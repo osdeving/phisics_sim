@@ -156,7 +156,7 @@ function buildPanel(
     ],
     references: [
       {
-        src: "/assets/references/projectile-motion.svg",
+        src: `${import.meta.env.BASE_URL}assets/references/projectile-motion.svg`,
         title: "Diagrama aberto de lançamento oblíquo",
         description:
           "Imagem aberta usada para reforçar a separação entre movimento horizontal uniforme e movimento vertical acelerado.",

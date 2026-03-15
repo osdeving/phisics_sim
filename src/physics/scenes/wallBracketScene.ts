@@ -124,7 +124,7 @@ function buildPanel(
     ],
     references: [
       {
-        src: "/assets/references/free-body-diagram.svg",
+        src: `${import.meta.env.BASE_URL}assets/references/free-body-diagram.svg`,
         title: "Diagrama de corpo livre e equilíbrio",
         description:
           "A mesma lógica de componentes e momento aparece em suportes e fixações.",

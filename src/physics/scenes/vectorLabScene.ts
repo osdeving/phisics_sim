@@ -149,7 +149,7 @@ function buildPanel(
     ],
     references: [
       {
-        src: "/assets/references/vector-addition.svg",
+        src: `${import.meta.env.BASE_URL}assets/references/vector-addition.svg`,
         title: "Diagrama clássico de soma vetorial",
         description: "Referência visual aberta para a regra do paralelogramo.",
         href: "https://commons.wikimedia.org/wiki/File:Vector_Addition.svg",

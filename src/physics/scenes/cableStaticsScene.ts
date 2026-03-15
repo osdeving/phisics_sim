@@ -134,7 +134,7 @@ function buildPanel(
     ],
     references: [
       {
-        src: "/assets/references/free-body-diagram.svg",
+        src: `${import.meta.env.BASE_URL}assets/references/free-body-diagram.svg`,
         title: "Exemplo de diagrama de corpo livre",
         description:
           "Imagem aberta usada como apoio visual para lembrar o passo zero de qualquer problema de estática.",

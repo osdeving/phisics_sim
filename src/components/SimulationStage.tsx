@@ -47,6 +47,11 @@ function loadImage(src: string) {
   });
 }
 
+function assetUrl(path: string) {
+  const normalized = path.startsWith("/") ? path.slice(1) : path;
+  return `${import.meta.env.BASE_URL}${normalized}`;
+}
+
 function buildViewport(
   scene: SceneDefinition,
   width: number,
@@ -422,14 +427,14 @@ export function SimulationStage({
     let active = true;
 
     Promise.all([
-      loadImage("/assets/car.svg"),
-      loadImage("/assets/crate.svg"),
-      loadImage("/assets/bucket.svg"),
-      loadImage("/assets/pulley.svg"),
-      loadImage("/assets/plane.svg"),
-      loadImage("/assets/train.svg"),
-      loadImage("/assets/boat.svg"),
-      loadImage("/assets/package.svg"),
+      loadImage(assetUrl("assets/car.svg")),
+      loadImage(assetUrl("assets/crate.svg")),
+      loadImage(assetUrl("assets/bucket.svg")),
+      loadImage(assetUrl("assets/pulley.svg")),
+      loadImage(assetUrl("assets/plane.svg")),
+      loadImage(assetUrl("assets/train.svg")),
+      loadImage(assetUrl("assets/boat.svg")),
+      loadImage(assetUrl("assets/package.svg")),
     ])
       .then(
         ([car, crate, bucket, pulley, plane, train, boat, packageSprite]) => {

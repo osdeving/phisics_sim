@@ -142,7 +142,7 @@ function buildPanel(
     ],
     references: [
       {
-        src: "/assets/references/boat-flow-vectors.svg",
+        src: `${import.meta.env.BASE_URL}assets/references/boat-flow-vectors.svg`,
         title: "Vetores de velocidade em barco e correnteza",
         description:
           "Referência aberta para reforçar a diferença entre velocidade relativa à água e velocidade vista da margem.",
