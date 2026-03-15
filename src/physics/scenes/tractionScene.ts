@@ -5,10 +5,14 @@ import {
   drawArrow,
   drawGrid,
   drawGround,
+  drawScenicBackdrop,
   drawLineWorld,
   drawSpriteAtWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
+import {
+  getVehicleSpriteFilter,
+  VEHICLE_SKIN_CHOICES,
+} from "../render/itemSkins";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
 interface TractionState extends SceneState {
@@ -139,6 +143,7 @@ export const tractionScene: SceneDefinition = {
     "Foco em ΣF = m·a",
   ],
   defaults: {
+    vehicleSkin: 0,
     totalMass: 12,
     engineForce: 85,
     gravity: 9.81,
@@ -146,6 +151,16 @@ export const tractionScene: SceneDefinition = {
     dragCoefficient: 6,
   },
   controls: [
+    {
+      key: "vehicleSkin",
+      label: "Tema do veículo",
+      min: 0,
+      max: 2,
+      step: 1,
+      unit: "",
+      description: "Exemplo da biblioteca visual para cenas sem colisão do carro.",
+      choices: VEHICLE_SKIN_CHOICES,
+    },
     {
       key: "totalMass",
       label: "Massa total",
@@ -241,10 +256,14 @@ export const tractionScene: SceneDefinition = {
     scene.dragForce = dragForce;
     scene.netForce = netForce;
   },
-  render: ({ ctx, state, viewport, sprites }) => {
+  render: ({ ctx, state, viewport, sprites, config }) => {
     const scene = getState(state);
     const carCenter = new Vector2(scene.position, scene.groundY - 0.65);
     const crateCenter = new Vector2(scene.position - 2.2, scene.groundY - 0.42);
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: scene.groundY,
+      treeSpacing: 3.8,
+    });
     drawGrid(ctx, viewport, 1);
     drawGround(ctx, viewport, scene.groundY, "Pista");
 
@@ -265,6 +284,8 @@ export const tractionScene: SceneDefinition = {
       1.45,
       0,
       "#69d5ff",
+      scene.velocity < -0.05 || (Math.abs(scene.velocity) <= 0.05 && scene.tractionForce < 0),
+      getVehicleSpriteFilter(config.vehicleSkin ?? 0),
     );
     drawSpriteAtWorld(
       ctx,
@@ -294,18 +315,6 @@ export const tractionScene: SceneDefinition = {
       "v",
     );
 
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.85),
-      "Modelo: carro + carga → sistema equivalente",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 1.3),
-      "Tração em N, massa em kg, velocidade em m/s",
-    );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),
 };

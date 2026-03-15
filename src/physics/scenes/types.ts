@@ -22,6 +22,10 @@ export interface SliderControl {
   step: number;
   unit: string;
   description: string;
+  choices?: Array<{
+    label: string;
+    value: number;
+  }>;
 }
 
 export interface MetricCardData {

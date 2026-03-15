@@ -1,17 +1,132 @@
-<svg width="320" height="160" viewBox="0 0 320 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 190" role="img" aria-labelledby="title desc">
+  <title id="title">Avião cargueiro lateral</title>
+  <desc id="desc">Sprite vetorial de um avião em vista lateral, com silhueta limpa para uso em canvas.</desc>
+
   <defs>
-    <linearGradient id="planeBody" x1="18" y1="46" x2="270" y2="102" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F5FAFF"/>
-      <stop offset="1" stop-color="#98C7FF"/>
+    <linearGradient id="bodyTop" x1="72" y1="46" x2="338" y2="144" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="58%" stop-color="#eef2f6"/>
+      <stop offset="100%" stop-color="#c4ccd5"/>
     </linearGradient>
+    <linearGradient id="bodyBottom" x1="178" y1="92" x2="178" y2="150" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#c7d0d9"/>
+      <stop offset="100%" stop-color="#9ca9b5"/>
+    </linearGradient>
+    <linearGradient id="tailOrange" x1="88" y1="28" x2="156" y2="98" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffb13d"/>
+      <stop offset="100%" stop-color="#ff7a00"/>
+    </linearGradient>
+    <linearGradient id="tailBlue" x1="88" y1="24" x2="136" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2447ff"/>
+      <stop offset="100%" stop-color="#152485"/>
+    </linearGradient>
+    <linearGradient id="wingTop" x1="142" y1="90" x2="290" y2="130" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#dbe3eb"/>
+      <stop offset="100%" stop-color="#aab5c0"/>
+    </linearGradient>
+    <linearGradient id="wingBottom" x1="180" y1="116" x2="312" y2="146" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#b3bdc7"/>
+      <stop offset="100%" stop-color="#8794a2"/>
+    </linearGradient>
+    <linearGradient id="engineShell" x1="236" y1="102" x2="274" y2="166" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#a9b6c4"/>
+    </linearGradient>
+    <radialGradient id="fanCore" cx="50%" cy="50%" r="54%">
+      <stop offset="0%" stop-color="#6a7681"/>
+      <stop offset="50%" stop-color="#232930"/>
+      <stop offset="100%" stop-color="#07090c"/>
+    </radialGradient>
+    <linearGradient id="windowBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3558ff"/>
+      <stop offset="100%" stop-color="#13206b"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-18%" width="126%" height="148%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+      <feOffset in="blur" dx="0" dy="5" result="offset"/>
+      <feColorMatrix in="offset" type="matrix"
+        values="0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0.18 0" result="shadow"/>
+      <feMerge>
+        <feMergeNode in="shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <path d="M20 82C20 64 34 50 52 50H230C248 50 262 64 262 82C262 100 248 114 230 114H52C34 114 20 100 20 82Z" fill="url(#planeBody)"/>
-  <path d="M112 50L188 12L204 14L170 50H112Z" fill="#DDEEFF"/>
-  <path d="M112 114L188 148L204 146L170 114H112Z" fill="#DDEEFF"/>
-  <path d="M246 62L308 48L300 68L246 82V62Z" fill="#8EBBFF"/>
-  <path d="M246 98L308 112L300 92L246 82V98Z" fill="#8EBBFF"/>
-  <circle cx="70" cy="82" r="8" fill="#4E92FF"/>
-  <circle cx="102" cy="82" r="8" fill="#4E92FF"/>
-  <circle cx="134" cy="82" r="8" fill="#4E92FF"/>
-  <circle cx="166" cy="82" r="8" fill="#4E92FF"/>
+
+  <g id="plane" filter="url(#softShadow)">
+    <path d="M82 98 L40 90 C28 88 18 92 16 98 C14 104 24 108 39 108 L84 106 Z" fill="#d3dbe3"/>
+    <path d="M86 98 L122 16 L174 16 L162 82 Z" fill="url(#tailOrange)"/>
+    <path d="M108 16 L136 16 L148 84 L124 96 Z" fill="url(#tailBlue)"/>
+    <path d="M82 108 L32 114 C20 116 14 120 16 125 C18 130 31 130 49 127 L92 119 Z" fill="#bdc7d2" opacity="0.92"/>
+
+    <path d="M76 101
+             C92 74 130 58 184 54
+             L324 54
+             C355 54 381 62 397 76
+             C410 87 412 99 407 111
+             C401 124 385 134 357 142
+             C334 148 304 151 268 151
+             L176 151
+             C131 151 98 145 79 133
+             C60 121 61 111 76 101 Z"
+          fill="url(#bodyTop)"/>
+    <path d="M111 122
+             C145 134 194 139 252 139
+             L349 139
+             C371 139 390 136 404 131
+             C395 141 380 148 358 154
+             C336 160 307 163 271 163
+             L176 163
+             C127 163 91 154 72 138
+             C66 133 63 127 64 121
+             C75 123 91 124 111 122 Z"
+          fill="url(#bodyBottom)" opacity="0.96"/>
+
+    <path d="M337 79 C345 72 356 68 370 68 L389 68 C395 68 398 72 396 77 L392 89 C391 94 387 97 381 97 L337 97 C330 97 330 87 337 79 Z" fill="#121827"/>
+    <path d="M343 78 L357 78 L354 92 L337 92 C335 92 336 88 343 78 Z" fill="url(#windowBlue)" opacity="0.88"/>
+    <path d="M360 78 L372 78 L369 92 L357 92 Z" fill="url(#windowBlue)" opacity="0.88"/>
+    <path d="M375 78 L387 78 C389 78 391 80 390 83 L388 92 L372 92 Z" fill="url(#windowBlue)" opacity="0.88"/>
+
+    <g stroke="#9099a3" stroke-width="2.3" fill="none" opacity="0.88">
+      <path d="M151 70 Q141 70 141 81 L141 120 Q141 131 151 131"/>
+      <path d="M161 70 Q171 70 171 81 L171 120 Q171 131 161 131"/>
+      <line x1="151" y1="75" x2="161" y2="75"/>
+      <path d="M292 74 Q282 74 282 85 L282 122 Q282 133 292 133"/>
+      <path d="M302 74 Q312 74 312 85 L312 122 Q312 133 302 133"/>
+      <line x1="292" y1="79" x2="302" y2="79"/>
+    </g>
+
+    <g fill="#1a2131" opacity="0.92">
+      <rect x="181" y="84" width="10" height="10" rx="5"/>
+      <rect x="200" y="84" width="10" height="10" rx="5"/>
+      <rect x="219" y="84" width="10" height="10" rx="5"/>
+      <rect x="238" y="84" width="10" height="10" rx="5"/>
+      <rect x="257" y="84" width="10" height="10" rx="5"/>
+      <rect x="276" y="84" width="10" height="10" rx="5"/>
+    </g>
+
+    <path d="M142 118 L226 94 L316 106 L208 132 Z" fill="url(#wingTop)"/>
+    <path d="M214 118 L314 128 L264 150 L188 142 Z" fill="url(#wingBottom)" opacity="0.88"/>
+
+    <path d="M235 112
+             C240 104 250 100 264 100
+             L281 100
+             C296 100 307 109 309 123
+             L311 142
+             C313 155 304 167 290 169
+             L260 173
+             C247 175 236 167 234 154
+             L231 126
+             C230 120 231 116 235 112 Z"
+          fill="url(#engineShell)"/>
+    <ellipse cx="286" cy="136" rx="19" ry="31" fill="#090c11"/>
+    <ellipse cx="286" cy="136" rx="12" ry="21" fill="url(#fanCore)"/>
+    <ellipse cx="248" cy="118" rx="9" ry="7" fill="#ffffff" opacity="0.36"/>
+
+    <path d="M114 96 C166 86 250 84 333 94" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.46"/>
+    <path d="M124 117 C186 120 272 119 363 109" fill="none" stroke="#94a1ae" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>
+  </g>
 </svg>

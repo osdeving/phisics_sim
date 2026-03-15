@@ -22,6 +22,7 @@ export function ControlPanel({ controls, config, onChange, embedded = false }: C
         {controls.map((control) => {
           const rawValue = config[control.key];
           const value = Number.isFinite(rawValue) ? rawValue : control.min;
+          const selectedChoice = control.choices?.find((choice) => choice.value === value);
           return (
             <label key={control.key} className="control-item">
               <div className="control-item__header">
@@ -30,17 +31,34 @@ export function ControlPanel({ controls, config, onChange, embedded = false }: C
                   <span className="control-item__description">{control.description}</span>
                 </div>
                 <strong>
-                  {value.toFixed(control.step < 0.1 ? 2 : 1)} {control.unit}
+                  {selectedChoice
+                    ? selectedChoice.label
+                    : `${value.toFixed(control.step < 0.1 ? 2 : 1)} ${control.unit}`.trim()}
                 </strong>
               </div>
-              <input
-                type="range"
-                min={control.min}
-                max={control.max}
-                step={control.step}
-                value={value}
-                onChange={(event) => onChange(control.key, Number(event.target.value))}
-              />
+              {control.choices?.length ? (
+                <div className="control-choice-group">
+                  {control.choices.map((choice) => (
+                    <button
+                      key={`${control.key}-${choice.value}`}
+                      type="button"
+                      className={`control-choice ${choice.value === value ? 'is-active' : ''}`}
+                      onClick={() => onChange(control.key, choice.value)}
+                    >
+                      {choice.label}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <input
+                  type="range"
+                  min={control.min}
+                  max={control.max}
+                  step={control.step}
+                  value={value}
+                  onChange={(event) => onChange(control.key, Number(event.target.value))}
+                />
+              )}
             </label>
           );
         })}

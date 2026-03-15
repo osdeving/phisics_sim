@@ -8,7 +8,6 @@ import {
   drawLineWorld,
   drawSpring,
   drawSpriteAtWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
@@ -255,13 +254,6 @@ export const springScene: SceneDefinition = {
       "v",
     );
 
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.85),
-      "x = deslocamento relativo ao equilíbrio",
-    );
-    drawWorldLabel(ctx, viewport, new Vector2(0.8, 1.3), "E = ½mv² + ½kx²");
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),
 };

@@ -13,9 +13,14 @@ import {
   drawGrid,
   drawGround,
   drawLineWorld,
+  drawScenicBackdrop,
   drawSpriteAtWorld,
   drawWorldLabel,
 } from "../render/canvasPrimitives";
+import {
+  getPlaneSpriteFilter,
+  PLANE_SKIN_CHOICES,
+} from "../render/itemSkins";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
 interface PackageDropState extends SceneState {
@@ -28,6 +33,8 @@ interface PackageDropState extends SceneState {
   time: number;
   frameCounter: number;
 }
+
+const PACKAGE_RELEASE_OFFSET_Y = 0.34;
 
 function getState(state: SceneState) {
   return state as PackageDropState;
@@ -182,6 +189,7 @@ export const packageDropScene: SceneDefinition = {
     "Use a timeline para rever a queda",
   ],
   defaults: {
+    planeSkin: 0,
     planeSpeed: 42,
     throwSpeed: 0,
     throwAngle: 0,
@@ -189,6 +197,16 @@ export const packageDropScene: SceneDefinition = {
     gravity: 9.81,
   },
   controls: [
+    {
+      key: "planeSkin",
+      label: "Tema da aeronave",
+      min: 0,
+      max: 2,
+      step: 1,
+      unit: "",
+      description: "Primeiro bloco da biblioteca visual de aeronaves.",
+      choices: PLANE_SKIN_CHOICES,
+    },
     {
       key: "planeSpeed",
       label: "Velocidade do avião",
@@ -238,12 +256,13 @@ export const packageDropScene: SceneDefinition = {
   createState: (config) => {
     const groundY = 8.8;
     const planeX = 2.6;
-    const planeY = groundY - config.releaseHeight;
+    const planeY = groundY - config.releaseHeight - PACKAGE_RELEASE_OFFSET_Y;
     const angle = toRadians(config.throwAngle);
     const initialVelocity = new Vector2(
       config.planeSpeed + config.throwSpeed * Math.cos(angle),
       -config.throwSpeed * Math.sin(angle),
     );
+    const packageStart = new Vector2(planeX, planeY + PACKAGE_RELEASE_OFFSET_Y);
     return {
       planeX,
       initialPlaneX: planeX,
@@ -252,11 +271,11 @@ export const packageDropScene: SceneDefinition = {
         mass: 5,
         radius: 0.24,
         restitution: 0,
-        position: new Vector2(planeX, planeY),
+        position: packageStart,
         velocity: initialVelocity,
       }),
       groundY,
-      trail: [new Vector2(planeX, planeY)],
+      trail: [packageStart],
       time: 0,
       frameCounter: 0,
     };
@@ -296,11 +315,12 @@ export const packageDropScene: SceneDefinition = {
     const answer = computeProjectileAnswer(config);
     const planePosition = new Vector2(scene.planeX, scene.planeY);
     const impactX = scene.initialPlaneX + answer.range;
-    const hudOrigin = new Vector2(
-      viewport.worldMinX + 0.8,
-      viewport.worldMinY + 0.9,
-    );
 
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: scene.groundY,
+      hillHeight: 1,
+      treeSpacing: 3.9,
+    });
     drawGrid(ctx, viewport, 1);
     drawGround(ctx, viewport, scene.groundY, "Solo");
     scene.trail.forEach((point, index) => {
@@ -322,17 +342,19 @@ export const packageDropScene: SceneDefinition = {
       viewport,
       sprites.plane,
       planePosition,
-      2.3,
-      1.1,
+      2.85,
+      1.3,
       0,
       "#9dd7ff",
+      false,
+      getPlaneSpriteFilter(config.planeSkin ?? 0),
     );
     drawSpriteAtWorld(
       ctx,
       viewport,
       sprites.package,
       scene.packageBody.position,
-      0.56,
+      0.72,
       0.56,
       0,
       "#ffffff",
@@ -358,12 +380,6 @@ export const packageDropScene: SceneDefinition = {
       viewport,
       new Vector2(impactX - 0.6, scene.groundY - 0.9),
       "impacto teórico",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      hudOrigin,
-      `Alcance teórico ≈ ${answer.range.toFixed(2)} m`,
     );
 
     const insetWidth = 260;

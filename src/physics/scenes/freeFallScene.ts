@@ -12,7 +12,7 @@ import {
   drawCircleBody,
   drawGrid,
   drawGround,
-  drawWorldLabel,
+  drawScenicBackdrop,
 } from "../render/canvasPrimitives";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 import { solveJumpVelocity } from "../core/solvers";
@@ -280,6 +280,11 @@ export const freeFallScene: SceneDefinition = {
   render: ({ ctx, state, viewport }) => {
     const scene = getState(state);
     const body = scene.body;
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: scene.groundY,
+      hillHeight: 0.95,
+      treeSpacing: 4,
+    });
     drawGrid(ctx, viewport, 1);
     drawGround(ctx, viewport, scene.groundY, "Chão");
     drawCircleBody(ctx, viewport, body.position, body.radius, "#6cdcff");
@@ -301,18 +306,6 @@ export const freeFallScene: SceneDefinition = {
       "v",
     );
 
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.9, 0.8),
-      "Unidades internas: m, s, kg, N",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.9, 1.25),
-      "A tela só converte metros → pixels",
-    );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),
   getDragHandles: (state) => {

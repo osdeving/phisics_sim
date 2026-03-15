@@ -6,7 +6,6 @@ import {
   drawArrow,
   drawGrid,
   drawLineWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
@@ -256,12 +255,6 @@ export const vectorLabScene: SceneDefinition = {
       origin.add(worldB).add(worldA),
       "rgba(255,255,255,0.22)",
       2,
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.95),
-      "Convenção do cálculo: y positivo para cima; tela só espelha o eixo vertical",
     );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),

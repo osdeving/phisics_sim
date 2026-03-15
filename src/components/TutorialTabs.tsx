@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { ScenePanelData } from "../physics/scenes/types";
+import { MarkdownDocument } from "./MarkdownDocument";
 import { MathFormula } from "./MathFormula";
 
 type TutorialTabId =
+  | "didactic"
   | "concept"
   | "formulas"
   | "loop"
@@ -13,11 +15,13 @@ type TutorialTabId =
   | "references";
 
 interface TutorialTabsProps {
+  sceneKey: string;
   panel: ScenePanelData;
   embedded?: boolean;
 }
 
 const labels: Record<TutorialTabId, string> = {
+  didactic: "Didático",
   concept: "Conceito",
   formulas: "Equações",
   loop: "Solver",
@@ -28,11 +32,47 @@ const labels: Record<TutorialTabId, string> = {
   references: "Referências",
 };
 
-export function TutorialTabs({ panel, embedded = false }: TutorialTabsProps) {
+export function TutorialTabs({ sceneKey, panel, embedded = false }: TutorialTabsProps) {
   const [activeTab, setActiveTab] = useState<TutorialTabId>("concept");
+  const [didacticMarkdown, setDidacticMarkdown] = useState<string | null>(null);
+  const [didacticAvailable, setDidacticAvailable] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const tutorialUrl = `${import.meta.env.BASE_URL}content/tutorials/${sceneKey}.md`;
+
+    fetch(tutorialUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Tutorial markdown not found");
+        }
+        return response.text();
+      })
+      .then((markdown) => {
+        if (cancelled) {
+          return;
+        }
+        setDidacticMarkdown(markdown);
+        setDidacticAvailable(true);
+      })
+      .catch(() => {
+        if (cancelled) {
+          return;
+        }
+        setDidacticMarkdown(null);
+        setDidacticAvailable(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [sceneKey]);
 
   const availableTabs = useMemo(() => {
     return (Object.keys(labels) as TutorialTabId[]).filter((tabId) => {
+      if (tabId === "didactic") {
+        return didacticAvailable;
+      }
       if (tabId === "intuition") {
         return Boolean(panel.intuition?.length);
       }
@@ -47,7 +87,17 @@ export function TutorialTabs({ panel, embedded = false }: TutorialTabsProps) {
       }
       return true;
     });
-  }, [panel.engineering, panel.intuition, panel.pitfalls, panel.references]);
+  }, [
+    didacticAvailable,
+    panel.engineering,
+    panel.intuition,
+    panel.pitfalls,
+    panel.references,
+  ]);
+
+  useEffect(() => {
+    setActiveTab(didacticAvailable ? "didactic" : "concept");
+  }, [sceneKey, didacticAvailable]);
 
   useEffect(() => {
     if (!availableTabs.includes(activeTab)) {
@@ -127,7 +177,8 @@ export function TutorialTabs({ panel, embedded = false }: TutorialTabsProps) {
           <h2>Entenda a simulação</h2>
         </div>
         <p className="panel-text">
-          Cada aba explica o fenômeno, as equações e o fluxo numérico.
+          O modo didático usa markdown externo; as outras abas mostram o fenômeno,
+          as equações e o fluxo numérico.
         </p>
       </div>
 
@@ -145,7 +196,11 @@ export function TutorialTabs({ panel, embedded = false }: TutorialTabsProps) {
       </div>
 
       <div className="tutorial-tabs__content">
-        {activeTab === "references" && panel.references
+        {activeTab === "didactic" && didacticMarkdown ? (
+          <article className="tutorial-item tutorial-item--markdown">
+            <MarkdownDocument markdown={didacticMarkdown} />
+          </article>
+        ) : activeTab === "references" && panel.references
           ? panel.references.map((item) => (
               <article
                 key={item.title}

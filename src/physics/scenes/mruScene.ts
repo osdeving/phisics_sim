@@ -6,9 +6,13 @@ import {
   drawArrow,
   drawGrid,
   drawGround,
+  drawScenicBackdrop,
   drawSpriteAtWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
+import {
+  getVehicleSpriteFilter,
+  VEHICLE_SKIN_CHOICES,
+} from "../render/itemSkins";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
 interface MruState extends SceneState {
@@ -133,10 +137,21 @@ export const mruScene: SceneDefinition = {
     "Use a timeline para rever",
   ],
   defaults: {
+    vehicleSkin: 0,
     initialPosition: 2.2,
     velocity: 2.4,
   },
   controls: [
+    {
+      key: "vehicleSkin",
+      label: "Tema do veículo",
+      min: 0,
+      max: 2,
+      step: 1,
+      unit: "",
+      description: "Escolha visual simples para o móvel da cena.",
+      choices: VEHICLE_SKIN_CHOICES,
+    },
     {
       key: "initialPosition",
       label: "Posição inicial",
@@ -174,6 +189,10 @@ export const mruScene: SceneDefinition = {
   render: ({ ctx, state, viewport, sprites, config }) => {
     const scene = getState(state);
     const carPosition = new Vector2(scene.position, scene.groundY - 0.68);
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: scene.groundY,
+      treeSpacing: 3.8,
+    });
     drawGrid(ctx, viewport, 1);
     drawGround(ctx, viewport, scene.groundY, "Pista MRU");
     drawSpriteAtWorld(
@@ -186,6 +205,7 @@ export const mruScene: SceneDefinition = {
       0,
       "#80dcff",
       config.velocity < 0,
+      getVehicleSpriteFilter(config.vehicleSkin ?? 0),
     );
     drawArrow(
       ctx,
@@ -194,12 +214,6 @@ export const mruScene: SceneDefinition = {
       new Vector2(config.velocity * 0.22, 0),
       "#ffbf69",
       "v",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.95),
-      "Sem força resultante horizontal → velocidade constante",
     );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),

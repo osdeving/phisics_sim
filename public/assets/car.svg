@@ -1,21 +1,24 @@
 <svg width="320" height="180" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="carBody" x1="36" y1="36" x2="244" y2="136" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#66E0FF"/>
-      <stop offset="1" stop-color="#2B79FF"/>
+    <linearGradient id="carBody" x1="34" y1="46" x2="266" y2="136" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#66E7FF"/>
+      <stop offset="1" stop-color="#2467E1"/>
     </linearGradient>
-    <linearGradient id="carCabin" x1="110" y1="40" x2="194" y2="94" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F5FBFF"/>
-      <stop offset="1" stop-color="#92C8FF"/>
+    <linearGradient id="carGlass" x1="120" y1="48" x2="206" y2="90" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7FCFF"/>
+      <stop offset="1" stop-color="#9CCFFF"/>
     </linearGradient>
   </defs>
-  <rect x="34" y="92" width="222" height="38" rx="18" fill="url(#carBody)"/>
-  <path d="M78 90L118 48C122 44 127 42 132 42H190C198 42 205 46 210 53L238 90H78Z" fill="url(#carBody)"/>
-  <path d="M122 52H187C192 52 196 54 199 58L220 84H101L116 60C117 55 120 52 122 52Z" fill="url(#carCabin)" opacity="0.88"/>
-  <circle cx="96" cy="132" r="24" fill="#101A30"/>
-  <circle cx="96" cy="132" r="11" fill="#C6E7FF"/>
-  <circle cx="222" cy="132" r="24" fill="#101A30"/>
-  <circle cx="222" cy="132" r="11" fill="#C6E7FF"/>
-  <rect x="248" y="100" width="24" height="12" rx="6" fill="#FFCC73"/>
-  <rect x="48" y="98" width="18" height="10" rx="5" fill="#9DEAFF" opacity="0.9"/>
+  <path d="M40 112C40 102 48 94 58 94H82L108 58C112 50 120 44 130 44H192C204 44 214 48 224 56L248 76C256 82 264 92 272 94H284C292 94 298 100 298 108V116C298 126 290 134 280 134H58C48 134 40 126 40 116V112Z" fill="url(#carBody)"/>
+  <path d="M110 92L128 58C130 54 134 52 138 52H189C197 52 204 54 210 60L232 84C234 86 234 88 234 92H110Z" fill="url(#carGlass)" opacity="0.95"/>
+  <path d="M162 54V92" stroke="#215CA7" stroke-width="4" opacity="0.44"/>
+  <path d="M240 92L268 92" stroke="#143D7D" stroke-width="6" stroke-linecap="round" opacity="0.42"/>
+  <rect x="266" y="98" width="24" height="13" rx="6.5" fill="#FFD07D"/>
+  <rect x="52" y="100" width="14" height="10" rx="5" fill="#A9F4FF" opacity="0.88"/>
+  <path d="M78 94L92 72H110L100 94H78Z" fill="#5EA3FF" opacity="0.4"/>
+  <circle cx="98" cy="134" r="24" fill="#111A30"/>
+  <circle cx="98" cy="134" r="11" fill="#D5ECFF"/>
+  <circle cx="228" cy="134" r="24" fill="#111A30"/>
+  <circle cx="228" cy="134" r="11" fill="#D5ECFF"/>
+  <path d="M56 126H276" stroke="#EAF6FF" stroke-width="4" stroke-linecap="round" opacity="0.54"/>
 </svg>

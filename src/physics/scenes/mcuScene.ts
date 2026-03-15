@@ -7,7 +7,6 @@ import {
   drawCircleBody,
   drawGrid,
   drawLineWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
@@ -237,12 +236,6 @@ export const mcuScene: SceneDefinition = {
     drawCircleBody(ctx, viewport, bodyPosition, 0.22, "#ffd974");
     drawArrow(ctx, viewport, bodyPosition, tangent, "#69e2ff", "v");
     drawArrow(ctx, viewport, bodyPosition, inward, "#ff8d8d", "a_c");
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.95),
-      "No MCU, a direção da velocidade muda continuamente",
-    );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),
   getDragHandles: (state, config) => {

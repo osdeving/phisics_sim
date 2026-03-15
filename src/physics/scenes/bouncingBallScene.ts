@@ -10,12 +10,12 @@ import { clamp } from "../math/scalar";
 import { Vector2 } from "../math/Vector2";
 import {
   drawArrow,
-  drawCircleBody,
   drawGrid,
   drawGround,
+  drawScenicBackdrop,
   drawLineWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
+import { metersToPixels, worldToScreen } from "../render/viewport";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
 interface BouncingBallState extends SceneState {
@@ -126,6 +126,89 @@ function buildPanel(
   };
 }
 
+function drawBallSkin(
+  ctx: CanvasRenderingContext2D,
+  viewport: Parameters<typeof drawGrid>[1],
+  center: Vector2,
+  radius: number,
+  skin: number,
+) {
+  const screen = worldToScreen(viewport, center);
+  const pixelRadius = metersToPixels(viewport, radius);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(screen.x, screen.y, pixelRadius, 0, Math.PI * 2);
+
+  if (skin === 1) {
+    ctx.fillStyle = "#d87928";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(45, 24, 8, 0.9)";
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    ctx.arc(screen.x, screen.y, pixelRadius * 0.96, Math.PI * 0.18, Math.PI * 1.82);
+    ctx.moveTo(screen.x - pixelRadius * 0.95, screen.y);
+    ctx.quadraticCurveTo(screen.x, screen.y - pixelRadius * 0.2, screen.x + pixelRadius * 0.95, screen.y);
+    ctx.moveTo(screen.x, screen.y - pixelRadius * 0.98);
+    ctx.lineTo(screen.x, screen.y + pixelRadius * 0.98);
+    ctx.stroke();
+  } else if (skin === 2) {
+    ctx.fillStyle = "#c8f06d";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.92)";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(screen.x - pixelRadius * 0.8, screen.y - pixelRadius * 0.55);
+    ctx.bezierCurveTo(
+      screen.x - pixelRadius * 0.18,
+      screen.y - pixelRadius * 0.92,
+      screen.x + pixelRadius * 0.12,
+      screen.y - pixelRadius * 0.1,
+      screen.x + pixelRadius * 0.72,
+      screen.y + pixelRadius * 0.4,
+    );
+    ctx.moveTo(screen.x - pixelRadius * 0.7, screen.y + pixelRadius * 0.4);
+    ctx.bezierCurveTo(
+      screen.x - pixelRadius * 0.12,
+      screen.y + pixelRadius * 0.9,
+      screen.x + pixelRadius * 0.16,
+      screen.y + pixelRadius * 0.08,
+      screen.x + pixelRadius * 0.78,
+      screen.y - pixelRadius * 0.55,
+    );
+    ctx.stroke();
+  } else {
+    ctx.fillStyle = "#f5f6f8";
+    ctx.fill();
+    const patches = [
+      [0, 0, 0.24],
+      [-0.42, -0.08, 0.18],
+      [0.34, -0.18, 0.16],
+      [-0.2, 0.34, 0.15],
+      [0.36, 0.28, 0.15],
+    ] as const;
+    ctx.fillStyle = "#1f2430";
+    patches.forEach(([offsetX, offsetY, scale]) => {
+      ctx.beginPath();
+      ctx.arc(
+        screen.x + pixelRadius * offsetX,
+        screen.y + pixelRadius * offsetY,
+        pixelRadius * scale,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+    });
+  }
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.58)";
+  ctx.beginPath();
+  ctx.arc(screen.x, screen.y, pixelRadius, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+}
+
 export const bouncingBallScene: SceneDefinition = {
   id: "bouncing-ball",
   title: "Bola quicando",
@@ -142,6 +225,7 @@ export const bouncingBallScene: SceneDefinition = {
     "Use a timeline para voltar",
   ],
   defaults: {
+    ballSkin: 0,
     mass: 1.2,
     gravity: 9.81,
     restitution: 0.82,
@@ -149,6 +233,20 @@ export const bouncingBallScene: SceneDefinition = {
     horizontalSpeed: 3,
   },
   controls: [
+    {
+      key: "ballSkin",
+      label: "Skin da bola",
+      min: 0,
+      max: 2,
+      step: 1,
+      unit: "",
+      description: "Primeiro exemplo da biblioteca de itens intercambiáveis.",
+      choices: [
+        { label: "Futebol", value: 0 },
+        { label: "Basquete", value: 1 },
+        { label: "Tênis", value: 2 },
+      ],
+    },
     {
       key: "mass",
       label: "Massa",
@@ -261,8 +359,13 @@ export const bouncingBallScene: SceneDefinition = {
       }
     }
   },
-  render: ({ ctx, state, viewport }) => {
+  render: ({ ctx, state, viewport, config }) => {
     const scene = getState(state);
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: scene.groundY,
+      hillHeight: 0.95,
+      treeSpacing: 3.9,
+    });
     drawGrid(ctx, viewport, 1);
     drawGround(ctx, viewport, scene.groundY, "Chão");
     scene.trail.forEach((point, index) => {
@@ -272,13 +375,7 @@ export const bouncingBallScene: SceneDefinition = {
       }
       drawLineWorld(ctx, viewport, point, next, "rgba(255,255,255,0.18)", 2);
     });
-    drawCircleBody(
-      ctx,
-      viewport,
-      scene.body.position,
-      scene.body.radius,
-      "#7ef4ff",
-    );
+    drawBallSkin(ctx, viewport, scene.body.position, scene.body.radius, config.ballSkin);
     drawArrow(
       ctx,
       viewport,
@@ -286,12 +383,6 @@ export const bouncingBallScene: SceneDefinition = {
       scene.body.velocity.scale(0.15),
       "#ffbf69",
       "v",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.9, 0.95),
-      "Trilha + restituição deixam a perda de energia visível",
     );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),

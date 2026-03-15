@@ -6,9 +6,13 @@ import {
   drawArrow,
   drawGrid,
   drawGround,
+  drawScenicBackdrop,
   drawSpriteAtWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
+import {
+  getVehicleSpriteFilter,
+  VEHICLE_SKIN_CHOICES,
+} from "../render/itemSkins";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
 interface MruvState extends SceneState {
@@ -129,11 +133,22 @@ export const mruvScene: SceneDefinition = {
   worldHeight: 8,
   keyboardHints: ["Arraste v₀", "Arraste a aceleração", "Pense em Torricelli"],
   defaults: {
+    vehicleSkin: 0,
     initialPosition: 1.8,
     initialVelocity: 1,
     acceleration: 1.6,
   },
   controls: [
+    {
+      key: "vehicleSkin",
+      label: "Tema do veículo",
+      min: 0,
+      max: 2,
+      step: 1,
+      unit: "",
+      description: "Escolha visual simples para a biblioteca de veículos.",
+      choices: VEHICLE_SKIN_CHOICES,
+    },
     {
       key: "initialPosition",
       label: "Posição inicial",
@@ -187,6 +202,10 @@ export const mruvScene: SceneDefinition = {
   render: ({ ctx, state, viewport, sprites, config }) => {
     const scene = getState(state);
     const carPosition = new Vector2(scene.position, scene.groundY - 0.68);
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: scene.groundY,
+      treeSpacing: 3.8,
+    });
     drawGrid(ctx, viewport, 1);
     drawGround(ctx, viewport, scene.groundY, "Trecho MRUV");
     drawSpriteAtWorld(
@@ -199,6 +218,7 @@ export const mruvScene: SceneDefinition = {
       0,
       "#8effa9",
       scene.velocity < 0,
+      getVehicleSpriteFilter(config.vehicleSkin ?? 0),
     );
     drawArrow(
       ctx,
@@ -215,12 +235,6 @@ export const mruvScene: SceneDefinition = {
       new Vector2(config.acceleration * 0.18, 0),
       "#ffffff",
       "a",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.95),
-      "Use v = v₀ + at e x = x₀ + v₀t + ½at² como bloco básico",
     );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),

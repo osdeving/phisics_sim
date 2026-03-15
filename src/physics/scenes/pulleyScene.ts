@@ -7,7 +7,6 @@ import {
   drawGrid,
   drawLineWorld,
   drawSpriteAtWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
@@ -276,18 +275,6 @@ export const pulleyScene: SceneDefinition = {
       new Vector2(0, scene.acceleration * 0.15),
       "#ffbf69",
       "a",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.85),
-      "Máquina de Atwood ideal",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 1.3),
-      "Deslocamentos opostos com o mesmo módulo",
     );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),

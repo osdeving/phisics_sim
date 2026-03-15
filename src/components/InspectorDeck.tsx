@@ -56,8 +56,16 @@ export function InspectorDeck({ sceneKey, panel, controls, config, onChange }: I
         {activeTab === 'controls' && (
           <ControlPanel controls={controls} config={config} onChange={onChange} embedded />
         )}
-        {activeTab === 'tutorial' && <TutorialTabs panel={panel} embedded />}
+        {activeTab === 'tutorial' && <TutorialTabs sceneKey={sceneKey} panel={panel} embedded />}
         {activeTab === 'exercise' && <ExercisePanel panel={panel} />}
+      </div>
+
+      <div className="inspector-deck__about">
+        <p className="eyebrow">Sobre</p>
+        <p>
+          Software de <strong>Willams Sousa</strong> para aprender Física de forma lúdica,
+          visual e interativa.
+        </p>
       </div>
     </section>
   );

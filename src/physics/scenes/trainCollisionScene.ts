@@ -5,6 +5,7 @@ import {
   drawArrow,
   drawGrid,
   drawGround,
+  drawScenicBackdrop,
   drawSpriteAtWorld,
   drawWorldLabel,
 } from "../render/canvasPrimitives";
@@ -190,6 +191,11 @@ export const trainCollisionScene: SceneDefinition = {
   },
   render: ({ ctx, state, viewport, sprites, config }) => {
     const scene = getState(state);
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: scene.trackY,
+      hillHeight: 1.05,
+      treeSpacing: 4.3,
+    });
     drawGrid(ctx, viewport, 1);
     drawGround(ctx, viewport, scene.trackY, "Linha férrea");
 

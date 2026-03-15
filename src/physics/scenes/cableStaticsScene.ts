@@ -7,7 +7,6 @@ import {
   drawCircleBody,
   drawGrid,
   drawLineWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
@@ -246,12 +245,6 @@ export const cableStaticsScene: SceneDefinition = {
       toWorld(solution.equilibriumForce).scale(0.02),
       "#ff7a7a",
       "F_eq",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.95),
-      "Diagrama de corpo livre no anel central",
     );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),

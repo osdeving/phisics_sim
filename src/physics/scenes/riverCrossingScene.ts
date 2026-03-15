@@ -5,8 +5,8 @@ import {
   drawArrow,
   drawGrid,
   drawLineWorld,
+  drawScenicBackdrop,
   drawSpriteAtWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
@@ -263,10 +263,12 @@ export const riverCrossingScene: SceneDefinition = {
     const { relative, current, resultant } = velocityVectors(config);
     const leftBankX = viewport.worldMinX + 0.8;
     const rightBankX = viewport.worldMaxX - 0.8;
-    const hudOrigin = new Vector2(
-      viewport.worldMinX + 0.8,
-      viewport.worldMinY + 0.95,
-    );
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: scene.topBankY - 0.15,
+      treeBaseY: scene.topBankY - 0.12,
+      hillHeight: 0.75,
+      treeSpacing: 4.6,
+    });
     drawGrid(ctx, viewport, 1);
 
     ctx.save();
@@ -377,12 +379,6 @@ export const riverCrossingScene: SceneDefinition = {
       resultant.scale(0.2),
       "#ffffff",
       "v solo",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      hudOrigin,
-      "Vista superior: rio, correnteza e rumo do barco",
     );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),

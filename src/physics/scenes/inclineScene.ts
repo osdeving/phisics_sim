@@ -6,8 +6,8 @@ import {
   drawArrow,
   drawGrid,
   drawLineWorld,
+  drawScenicBackdrop,
   drawSpriteAtWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
@@ -222,6 +222,12 @@ export const inclineScene: SceneDefinition = {
       .add(direction.scale(scene.distance))
       .add(direction.perpendicular().scale(-0.48));
 
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: bottom.y + 0.8,
+      treeBaseY: bottom.y + 0.78,
+      hillHeight: 0.9,
+      treeSpacing: 4.2,
+    });
     drawGrid(ctx, viewport, 1);
     drawLineWorld(
       ctx,
@@ -249,18 +255,6 @@ export const inclineScene: SceneDefinition = {
     drawArrow(ctx, viewport, blockCenter, tangent, "#ffbf69", "m·g·senθ");
     drawArrow(ctx, viewport, blockCenter, normal, "#9bff9b", "N");
 
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.85),
-      "Eixo da física: ao longo da rampa",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 1.3),
-      "Render: posição tangencial projetada em 2D",
-    );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),
 };

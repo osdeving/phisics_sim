@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cloneSceneState } from "../physics/core/cloneState";
 import { Vector2 } from "../physics/math/Vector2";
 import { drawArrow, drawWorldLabel } from "../physics/render/canvasPrimitives";
@@ -11,6 +11,7 @@ import {
   SceneState,
   SpriteAtlas,
 } from "../physics/scenes/types";
+import { MathFormula } from "./MathFormula";
 
 const FIXED_DT = 1 / 60;
 const MAX_HISTORY = 1200;
@@ -338,6 +339,16 @@ export function SimulationStage({
   const [hoveredHandleStyle, setHoveredHandleStyle] = useState<
     "vector" | "point" | null
   >(null);
+
+  const stageCallout = useMemo(() => {
+    const leadingConcept = panel.concept[0];
+    const leadingFormula = panel.formulas[0];
+    return {
+      title: leadingConcept?.title ?? scene.subtitle,
+      body: leadingConcept?.body ?? scene.summary,
+      formula: leadingFormula?.formula,
+    };
+  }, [panel.concept, panel.formulas, scene.subtitle, scene.summary]);
 
   useKeyboardInput(inputRef);
 
@@ -844,6 +855,45 @@ export function SimulationStage({
       </div>
 
       <div ref={stageRef} className="workspace-stage__canvas-wrap">
+        <div className="canvas-overlay-row">
+          <div className="canvas-overlay canvas-overlay--left">
+            {panel.metrics.slice(0, 4).map((metric) => (
+              <div key={metric.label} className="hud-chip">
+                <span>{metric.label}</span>
+                <strong>{metric.value}</strong>
+              </div>
+            ))}
+          </div>
+
+          <div className="canvas-overlay canvas-overlay--center">
+            <article className="canvas-callout">
+              <p className="canvas-callout__eyebrow">Leitura rápida</p>
+              <h3 className="canvas-callout__title">{stageCallout.title}</h3>
+              <p className="canvas-callout__body">{stageCallout.body}</p>
+              {stageCallout.formula && (
+                <div className="canvas-callout__formula">
+                  <MathFormula expression={stageCallout.formula} displayMode />
+                </div>
+              )}
+            </article>
+          </div>
+
+          <div className="canvas-overlay canvas-overlay--right">
+            {scene.keyboardHints.map((hint) => (
+              <span key={hint} className="keyboard-hint">
+                {hint}
+              </span>
+            ))}
+            <span className="keyboard-hint">
+              {hoveredHandleId
+                ? hoveredHandleStyle === "vector"
+                  ? "Arraste a seta"
+                  : "Arraste o ponto"
+                : "Clique e arraste vetores/objetos"}
+            </span>
+          </div>
+        </div>
+
         <canvas
           ref={canvasRef}
           className="simulation-canvas"
@@ -866,30 +916,6 @@ export function SimulationStage({
             }
           }}
         />
-
-        <div className="canvas-overlay canvas-overlay--left">
-          {panel.metrics.slice(0, 4).map((metric) => (
-            <div key={metric.label} className="hud-chip">
-              <span>{metric.label}</span>
-              <strong>{metric.value}</strong>
-            </div>
-          ))}
-        </div>
-
-        <div className="canvas-overlay canvas-overlay--right">
-          {scene.keyboardHints.map((hint) => (
-            <span key={hint} className="keyboard-hint">
-              {hint}
-            </span>
-          ))}
-          <span className="keyboard-hint">
-            {hoveredHandleId
-              ? hoveredHandleStyle === "vector"
-                ? "Arraste a seta"
-                : "Arraste o ponto"
-              : "Clique e arraste vetores/objetos"}
-          </span>
-        </div>
       </div>
 
       <div className="timeline-row">

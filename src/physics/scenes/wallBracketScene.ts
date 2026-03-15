@@ -7,7 +7,6 @@ import {
   drawGrid,
   drawLineWorld,
   drawSpriteAtWorld,
-  drawWorldLabel,
 } from "../render/canvasPrimitives";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
@@ -253,12 +252,6 @@ export const wallBracketScene: SceneDefinition = {
       new Vector2(boltForce * 0.003, 0),
       "#69e2ff",
       "Compressão",
-    );
-    drawWorldLabel(
-      ctx,
-      viewport,
-      new Vector2(0.8, 0.95),
-      "A parede equilibra força vertical e momento",
     );
   },
   buildPanelData: (state, config) => buildPanel(getState(state), config),
