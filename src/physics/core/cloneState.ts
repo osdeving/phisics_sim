@@ -6,6 +6,15 @@ function cloneValue<T>(value: T): T {
     return new Vector2(value.x, value.y) as T;
   }
 
+  if (
+    value &&
+    typeof value === "object" &&
+    "clone" in value &&
+    typeof value.clone === "function"
+  ) {
+    return value.clone() as T;
+  }
+
   if (Array.isArray(value)) {
     return value.map((item) => cloneValue(item)) as T;
   }

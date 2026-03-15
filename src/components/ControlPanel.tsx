@@ -20,7 +20,8 @@ export function ControlPanel({ controls, config, onChange, embedded = false }: C
 
       <div className="control-list">
         {controls.map((control) => {
-          const value = config[control.key];
+          const rawValue = config[control.key];
+          const value = Number.isFinite(rawValue) ? rawValue : control.min;
           return (
             <label key={control.key} className="control-item">
               <div className="control-item__header">

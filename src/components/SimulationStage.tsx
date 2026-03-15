@@ -106,6 +106,37 @@ function useKeyboardInput(inputRef: React.MutableRefObject<InputState>) {
       ) {
         inputRef.current.jump = true;
       }
+      if (
+        event.code === "KeyR" ||
+        event.code === "PageUp" ||
+        event.code === "KeyW"
+      ) {
+        inputRef.current.liftUp = true;
+      }
+      if (
+        event.code === "KeyF" ||
+        event.code === "PageDown" ||
+        event.code === "KeyS"
+      ) {
+        inputRef.current.liftDown = true;
+      }
+      if (
+        event.code === "KeyT" ||
+        event.code === "KeyE" ||
+        event.code === "KeyZ"
+      ) {
+        inputRef.current.tiltUp = true;
+      }
+      if (
+        event.code === "KeyG" ||
+        event.code === "KeyQ" ||
+        event.code === "KeyX"
+      ) {
+        inputRef.current.tiltDown = true;
+      }
+      if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+        inputRef.current.boost = true;
+      }
     };
 
     const onKeyUp = (event: KeyboardEvent) => {
@@ -121,6 +152,37 @@ function useKeyboardInput(inputRef: React.MutableRefObject<InputState>) {
         event.code === "KeyW"
       ) {
         inputRef.current.jump = false;
+      }
+      if (
+        event.code === "KeyR" ||
+        event.code === "PageUp" ||
+        event.code === "KeyW"
+      ) {
+        inputRef.current.liftUp = false;
+      }
+      if (
+        event.code === "KeyF" ||
+        event.code === "PageDown" ||
+        event.code === "KeyS"
+      ) {
+        inputRef.current.liftDown = false;
+      }
+      if (
+        event.code === "KeyT" ||
+        event.code === "KeyE" ||
+        event.code === "KeyZ"
+      ) {
+        inputRef.current.tiltUp = false;
+      }
+      if (
+        event.code === "KeyG" ||
+        event.code === "KeyQ" ||
+        event.code === "KeyX"
+      ) {
+        inputRef.current.tiltDown = false;
+      }
+      if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+        inputRef.current.boost = false;
       }
     };
 
@@ -242,6 +304,11 @@ export function SimulationStage({
     left: false,
     right: false,
     jump: false,
+    liftUp: false,
+    liftDown: false,
+    tiltUp: false,
+    tiltDown: false,
+    boost: false,
   });
   const configRef = useRef(config);
   const spriteRef = useRef<SpriteAtlas>({});
@@ -471,6 +538,7 @@ export function SimulationStage({
     setIsPlaying(true);
     setPlaybackRate(1);
     setZoom(1);
+    setAutoLoop(scene.autoLoopDefault ?? true);
     resetScene();
   }, [resetScene, scene]);
 

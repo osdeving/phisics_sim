@@ -7,6 +7,11 @@ export interface InputState {
   left: boolean;
   right: boolean;
   jump: boolean;
+  liftUp: boolean;
+  liftDown: boolean;
+  tiltUp: boolean;
+  tiltDown: boolean;
+  boost: boolean;
 }
 
 export interface SliderControl {
@@ -153,4 +158,5 @@ export interface SceneDefinition {
   onDrag?: (args: SceneDragArgs) => SceneDragResult | void;
   getCameraWindow?: (state: SceneState, config: SceneConfig) => SceneCameraWindow;
   resetOnConfigChange?: boolean;
+  autoLoopDefault?: boolean;
 }

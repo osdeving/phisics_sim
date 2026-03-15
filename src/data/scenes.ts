@@ -1,6 +1,7 @@
 import { bouncingBallScene } from '../physics/scenes/bouncingBallScene';
 import { cableStaticsScene } from '../physics/scenes/cableStaticsScene';
 import { freeFallScene } from '../physics/scenes/freeFallScene';
+import { forkliftScene } from '../physics/scenes/forkliftScene';
 import { inclineScene } from '../physics/scenes/inclineScene';
 import { mcuScene } from '../physics/scenes/mcuScene';
 import { mruScene } from '../physics/scenes/mruScene';
@@ -15,6 +16,7 @@ import { vectorLabScene } from '../physics/scenes/vectorLabScene';
 import { wallBracketScene } from '../physics/scenes/wallBracketScene';
 
 export const scenes = [
+  forkliftScene,
   vectorLabScene,
   mruScene,
   mruvScene,

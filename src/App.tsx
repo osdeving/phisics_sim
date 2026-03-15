@@ -3,11 +3,30 @@ import { InspectorDeck } from "./components/InspectorDeck";
 import { SceneTabs } from "./components/SceneTabs";
 import { SimulationStage } from "./components/SimulationStage";
 import { scenes } from "./data/scenes";
-import { ScenePanelData } from "./physics/scenes/types";
+import { SceneDefinition, ScenePanelData } from "./physics/scenes/types";
+
+function normalizeSceneConfig(
+  scene: SceneDefinition,
+  currentConfig?: Record<string, number>,
+) {
+  const merged = {
+    ...scene.defaults,
+    ...(currentConfig ?? {}),
+  };
+
+  scene.controls.forEach((control) => {
+    const value = merged[control.key];
+    if (!Number.isFinite(value) || value < control.min || value > control.max) {
+      merged[control.key] = scene.defaults[control.key];
+    }
+  });
+
+  return merged;
+}
 
 function buildConfigMap() {
   return Object.fromEntries(
-    scenes.map((scene) => [scene.id, { ...scene.defaults }]),
+    scenes.map((scene) => [scene.id, normalizeSceneConfig(scene)]),
   );
 }
 
@@ -33,8 +52,26 @@ export default function App() {
     () => scenes.find((scene) => scene.id === activeSceneId) ?? scenes[0],
     [activeSceneId],
   );
-  const activeConfig = configMap[activeScene.id];
+  const activeConfig = useMemo(
+    () => normalizeSceneConfig(activeScene, configMap[activeScene.id]),
+    [activeScene, configMap],
+  );
   const activePanel = panelMap[activeScene.id];
+
+  useEffect(() => {
+    setConfigMap((current) => {
+      const normalized = normalizeSceneConfig(activeScene, current[activeScene.id]);
+      const currentSceneConfig = current[activeScene.id];
+      if (JSON.stringify(currentSceneConfig) === JSON.stringify(normalized)) {
+        return current;
+      }
+
+      return {
+        ...current,
+        [activeScene.id]: normalized,
+      };
+    });
+  }, [activeScene]);
 
   useEffect(() => {
     document.documentElement.style.setProperty(
@@ -48,12 +85,12 @@ export default function App() {
       setConfigMap((current) => ({
         ...current,
         [activeScene.id]: {
-          ...current[activeScene.id],
+          ...normalizeSceneConfig(activeScene, current[activeScene.id]),
           [key]: value,
         },
       }));
     },
-    [activeScene.id],
+    [activeScene],
   );
 
   const handleConfigPatch = useCallback(
@@ -66,12 +103,12 @@ export default function App() {
       setConfigMap((current) => ({
         ...current,
         [activeScene.id]: {
-          ...current[activeScene.id],
+          ...normalizeSceneConfig(activeScene, current[activeScene.id]),
           ...patchValues,
         },
       }));
     },
-    [activeScene.id],
+    [activeScene],
   );
 
   const handleTelemetry = useCallback(
