@@ -1,0 +1,12 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="boatHull" x1="38" y1="110" x2="176" y2="170" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6CF2D2"/>
+      <stop offset="1" stop-color="#178D70"/>
+    </linearGradient>
+  </defs>
+  <path d="M36 124H184L166 162C160 174 148 182 134 182H86C72 182 60 174 54 162L36 124Z" fill="url(#boatHull)"/>
+  <path d="M108 50V124" stroke="#F2FBFF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M108 56L164 98H108V56Z" fill="#F5FBFF"/>
+  <rect x="90" y="104" width="36" height="20" rx="8" fill="#D4E8FF"/>
+</svg>

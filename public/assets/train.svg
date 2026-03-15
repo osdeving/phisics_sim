@@ -1,0 +1,21 @@
+<svg width="320" height="180" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="trainBody" x1="20" y1="34" x2="276" y2="126" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7BE7FF"/>
+      <stop offset="1" stop-color="#246FFF"/>
+    </linearGradient>
+  </defs>
+  <rect x="22" y="52" width="210" height="72" rx="26" fill="url(#trainBody)"/>
+  <rect x="210" y="66" width="64" height="58" rx="18" fill="#EAF6FF"/>
+  <rect x="46" y="68" width="34" height="22" rx="8" fill="#EAF6FF"/>
+  <rect x="90" y="68" width="34" height="22" rx="8" fill="#EAF6FF"/>
+  <rect x="134" y="68" width="34" height="22" rx="8" fill="#EAF6FF"/>
+  <rect x="178" y="68" width="34" height="22" rx="8" fill="#EAF6FF"/>
+  <rect x="36" y="122" width="220" height="12" rx="6" fill="#09172B"/>
+  <circle cx="72" cy="138" r="16" fill="#09172B"/>
+  <circle cx="72" cy="138" r="8" fill="#DCEBFF"/>
+  <circle cx="150" cy="138" r="16" fill="#09172B"/>
+  <circle cx="150" cy="138" r="8" fill="#DCEBFF"/>
+  <circle cx="228" cy="138" r="16" fill="#09172B"/>
+  <circle cx="228" cy="138" r="8" fill="#DCEBFF"/>
+</svg>

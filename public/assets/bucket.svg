@@ -1,0 +1,13 @@
+<svg width="220" height="260" viewBox="0 0 220 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bucketBody" x1="42" y1="48" x2="170" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B2ECFF"/>
+      <stop offset="1" stop-color="#418DFF"/>
+    </linearGradient>
+  </defs>
+  <path d="M56 76H164L144 210C142 224 130 234 116 234H104C90 234 78 224 76 210L56 76Z" fill="url(#bucketBody)"/>
+  <rect x="42" y="62" width="136" height="24" rx="12" fill="#DFF6FF"/>
+  <path d="M72 60C72 35 88 18 110 18C132 18 148 35 148 60" stroke="#E9F7FF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M82 118H138" stroke="#EAF9FF" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+  <path d="M88 154H132" stroke="#EAF9FF" stroke-width="10" stroke-linecap="round" opacity="0.42"/>
+</svg>

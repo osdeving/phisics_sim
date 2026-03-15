@@ -1,0 +1,15 @@
+<svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="pulleyOuter" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(92 78) rotate(52) scale(132)">
+      <stop stop-color="#FFF2B0"/>
+      <stop offset="1" stop-color="#C88B1B"/>
+    </radialGradient>
+  </defs>
+  <circle cx="120" cy="120" r="82" fill="url(#pulleyOuter)"/>
+  <circle cx="120" cy="120" r="58" fill="#1A223A" opacity="0.8"/>
+  <circle cx="120" cy="120" r="18" fill="#DDE9FF"/>
+  <path d="M120 48V192" stroke="#FFEEC8" stroke-width="8" stroke-linecap="round" opacity="0.45"/>
+  <path d="M48 120H192" stroke="#FFEEC8" stroke-width="8" stroke-linecap="round" opacity="0.45"/>
+  <path d="M68 68L172 172" stroke="#FFEEC8" stroke-width="8" stroke-linecap="round" opacity="0.3"/>
+  <path d="M172 68L68 172" stroke="#FFEEC8" stroke-width="8" stroke-linecap="round" opacity="0.3"/>
+</svg>

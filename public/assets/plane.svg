@@ -1,0 +1,17 @@
+<svg width="320" height="160" viewBox="0 0 320 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="planeBody" x1="18" y1="46" x2="270" y2="102" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F5FAFF"/>
+      <stop offset="1" stop-color="#98C7FF"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 82C20 64 34 50 52 50H230C248 50 262 64 262 82C262 100 248 114 230 114H52C34 114 20 100 20 82Z" fill="url(#planeBody)"/>
+  <path d="M112 50L188 12L204 14L170 50H112Z" fill="#DDEEFF"/>
+  <path d="M112 114L188 148L204 146L170 114H112Z" fill="#DDEEFF"/>
+  <path d="M246 62L308 48L300 68L246 82V62Z" fill="#8EBBFF"/>
+  <path d="M246 98L308 112L300 92L246 82V98Z" fill="#8EBBFF"/>
+  <circle cx="70" cy="82" r="8" fill="#4E92FF"/>
+  <circle cx="102" cy="82" r="8" fill="#4E92FF"/>
+  <circle cx="134" cy="82" r="8" fill="#4E92FF"/>
+  <circle cx="166" cy="82" r="8" fill="#4E92FF"/>
+</svg>

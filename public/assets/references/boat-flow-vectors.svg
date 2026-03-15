@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"><!--
+
+   Author: Yves Baelde
+
+   Aspect ratio  5/4 = 750/600
+
+--><svg viewBox="-88 -55 790 632" width="750" height="600" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" preserveAspectRatio="xMinYMin"><defs><pattern id="gk" width="194" height="168"
+ patternUnits="userSpaceOnUse" patternTransform="matrix(1 -.2679 -.3094 1.1547 71 41)"><path fill="#bcd" d="M0 0H194V168H0"/><path d="M97 0h97L0 168H97L0 0V84l194 84L0 0 194 84v84"
+ fill="#7aa"/></pattern><pattern width="120" height="69" id="wvs" patternUnits="userSpaceOnUse"><path fill="none" d="M0 7q8-8 13 0t13 0m31 31q8 8 13 0t13 0" stroke-width="3"
+ stroke="#fff"/></pattern></defs><path fill="url(#gk)" d="M-88-55H702V577H-88"/><path fill="url(#wvs)" d="M-88-52H702V580H-88"/><g fill="none" stroke="#300" stroke-width="4"><path stroke="#000"
+ stroke-dasharray="21,13,8,13" d="m456 549-497-497m164-82 255 255"/><path stroke="#555" d="m157 87-8-3-26 26q21 71 97 71v-5m15-4v5q-73.5 0-97-71l26-26l8 3m15-4-8-3-26 26q21 71 97 71v-5m15-4v5q-73.5
+  0-97-71l26-26l8 3m15-4-8-3-26 26q21 71 97 71v-5m15-4v5q-73.5 0-97-71l26-26l8 3"/><path d="M213 86q21 71 97 71 0-73.5-71-97z"/><g stroke-linejoin="bevel" stroke-width="15"><path stroke="#04b"
+ d="m414 83-37-64v74m0-74 86 321m19 11a16 16 0 1 0-30 8"/><path stroke="#d20" d="M127 198a16 16 0 1 1-22 22m22 0 273 273m-37-64 37 64-64-37m261-190 64 37-37-64m37 64-273-273m0-22a16 16
+  0 1 1-22 22"/><path stroke="#04b" d="m21 270-37-64v74m0-74 86 321m19 11a16 16 0 1 0-30 8m356-57a16 16 0 1 0-30 8m11-19-86-321m0 74v-74l37 64"/><path stroke="#050" opacity=".82"
+ d="m246 194 64-37h-74m74 0-194 52m351 146 194-52m-74 0h74l-64 37"/></g><path fill="#853" d="M19 138q21 71 97 71 0-73.5-71-97z"/></g><text font-family='"Bitstream Charter",serif'
+ font-weight="bold" fill="#04b" font-style="italic" font-size="57" y="405" x="62">F<tspan fill="#050" x="534">K</tspan><tspan fill="#d20" x="192">T<tspan
+ x="546" y="154">T</tspan></tspan><tspan x="471" y="276">F</tspan></text></svg>

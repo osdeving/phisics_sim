@@ -1,0 +1,20 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="wood" x1="22" y1="24" x2="190" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0B96E"/>
+      <stop offset="1" stop-color="#A35F24"/>
+    </linearGradient>
+    <linearGradient id="woodDark" x1="110" y1="24" x2="110" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8C491C"/>
+      <stop offset="1" stop-color="#5F2D12"/>
+    </linearGradient>
+  </defs>
+  <rect x="24" y="24" width="172" height="172" rx="22" fill="url(#wood)"/>
+  <rect x="34" y="38" width="152" height="26" rx="12" fill="url(#woodDark)" opacity="0.42"/>
+  <rect x="34" y="84" width="152" height="26" rx="12" fill="url(#woodDark)" opacity="0.36"/>
+  <rect x="34" y="130" width="152" height="26" rx="12" fill="url(#woodDark)" opacity="0.42"/>
+  <rect x="48" y="24" width="16" height="172" rx="8" fill="#6E350F" opacity="0.55"/>
+  <rect x="156" y="24" width="16" height="172" rx="8" fill="#6E350F" opacity="0.55"/>
+  <path d="M52 56L168 164" stroke="#FFE3B7" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+  <path d="M168 56L52 164" stroke="#FFE3B7" stroke-width="8" stroke-linecap="round" opacity="0.42"/>
+</svg>
