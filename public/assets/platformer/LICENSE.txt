@@ -1,0 +1,16 @@
+Platformer assets used in this folder
+
+Sources
+- Kenney - Platformer Characters 1
+- Kenney - Simplified Platformer Pack
+
+Downloaded from
+- https://opengameart.org/content/platformer-characters-1
+- https://opengameart.org/content/simplified-platformer-pack
+
+License
+- Creative Commons Zero (CC0) 1.0
+- https://creativecommons.org/publicdomain/zero/1.0/
+
+Selected files in this project were copied from those packs and renamed for clarity.
+Credit to Kenney is appreciated but not required by the license.

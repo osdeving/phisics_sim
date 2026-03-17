@@ -18,6 +18,10 @@ import {
   DEFAULT_MATERIAL,
   type PhysicsMaterial,
 } from "./Material";
+import {
+  ALL_COLLISION_BITS,
+  normalizeCollisionBits,
+} from "../collision/filter";
 
 export type BodyType = "static" | "dynamic" | "kinematic";
 
@@ -28,6 +32,8 @@ export interface ColliderDefinition {
   localRotation?: number;
   material?: Partial<PhysicsMaterial>;
   isSensor?: boolean;
+  collisionLayer?: number;
+  collisionMask?: number;
   userData?: Record<string, unknown>;
 }
 
@@ -38,6 +44,8 @@ export interface Collider {
   localRotation: number;
   material: PhysicsMaterial;
   isSensor: boolean;
+  collisionLayer: number;
+  collisionMask: number;
   userData?: Record<string, unknown>;
 }
 
@@ -74,6 +82,11 @@ function buildColliders(definitions: ColliderDefinition[]): Collider[] {
       ...definition.material,
     },
     isSensor: definition.isSensor ?? false,
+    collisionLayer: normalizeCollisionBits(definition.collisionLayer, 1),
+    collisionMask: normalizeCollisionBits(
+      definition.collisionMask,
+      ALL_COLLISION_BITS,
+    ),
     userData: definition.userData,
   }));
 }
@@ -355,6 +368,8 @@ export class RigidBody {
         localRotation: collider.localRotation,
         material: { ...collider.material },
         isSensor: collider.isSensor,
+        collisionLayer: collider.collisionLayer,
+        collisionMask: collider.collisionMask,
         userData: collider.userData ? { ...collider.userData } : undefined,
       })),
     });

@@ -1,5 +1,6 @@
 import { bouncingBallScene } from '../physics/scenes/bouncingBallScene';
 import { cableStaticsScene } from '../physics/scenes/cableStaticsScene';
+import { engineLabScene } from '../physics/scenes/engineLabScene';
 import { freeFallScene } from '../physics/scenes/freeFallScene';
 import { forkliftScene } from '../physics/scenes/forkliftScene';
 import { inclineScene } from '../physics/scenes/inclineScene';
@@ -8,6 +9,7 @@ import { mcuScene } from '../physics/scenes/mcuScene';
 import { mruScene } from '../physics/scenes/mruScene';
 import { mruvScene } from '../physics/scenes/mruvScene';
 import { packageDropScene } from '../physics/scenes/packageDropScene';
+import { platformerLabScene } from '../physics/scenes/platformerLabScene';
 import { pulleyScene } from '../physics/scenes/pulleyScene';
 import { relativeMotionScenes } from '../physics/scenes/relativeMotionScenes';
 import { riverCrossingScene } from '../physics/scenes/riverCrossingScene';
@@ -16,9 +18,13 @@ import { trainCollisionScene } from '../physics/scenes/trainCollisionScene';
 import { tractionScene } from '../physics/scenes/tractionScene';
 import { vectorLabScene } from '../physics/scenes/vectorLabScene';
 import { wallBracketScene } from '../physics/scenes/wallBracketScene';
+import { wreckingBallScene } from '../physics/scenes/wreckingBallScene';
 
 export const scenes = [
   forkliftScene,
+  wreckingBallScene,
+  engineLabScene,
+  platformerLabScene,
   ...mathFoundationScenes,
   vectorLabScene,
   mruScene,

@@ -82,6 +82,19 @@ export interface SpriteAtlas {
   train?: HTMLImageElement;
   boat?: HTMLImageElement;
   package?: HTMLImageElement;
+  platformerPlayerIdle?: HTMLImageElement;
+  platformerPlayerRun1?: HTMLImageElement;
+  platformerPlayerRun2?: HTMLImageElement;
+  platformerPlayerJump?: HTMLImageElement;
+  platformerPlayerFall?: HTMLImageElement;
+  platformerPlayerSkid?: HTMLImageElement;
+  platformerTileGrass?: HTMLImageElement;
+  platformerTileDirt?: HTMLImageElement;
+  platformerTileStoneGrass?: HTMLImageElement;
+  platformerTileStone?: HTMLImageElement;
+  platformerSpikes?: HTMLImageElement;
+  platformerDoor?: HTMLImageElement;
+  platformerGem?: HTMLImageElement;
 }
 
 export interface RenderViewport {

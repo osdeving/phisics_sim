@@ -1,11 +1,15 @@
 import { Vector3 } from "../math/Vector3";
 
 export interface ContactPoint {
+  id: string;
   position: Vector3;
   penetration: number;
+  normalImpulse: number;
+  tangentImpulse: number;
 }
 
 export interface ContactManifold {
+  id: string;
   bodyAId: string;
   bodyBId: string;
   colliderAId: string;
@@ -18,3 +22,16 @@ export interface ContactManifold {
   isSensor: boolean;
 }
 
+export interface ContactEventSet {
+  begin: ContactManifold[];
+  persist: ContactManifold[];
+  end: ContactManifold[];
+}
+
+export function createEmptyContactEventSet(): ContactEventSet {
+  return {
+    begin: [],
+    persist: [],
+    end: [],
+  };
+}

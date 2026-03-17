@@ -10,6 +10,8 @@ import {
 } from "./shapes";
 import { Vector3 } from "../math/Vector3";
 
+const CONTACT_EPSILON = 1e-4;
+
 function combineMaterial(
   first: ColliderSnapshot["collider"],
   second: ColliderSnapshot["collider"],
@@ -31,18 +33,26 @@ function createManifold(
   snapshotB: ColliderSnapshot,
   normal: Vector3,
   penetration: number,
-  points: ContactPoint[],
+  points: Array<Pick<ContactPoint, "position" | "penetration">>,
 ): ContactManifold {
   const material = combineMaterial(snapshotA.collider, snapshotB.collider);
+  const manifoldId = `${bodyA.id}:${snapshotA.collider.id}::${bodyB.id}:${snapshotB.collider.id}`;
 
   return {
+    id: manifoldId,
     bodyAId: bodyA.id,
     bodyBId: bodyB.id,
     colliderAId: snapshotA.collider.id,
     colliderBId: snapshotB.collider.id,
     normal,
     penetration,
-    points,
+    points: points.map((point, index) => ({
+      id: `${manifoldId}:${index}`,
+      position: point.position,
+      penetration: point.penetration,
+      normalImpulse: 0,
+      tangentImpulse: 0,
+    })),
     friction: material.friction,
     restitution: material.restitution,
     isSensor: material.isSensor,
@@ -61,13 +71,13 @@ function circleCircleContact(
   const distance = delta.length;
   const radiusSum = circleA.radius + circleB.radius;
 
-  if (distance >= radiusSum) {
+  if (distance > radiusSum + CONTACT_EPSILON) {
     return null;
   }
 
   const normal =
     distance === 0 ? Vector3.right() : delta.scale(1 / distance);
-  const penetration = radiusSum - distance;
+  const penetration = Math.max(radiusSum - distance, 0);
   const point = circleA.center.add(
     normal.scale(circleA.radius - penetration * 0.5),
   );
@@ -133,7 +143,7 @@ function circlePolygonContact(
   const distance = delta.length;
   const inside = isPointInsidePolygon(circle.center, polygon);
 
-  if (!inside && distance >= circle.radius) {
+  if (!inside && distance > circle.radius + CONTACT_EPSILON) {
     return null;
   }
 
@@ -142,7 +152,9 @@ function circlePolygonContact(
     distance === 0
       ? polygon.normals[0] ?? Vector3.down()
       : directionToPolygon.scale(1 / distance);
-  const penetration = inside ? circle.radius + distance : circle.radius - distance;
+  const penetration = inside
+    ? circle.radius + distance
+    : Math.max(circle.radius - distance, 0);
   const contactPoint = inside
     ? circle.center.add(normal.scale(circle.radius))
     : closestPoint;
@@ -184,14 +196,14 @@ function getAxisWithLeastOverlap(
       Math.min(projectionA.max, projectionB.max) -
       Math.max(projectionA.min, projectionB.min);
 
-    if (overlap <= 0) {
+    if (overlap < -CONTACT_EPSILON) {
       return null;
     }
 
     if (!best || overlap < best.overlap) {
       best = {
         axis: normalizedAxis,
-        overlap,
+        overlap: Math.max(overlap, 0),
       };
     }
   }

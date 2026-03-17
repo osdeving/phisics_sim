@@ -108,6 +108,7 @@ function useKeyboardInput(inputRef: React.MutableRefObject<InputState>) {
         inputRef.current.jump = true;
       }
       if (
+        event.code === "ArrowUp" ||
         event.code === "KeyR" ||
         event.code === "PageUp" ||
         event.code === "KeyW"
@@ -115,6 +116,7 @@ function useKeyboardInput(inputRef: React.MutableRefObject<InputState>) {
         inputRef.current.liftUp = true;
       }
       if (
+        event.code === "ArrowDown" ||
         event.code === "KeyF" ||
         event.code === "PageDown" ||
         event.code === "KeyS"
@@ -155,6 +157,7 @@ function useKeyboardInput(inputRef: React.MutableRefObject<InputState>) {
         inputRef.current.jump = false;
       }
       if (
+        event.code === "ArrowUp" ||
         event.code === "KeyR" ||
         event.code === "PageUp" ||
         event.code === "KeyW"
@@ -162,6 +165,7 @@ function useKeyboardInput(inputRef: React.MutableRefObject<InputState>) {
         inputRef.current.liftUp = false;
       }
       if (
+        event.code === "ArrowDown" ||
         event.code === "KeyF" ||
         event.code === "PageDown" ||
         event.code === "KeyS"
@@ -513,9 +517,44 @@ export function SimulationStage({
       loadImage(assetUrl("assets/train.svg")),
       loadImage(assetUrl("assets/boat.svg")),
       loadImage(assetUrl("assets/package.svg")),
+      loadImage(assetUrl("assets/platformer/player_idle.png")),
+      loadImage(assetUrl("assets/platformer/player_walk1.png")),
+      loadImage(assetUrl("assets/platformer/player_walk2.png")),
+      loadImage(assetUrl("assets/platformer/player_jump.png")),
+      loadImage(assetUrl("assets/platformer/player_fall.png")),
+      loadImage(assetUrl("assets/platformer/player_skid.png")),
+      loadImage(assetUrl("assets/platformer/tile_grass.png")),
+      loadImage(assetUrl("assets/platformer/tile_dirt.png")),
+      loadImage(assetUrl("assets/platformer/tile_stone_grass.png")),
+      loadImage(assetUrl("assets/platformer/tile_stone.png")),
+      loadImage(assetUrl("assets/platformer/spikes.png")),
+      loadImage(assetUrl("assets/platformer/door.png")),
+      loadImage(assetUrl("assets/platformer/gem.png")),
     ])
       .then(
-        ([car, crate, bucket, pulley, plane, train, boat, packageSprite]) => {
+        ([
+          car,
+          crate,
+          bucket,
+          pulley,
+          plane,
+          train,
+          boat,
+          packageSprite,
+          platformerPlayerIdle,
+          platformerPlayerRun1,
+          platformerPlayerRun2,
+          platformerPlayerJump,
+          platformerPlayerFall,
+          platformerPlayerSkid,
+          platformerTileGrass,
+          platformerTileDirt,
+          platformerTileStoneGrass,
+          platformerTileStone,
+          platformerSpikes,
+          platformerDoor,
+          platformerGem,
+        ]) => {
           if (!active) {
             return;
           }
@@ -529,6 +568,19 @@ export function SimulationStage({
             train,
             boat,
             package: packageSprite,
+            platformerPlayerIdle,
+            platformerPlayerRun1,
+            platformerPlayerRun2,
+            platformerPlayerJump,
+            platformerPlayerFall,
+            platformerPlayerSkid,
+            platformerTileGrass,
+            platformerTileDirt,
+            platformerTileStoneGrass,
+            platformerTileStone,
+            platformerSpikes,
+            platformerDoor,
+            platformerGem,
           };
         },
       )
