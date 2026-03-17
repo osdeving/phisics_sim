@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { SceneDefinition } from "../physics/scenes/types";
 import { WorkspaceTabId } from "./WorkspaceTabs";
 
@@ -49,6 +50,16 @@ const menuLabels: Record<MenuId, string> = {
   help: "Help",
 };
 
+type MenuPosition = {
+  top: number;
+  left: number;
+  width: number;
+};
+
+const MENU_WIDTH = 248;
+const MENU_GAP = 6;
+const VIEWPORT_PADDING = 12;
+
 export function AppNavbar({
   scenes,
   activeScene,
@@ -61,6 +72,18 @@ export function AppNavbar({
   onToggleRightDock,
 }: AppNavbarProps) {
   const [openMenu, setOpenMenu] = useState<MenuId | null>(null);
+  const [menuPosition, setMenuPosition] = useState<MenuPosition | null>(null);
+  const buttonRefs = useRef<Record<MenuId, HTMLButtonElement | null>>({
+    file: null,
+    edit: null,
+    view: null,
+    window: null,
+    journey: null,
+    insert: null,
+    settings: null,
+    help: null,
+  });
+  const closeTimerRef = useRef<number | null>(null);
 
   const groupedScenes = useMemo(() => {
     const groups = new Map<string, SceneDefinition[]>();
@@ -91,10 +114,75 @@ export function AppNavbar({
     (scene) => scene.category === "Matematica base",
   );
 
-  const closeMenu = () => setOpenMenu(null);
-  const toggleMenu = (menuId: MenuId) => {
-    setOpenMenu((current) => (current === menuId ? null : menuId));
+  const clearCloseTimer = () => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
   };
+
+  const closeMenu = () => {
+    clearCloseTimer();
+    setOpenMenu(null);
+    setMenuPosition(null);
+  };
+
+  const scheduleCloseMenu = () => {
+    clearCloseTimer();
+    closeTimerRef.current = window.setTimeout(() => {
+      setOpenMenu(null);
+      setMenuPosition(null);
+    }, 90);
+  };
+
+  const computeMenuPosition = (menuId: MenuId) => {
+    const button = buttonRefs.current[menuId];
+    if (!button) {
+      return null;
+    }
+
+    const rect = button.getBoundingClientRect();
+    const maxLeft = window.innerWidth - MENU_WIDTH - VIEWPORT_PADDING;
+    const left = Math.max(VIEWPORT_PADDING, Math.min(rect.left, maxLeft));
+
+    return {
+      top: rect.bottom + MENU_GAP,
+      left,
+      width: MENU_WIDTH,
+    };
+  };
+
+  const openMenuAt = (menuId: MenuId) => {
+    clearCloseTimer();
+    setOpenMenu(menuId);
+    setMenuPosition(computeMenuPosition(menuId));
+  };
+
+  useEffect(() => {
+    if (!openMenu) {
+      return;
+    }
+
+    const updatePosition = () => {
+      setMenuPosition(computeMenuPosition(openMenu));
+    };
+
+    updatePosition();
+
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [openMenu]);
+
+  useEffect(() => {
+    return () => {
+      clearCloseTimer();
+    };
+  }, []);
 
   const menus = useMemo<Record<MenuId, MenuEntry[]>>(
     () => ({
@@ -241,7 +329,7 @@ export function AppNavbar({
         key: `${activeScene.id}-hint-${index}`,
         label: hint,
         meta: "Hint",
-        onSelect: closeMenu,
+        onSelect: () => undefined,
       })),
     }),
     [
@@ -265,73 +353,101 @@ export function AppNavbar({
     ],
   );
 
-  return (
-    <header className="app-navbar card">
-      <button type="button" className="app-navbar__logo" onClick={closeMenu}>
-        <span>PS</span>
-      </button>
-
-      <div className="app-navbar__menu-rail">
-        <nav
-          className="app-navbar__menu"
-          aria-label="Application menu"
-          onMouseLeave={closeMenu}
-        >
-          {(Object.keys(menuLabels) as MenuId[]).map((menuId) => (
-            <div
-              key={menuId}
-              className={`app-navbar__menu-item ${openMenu === menuId ? "is-open" : ""}`}
-              onMouseEnter={() => setOpenMenu(menuId)}
-            >
-              <button
-                type="button"
-                className="app-navbar__menu-button"
-                aria-haspopup="menu"
-                aria-expanded={openMenu === menuId}
-                onClick={() => toggleMenu(menuId)}
-              >
-                {menuLabels[menuId]}
-              </button>
-
-              <div className="app-navbar__dropdown" role="menu">
-                {menus[menuId].map((entry) => {
-                  if (entry.type === "divider") {
-                    return <div key={entry.key} className="app-navbar__dropdown-divider" />;
-                  }
-
+  const renderedOverlay =
+    openMenu && menuPosition
+      ? createPortal(
+          <div
+            className="app-navbar__menu-overlay"
+            onMouseEnter={clearCloseTimer}
+            onMouseLeave={scheduleCloseMenu}
+            style={{
+              top: `${menuPosition.top}px`,
+              left: `${menuPosition.left}px`,
+              width: `${menuPosition.width}px`,
+            }}
+          >
+            <div className="app-navbar__dropdown" role="menu">
+              {menus[openMenu].map((entry) => {
+                if (entry.type === "divider") {
                   return (
-                    <button
+                    <div
                       key={entry.key}
-                      type="button"
-                      role="menuitem"
-                      className={`app-navbar__dropdown-item ${entry.active ? "is-active" : ""}`}
-                      onClick={() => {
-                        entry.onSelect();
-                        closeMenu();
-                      }}
-                    >
-                      <span className="app-navbar__dropdown-label">
-                        {entry.label}
-                      </span>
-                      {entry.meta ? (
-                        <span className="app-navbar__dropdown-meta">{entry.meta}</span>
-                      ) : null}
-                    </button>
+                      className="app-navbar__dropdown-divider"
+                    />
                   );
-                })}
-              </div>
-            </div>
-          ))}
-        </nav>
-      </div>
+                }
 
-      <div className="app-navbar__status">
-        <span className="app-navbar__status-title">{activeScene.title}</span>
-        <span className="app-navbar__status-subtitle">
-          {scenes.length} items
-        </span>
-        <span className="app-navbar__status-dot" />
-      </div>
-    </header>
+                return (
+                  <button
+                    key={entry.key}
+                    type="button"
+                    role="menuitem"
+                    className={`app-navbar__dropdown-item ${entry.active ? "is-active" : ""}`}
+                    onClick={() => {
+                      entry.onSelect();
+                      closeMenu();
+                    }}
+                  >
+                    <span className="app-navbar__dropdown-label">
+                      {entry.label}
+                    </span>
+                    {entry.meta ? (
+                      <span className="app-navbar__dropdown-meta">
+                        {entry.meta}
+                      </span>
+                    ) : null}
+                  </button>
+                );
+              })}
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
+
+  return (
+    <>
+      <header className="app-navbar card">
+        <button type="button" className="app-navbar__logo" onClick={closeMenu}>
+          <span>PS</span>
+        </button>
+
+        <div className="app-navbar__menu-rail">
+          <nav className="app-navbar__menu" aria-label="Application menu">
+            {(Object.keys(menuLabels) as MenuId[]).map((menuId) => (
+              <div
+                key={menuId}
+                className={`app-navbar__menu-item ${openMenu === menuId ? "is-open" : ""}`}
+                onMouseEnter={() => openMenuAt(menuId)}
+                onMouseLeave={scheduleCloseMenu}
+              >
+                <button
+                  ref={(node) => {
+                    buttonRefs.current[menuId] = node;
+                  }}
+                  type="button"
+                  className="app-navbar__menu-button"
+                  aria-haspopup="menu"
+                  aria-expanded={openMenu === menuId}
+                  onClick={() => openMenuAt(menuId)}
+                >
+                  {menuLabels[menuId]}
+                </button>
+              </div>
+            ))}
+          </nav>
+        </div>
+
+        <div className="app-navbar__status">
+          <span className="app-navbar__status-title">{activeScene.title}</span>
+          <span className="app-navbar__status-subtitle">
+            {scenes.length} items
+          </span>
+          <span className="app-navbar__status-dot" />
+        </div>
+      </header>
+
+      {renderedOverlay}
+    </>
   );
 }
