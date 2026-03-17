@@ -134,7 +134,6 @@ export default function App() {
         <SceneTabs
           scenes={scenes}
           activeSceneId={activeScene.id}
-          activeScene={activeScene}
           onChange={setActiveSceneId}
         />
 

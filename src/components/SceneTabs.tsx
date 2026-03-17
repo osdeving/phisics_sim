@@ -4,7 +4,6 @@ import { SceneDefinition } from "../physics/scenes/types";
 interface SceneTabsProps {
   scenes: SceneDefinition[];
   activeSceneId: string;
-  activeScene: SceneDefinition;
   onChange: (sceneId: string) => void;
 }
 
@@ -29,7 +28,7 @@ function getSceneGlyph(scene: SceneDefinition) {
   return scene.navGlyph ?? buildSceneGlyph(scene.title);
 }
 
-export function SceneTabs({ scenes, activeSceneId, activeScene, onChange }: SceneTabsProps) {
+export function SceneTabs({ scenes, activeSceneId, onChange }: SceneTabsProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -139,29 +138,6 @@ export function SceneTabs({ scenes, activeSceneId, activeScene, onChange }: Scen
           ))}
         </div>
 
-        {!collapsed && (
-          <section className="scene-menu__details">
-            <p className="eyebrow">Cena ativa</p>
-            <h3>{activeScene.title}</h3>
-            <p className="scene-menu__details-subtitle">{activeScene.subtitle}</p>
-            <p className="scene-menu__details-summary">{activeScene.summary}</p>
-
-            <div className="scene-menu__meta">
-              <span className="scene-menu__meta-chip">{activeScene.category}</span>
-              <span className="scene-menu__meta-chip">
-                {activeScene.controls.length} controle{activeScene.controls.length === 1 ? "" : "s"}
-              </span>
-            </div>
-
-            {!!activeScene.keyboardHints.length && (
-              <ul className="scene-menu__details-list">
-                {activeScene.keyboardHints.map((hint) => (
-                  <li key={hint}>{hint}</li>
-                ))}
-              </ul>
-            )}
-          </section>
-        )}
       </aside>
     </div>
   );

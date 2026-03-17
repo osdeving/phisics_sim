@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { SceneDefinition } from "../physics/scenes/types";
 
 interface AppNavbarProps {
@@ -11,17 +12,26 @@ export function AppNavbar({
   activeScene,
   onChangeScene,
 }: AppNavbarProps) {
-  const categoryMap = new Map<string, SceneDefinition[]>();
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
 
-  scenes.forEach((scene) => {
-    const bucket = categoryMap.get(scene.category);
-    if (bucket) {
-      bucket.push(scene);
-      return;
-    }
+  const groupedScenes = useMemo(() => {
+    const categoryMap = new Map<string, SceneDefinition[]>();
 
-    categoryMap.set(scene.category, [scene]);
-  });
+    scenes.forEach((scene) => {
+      const bucket = categoryMap.get(scene.category);
+      if (bucket) {
+        bucket.push(scene);
+        return;
+      }
+
+      categoryMap.set(scene.category, [scene]);
+    });
+
+    return Array.from(categoryMap.entries()).map(([category, categoryScenes]) => ({
+      category,
+      scenes: categoryScenes,
+    }));
+  }, [scenes]);
 
   return (
     <header className="app-navbar card">
@@ -33,19 +43,61 @@ export function AppNavbar({
         </p>
       </div>
 
-      <nav className="app-navbar__categories" aria-label="Categorias de cenas">
-        {Array.from(categoryMap.entries()).map(([category, categoryScenes]) => {
+      <nav
+        className="app-navbar__menu"
+        aria-label="Categorias de cenas"
+        onMouseLeave={() => setOpenCategory(null)}
+      >
+        {groupedScenes.map(({ category, scenes: categoryScenes }) => {
           const isActive = activeScene.category === category;
+          const isOpen = openCategory === category;
+
           return (
-            <button
+            <div
               key={category}
-              type="button"
-              className={`app-navbar__category ${isActive ? "is-active" : ""}`}
-              onClick={() => onChangeScene(categoryScenes[0].id)}
+              className={`app-navbar__menu-item ${isActive ? "is-active" : ""} ${isOpen ? "is-open" : ""}`}
+              onMouseEnter={() => setOpenCategory(category)}
             >
-              <span>{category}</span>
-              <small>{categoryScenes.length}</small>
-            </button>
+              <button
+                type="button"
+                className="app-navbar__menu-button"
+                aria-haspopup="menu"
+                aria-expanded={isOpen}
+                onClick={() =>
+                  setOpenCategory((current) =>
+                    current === category ? null : category,
+                  )
+                }
+              >
+                <span>{category}</span>
+                <small>{categoryScenes.length}</small>
+                <span className="app-navbar__caret">▾</span>
+              </button>
+
+              <div className="app-navbar__dropdown" role="menu">
+                {categoryScenes.map((scene) => (
+                  <button
+                    key={scene.id}
+                    type="button"
+                    role="menuitem"
+                    className={`app-navbar__scene-link ${scene.id === activeScene.id ? "is-active" : ""}`}
+                    onClick={() => {
+                      onChangeScene(scene.id);
+                      setOpenCategory(null);
+                    }}
+                  >
+                    <span
+                      className="app-navbar__scene-dot"
+                      style={{ ["--scene-accent" as string]: scene.accent }}
+                    />
+                    <span className="app-navbar__scene-copy">
+                      <span className="app-navbar__scene-title">{scene.title}</span>
+                      <span className="app-navbar__scene-subtitle">{scene.subtitle}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
           );
         })}
       </nav>
