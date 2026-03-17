@@ -10,11 +10,25 @@ type MarkdownBlock =
   | { type: "formula"; expression: string };
 
 function renderInline(text: string) {
-  const parts = text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g);
+  const parts = text.split(
+    /(\$\$[^$\n]+\$\$|\$[^$\n]+\$|\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g,
+  );
 
   return parts
     .filter(Boolean)
     .map((part, index): ReactNode => {
+      const inlineFormulaMatch = part.match(/^\$\$?[^$\n]+\$\$?$/);
+      if (inlineFormulaMatch) {
+        return (
+          <MathFormula
+            key={`${part}-${index}`}
+            expression={part}
+            displayMode={false}
+            className="markdown-inline-math"
+          />
+        );
+      }
+
       const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
       if (linkMatch) {
         return (

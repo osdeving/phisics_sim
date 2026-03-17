@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { InspectorDeck } from "./components/InspectorDeck";
 import { SceneTabs } from "./components/SceneTabs";
 import { SimulationStage } from "./components/SimulationStage";
+import { WorkspaceTabs } from "./components/WorkspaceTabs";
 import { scenes } from "./data/scenes";
 import { SceneDefinition, ScenePanelData } from "./physics/scenes/types";
 
@@ -127,25 +127,25 @@ export default function App() {
         <SceneTabs
           scenes={scenes}
           activeSceneId={activeScene.id}
+          activeScene={activeScene}
           onChange={setActiveSceneId}
         />
 
-        <div className="workspace-grid">
-          <SimulationStage
-            scene={activeScene}
-            config={activeConfig}
-            onTelemetry={handleTelemetry}
-            onConfigPatch={handleConfigPatch}
-          />
-
-          <InspectorDeck
-            sceneKey={activeScene.id}
-            panel={activePanel}
-            controls={activeScene.controls}
-            config={activeConfig}
-            onChange={handleConfigChange}
-          />
-        </div>
+        <WorkspaceTabs
+          scene={activeScene}
+          panel={activePanel}
+          controls={activeScene.controls}
+          config={activeConfig}
+          onChange={handleConfigChange}
+          sceneContent={
+            <SimulationStage
+              scene={activeScene}
+              config={activeConfig}
+              onTelemetry={handleTelemetry}
+              onConfigPatch={handleConfigPatch}
+            />
+          }
+        />
       </main>
     </div>
   );

@@ -174,11 +174,11 @@ export function TutorialTabs({ sceneKey, panel, embedded = false }: TutorialTabs
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Tutorial guiado</p>
-          <h2>Entenda a simulação</h2>
+          <h2>Entenda a cena</h2>
         </div>
         <p className="panel-text">
-          O modo didático usa markdown externo; as outras abas mostram o fenômeno,
-          as equações e o fluxo numérico.
+          O modo didático usa markdown externo; as outras abas mostram conceito,
+          equações, armadilhas e a lógica por trás da cena.
         </p>
       </div>
 

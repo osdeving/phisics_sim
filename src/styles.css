@@ -129,10 +129,13 @@ input {
   box-shadow: var(--shadow);
   padding: 8px;
   transition: width 180ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .scene-menu__panel.is-collapsed {
-  width: 68px;
+  width: 78px;
 }
 
 .scene-menu__header {
@@ -145,7 +148,7 @@ input {
 }
 
 .scene-menu__header h2 {
-  margin: 0;
+  margin: 4px 0 0;
   font-size: 0.86rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -177,6 +180,7 @@ input {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-height: 0;
 }
 
 .scene-menu__group {
@@ -222,6 +226,9 @@ input {
     transform 180ms ease,
     border-color 180ms ease,
     background 180ms ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .scene-tab:hover,
@@ -238,6 +245,31 @@ input {
     rgba(103, 218, 255, 0.18),
     rgba(143, 125, 255, 0.12)
   );
+}
+
+.scene-tab__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #07111f;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--scene-accent) 88%, white 10%),
+    color-mix(in srgb, var(--scene-accent) 46%, #fff 12%)
+  );
+}
+
+.scene-tab__copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .scene-tab__title {
@@ -258,6 +290,7 @@ input {
 .scene-menu__panel.is-collapsed .scene-tab {
   padding: 8px;
   border-radius: 10px;
+  justify-content: center;
 }
 
 .scene-menu__panel.is-collapsed .scene-menu__group + .scene-menu__group {
@@ -265,9 +298,57 @@ input {
   padding-top: 6px;
 }
 
-.scene-menu__panel.is-collapsed .scene-tab__title {
-  font-size: 0.72rem;
-  text-align: center;
+.scene-menu__details {
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.scene-menu__details h3 {
+  margin: 8px 0 4px;
+  font-size: 1rem;
+}
+
+.scene-menu__details-subtitle,
+.scene-menu__details-summary {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+.scene-menu__details-summary {
+  margin-top: 8px;
+  font-size: 0.88rem;
+}
+
+.scene-menu__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.scene-menu__meta-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-soft);
+  font-size: 0.75rem;
+}
+
+.scene-menu__details-list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: var(--text-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.84rem;
 }
 
 .workspace-grid {
@@ -275,6 +356,98 @@ input {
   flex-direction: column;
   gap: 10px;
   min-width: 0;
+}
+
+.workspace-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.workspace-header {
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.workspace-header__copy {
+  min-width: 0;
+}
+
+.workspace-header h1 {
+  margin: 8px 0 6px;
+  font-size: clamp(1.3rem, 1.8vw, 2rem);
+  line-height: 1.1;
+}
+
+.workspace-header__summary {
+  margin: 0;
+  max-width: 760px;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.workspace-tabs__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.workspace-tabs__button {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.84rem;
+}
+
+.workspace-tabs__button.is-active {
+  border-color: var(--scene-accent);
+  background: linear-gradient(
+    135deg,
+    rgba(103, 218, 255, 0.18),
+    rgba(143, 125, 255, 0.14)
+  );
+}
+
+.workspace-scene-tab,
+.workspace-full-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.workspace-scene-tab__panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.9fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.workspace-panel-card {
+  padding: 12px;
+}
+
+.workspace-panel-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.workspace-panel-card--exercise {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .workspace-stage {
@@ -672,8 +845,10 @@ input {
 .formula-card .katex-display,
 .tutorial-formula .katex-display {
   margin: 0.2rem 0 0.4rem;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: hidden;
+  text-align: left;
+  padding-bottom: 2px;
 }
 
 .formula-card .katex,
@@ -684,13 +859,14 @@ input {
 
 .formula-card .katex-display > .katex,
 .tutorial-formula .katex-display > .katex {
-  display: inline-flex;
-  max-width: 100%;
+  display: inline-block;
+  min-width: max-content;
+  max-width: none;
 }
 
 .formula-card .katex-display > .katex > .katex-html,
 .tutorial-formula .katex-display > .katex > .katex-html {
-  max-width: 100%;
+  max-width: none;
 }
 
 .tutorial-item--markdown,
@@ -747,6 +923,17 @@ input {
   background: rgba(255, 255, 255, 0.08);
 }
 
+.markdown-inline-math {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: baseline;
+  max-width: 100%;
+}
+
+.markdown-inline-math .katex {
+  font-size: 1em;
+}
+
 @media (max-width: 980px) {
   .app-layout {
     grid-template-columns: 1fr;
@@ -796,9 +983,8 @@ input {
     width: min(320px, calc(100vw - 20px));
   }
 
-  .scene-menu__panel.is-collapsed .scene-tab__title {
-    text-align: left;
-    font-size: 0.82rem;
+  .scene-menu__panel.is-collapsed .scene-tab {
+    justify-content: flex-start;
   }
 
   .scene-menu__close {
@@ -809,7 +995,9 @@ input {
 
   .workspace-stage__topbar,
   .inspector-deck__header,
-  .panel-heading {
+  .panel-heading,
+  .workspace-header,
+  .workspace-panel-card__header {
     flex-direction: column;
     align-items: stretch;
   }
@@ -845,8 +1033,13 @@ input {
   .workspace-stage__topbar,
   .inspector-deck__header,
   .panel-heading,
-  .control-item__header {
+  .control-item__header,
+  .workspace-panel-card__header {
     flex-direction: column;
+  }
+
+  .workspace-scene-tab__panels {
+    grid-template-columns: 1fr;
   }
 
   .stage-player {

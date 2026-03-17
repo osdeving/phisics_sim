@@ -31,7 +31,7 @@ export function OverviewPanel({ panel }: OverviewPanelProps) {
         <div className="panel-heading">
           <div>
             <p className="eyebrow">Equações</p>
-            <h3>O que o simulador resolve</h3>
+            <h3>O que a cena usa</h3>
           </div>
         </div>
 

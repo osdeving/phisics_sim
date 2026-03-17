@@ -4,10 +4,28 @@ import { SceneDefinition } from "../physics/scenes/types";
 interface SceneTabsProps {
   scenes: SceneDefinition[];
   activeSceneId: string;
+  activeScene: SceneDefinition;
   onChange: (sceneId: string) => void;
 }
 
-export function SceneTabs({ scenes, activeSceneId, onChange }: SceneTabsProps) {
+function buildSceneGlyph(title: string) {
+  const words = title
+    .replace(/[^A-Za-zÀ-ÿ0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (!words.length) {
+    return "SC";
+  }
+
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
+
+  return `${words[0][0]}${words[1][0]}`.toUpperCase();
+}
+
+export function SceneTabs({ scenes, activeSceneId, activeScene, onChange }: SceneTabsProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -60,7 +78,12 @@ export function SceneTabs({ scenes, activeSceneId, onChange }: SceneTabsProps) {
         className={`scene-menu__panel ${collapsed ? "is-collapsed" : ""} ${mobileOpen ? "is-mobile-open" : ""}`}
       >
         <header className="scene-menu__header">
-          {!collapsed && <h2>Cenas</h2>}
+          {!collapsed && (
+            <div>
+              <p className="eyebrow">Navegação</p>
+              <h2>Cenas</h2>
+            </div>
+          )}
           <div className="scene-menu__header-actions">
             <button
               type="button"
@@ -98,9 +121,12 @@ export function SceneTabs({ scenes, activeSceneId, onChange }: SceneTabsProps) {
                     style={{ ["--scene-accent" as string]: scene.accent }}
                     title={scene.title}
                   >
-                    <span className="scene-tab__title">{scene.title}</span>
+                    <span className="scene-tab__icon">{buildSceneGlyph(scene.title)}</span>
                     {!collapsed && (
-                      <span className="scene-tab__subtitle">{scene.subtitle}</span>
+                      <span className="scene-tab__copy">
+                        <span className="scene-tab__title">{scene.title}</span>
+                        <span className="scene-tab__subtitle">{scene.subtitle}</span>
+                      </span>
                     )}
                   </button>
                 ))}
@@ -108,6 +134,30 @@ export function SceneTabs({ scenes, activeSceneId, onChange }: SceneTabsProps) {
             </section>
           ))}
         </div>
+
+        {!collapsed && (
+          <section className="scene-menu__details">
+            <p className="eyebrow">Cena ativa</p>
+            <h3>{activeScene.title}</h3>
+            <p className="scene-menu__details-subtitle">{activeScene.subtitle}</p>
+            <p className="scene-menu__details-summary">{activeScene.summary}</p>
+
+            <div className="scene-menu__meta">
+              <span className="scene-menu__meta-chip">{activeScene.category}</span>
+              <span className="scene-menu__meta-chip">
+                {activeScene.controls.length} controle{activeScene.controls.length === 1 ? "" : "s"}
+              </span>
+            </div>
+
+            {!!activeScene.keyboardHints.length && (
+              <ul className="scene-menu__details-list">
+                {activeScene.keyboardHints.map((hint) => (
+                  <li key={hint}>{hint}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
       </aside>
     </div>
   );

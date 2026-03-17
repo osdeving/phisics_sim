@@ -20,7 +20,7 @@ interface StudySceneOptions {
   summary: string;
   stageLabel: string;
   highlights: string[];
-  formulaTags: string[];
+  boardTags: string[];
   panel: ScenePanelData;
 }
 
@@ -126,50 +126,78 @@ function drawStudyBoard(
   ctx.font = "600 13px Inter, sans-serif";
   ctx.fillText(options.stageLabel, topLeft.x + width - 150, topLeft.y + 40);
 
+  const sidebarX = topLeft.x + width - 320;
+  const sidebarY = topLeft.y + 160;
+  const sidebarWidth = 270;
+  const sidebarHeight = 250;
+  const leftColumnWidth = sidebarX - topLeft.x - 40;
+
+  ctx.fillStyle = "rgba(28, 40, 61, 0.86)";
+  ctx.font = "500 17px Inter, sans-serif";
+  const summaryLines = wrapText(ctx, options.summary, leftColumnWidth);
+  summaryLines.forEach((line, index) => {
+    ctx.fillText(line, topLeft.x + 20, topLeft.y + 155 + index * 22);
+  });
+
   ctx.fillStyle = "#0f1726";
   ctx.font = "700 16px Inter, sans-serif";
-  ctx.fillText("Mapa rapido", topLeft.x + 20, topLeft.y + 164);
+  ctx.fillText("Mapa rapido", topLeft.x + 20, topLeft.y + 236);
 
-  ctx.font = "500 15px Inter, sans-serif";
+  ctx.font = "500 14px Inter, sans-serif";
   const bulletLeft = topLeft.x + 26;
-  let bulletY = topLeft.y + 196;
-  options.highlights.forEach((item) => {
+  let bulletY = topLeft.y + 268;
+  options.highlights.slice(0, 3).forEach((item) => {
     ctx.fillStyle = accent;
     ctx.beginPath();
     ctx.arc(bulletLeft, bulletY - 5, 4, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = "rgba(18, 24, 38, 0.92)";
-    const lines = wrapText(ctx, item, width - 88);
+    const lines = wrapText(ctx, item, leftColumnWidth - 20);
     lines.forEach((line, index) => {
       ctx.fillText(line, bulletLeft + 14, bulletY + index * 18);
     });
     bulletY += Math.max(28, lines.length * 18 + 10);
   });
 
+  ctx.fillStyle = "rgba(13, 24, 44, 0.06)";
+  drawRoundedPanel(ctx, sidebarX, sidebarY, sidebarWidth, sidebarHeight, 20);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(32, 47, 74, 0.1)";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
   ctx.fillStyle = "#0f1726";
-  ctx.font = "700 16px Inter, sans-serif";
-  ctx.fillText("Formulas-chave", topLeft.x + 20, bottomRight.y - 122);
+  ctx.font = "700 15px Inter, sans-serif";
+  ctx.fillText("Rota recomendada", sidebarX + 18, sidebarY + 30);
 
-  let chipX = topLeft.x + 20;
-  let chipY = bottomRight.y - 92;
+  ctx.fillStyle = "rgba(28, 40, 61, 0.86)";
+  ctx.font = "500 14px Inter, sans-serif";
+  const sideIntro = wrapText(
+    ctx,
+    "Use a aba Tutorial para a teoria completa e a aba Exercicios para revisar a aplicacao.",
+    sidebarWidth - 36,
+  );
+  sideIntro.forEach((line, index) => {
+    ctx.fillText(line, sidebarX + 18, sidebarY + 58 + index * 18);
+  });
+
+  ctx.fillStyle = "#0f1726";
+  ctx.font = "700 14px Inter, sans-serif";
+  ctx.fillText("Topicos-chave", sidebarX + 18, sidebarY + 122);
+
+  let chipY = sidebarY + 142;
   ctx.font = "700 13px Inter, sans-serif";
-  options.formulaTags.forEach((tag) => {
-    const chipWidth = ctx.measureText(tag).width + 24;
-    if (chipX + chipWidth > bottomRight.x - 20) {
-      chipX = topLeft.x + 20;
-      chipY += 38;
-    }
-
+  options.boardTags.slice(0, 4).forEach((tag) => {
     ctx.fillStyle = "rgba(13, 24, 44, 0.08)";
-    drawRoundedPanel(ctx, chipX, chipY, chipWidth, 28, 14);
+    drawRoundedPanel(ctx, sidebarX + 18, chipY, sidebarWidth - 36, 30, 15);
     ctx.fill();
     ctx.strokeStyle = "rgba(32, 47, 74, 0.12)";
     ctx.lineWidth = 1;
     ctx.stroke();
     ctx.fillStyle = "#162132";
-    ctx.fillText(tag, chipX + 12, chipY + 18);
-    chipX += chipWidth + 10;
+    ctx.fillText(tag, sidebarX + 30, chipY + 19);
+    chipY += 38;
   });
 
   ctx.restore();
@@ -224,11 +252,11 @@ const algebraFoundationScene = buildStudyScene({
     "Fatorar e escrever uma expressao como produto, o caminho natural para simplificar e resolver varias equacoes.",
     "Sempre respeite as equivalencias: o que faz de um lado, precisa fazer do outro.",
   ],
-  formulaTags: [
-    "(a+b)^2 = a^2 + 2ab + b^2",
-    "(a-b)^2 = a^2 - 2ab + b^2",
-    "(a+b)(a-b) = a^2 - b^2",
-    "ax^2 + bx + c = 0",
+  boardTags: [
+    "Equacao do 1º grau",
+    "Bhaskara e delta",
+    "Quadrados notaveis",
+    "Fatoracao por padrao",
   ],
   panel: {
     metrics: [
@@ -347,11 +375,11 @@ const fractionsScene = buildStudyScene({
     "Fracoes algebricas exigem fatoracao para simplificar com seguranca.",
     "Antes de cortar termos, transforme soma em produto. Cancelamento so vale entre fatores.",
   ],
-  formulaTags: [
-    "\\frac{a}{b} + \\frac{c}{d} = \\frac{ad+bc}{bd}",
-    "\\frac{a}{b} \\cdot \\frac{c}{d} = \\frac{ac}{bd}",
-    "\\frac{a}{b} \\div \\frac{c}{d} = \\frac{ad}{bc}",
-    "b \\neq 0, d \\neq 0",
+  boardTags: [
+    "MMC e denominador comum",
+    "Multiplicacao de fracoes",
+    "Divisao pelo inverso",
+    "Fracoes algebricas",
   ],
   panel: {
     metrics: [
@@ -472,11 +500,11 @@ const proportionalityScene = buildStudyScene({
     "Regra de tres funciona porque preserva a proporcionalidade do problema.",
     "Porcentagem e apenas uma razao sobre 100, e deve ser tratada como numero.",
   ],
-  formulaTags: [
-    "\\frac{a}{b} = \\frac{c}{d}",
-    "ad = bc",
-    "y = kx",
-    "y = \\frac{k}{x}",
+  boardTags: [
+    "Razao e proporcao",
+    "Produto dos meios",
+    "Direta e inversa",
+    "Porcentagem e escala",
   ],
   panel: {
     metrics: [
@@ -594,11 +622,11 @@ const powersRootsScene = buildStudyScene({
     "Expoente negativo indica inverso; expoente fracionario conecta potencia e raiz.",
     "Em radicais, simplifique fatorando, extraia quadrados perfeitos e racionalize quando necessario.",
   ],
-  formulaTags: [
-    "a^m \\cdot a^n = a^{m+n}",
-    "\\frac{a^m}{a^n} = a^{m-n}",
-    "(a^m)^n = a^{mn}",
-    "a^{1/n} = \\sqrt[n]{a}",
+  boardTags: [
+    "Mesma base, soma expoentes",
+    "Divisao e diferenca",
+    "Expoente negativo",
+    "Raiz e expoente fracionario",
   ],
   panel: {
     metrics: [
@@ -715,11 +743,11 @@ const geometryTrigScene = buildStudyScene({
     "Teorema de Pitagoras e a ponte entre geometria e trigonometria no triangulo retangulo.",
     "Seno, cosseno e tangente relacionam lados e angulos e aparecem em decomposicao vetorial e analise de inclinacao.",
   ],
-  formulaTags: [
-    "a^2 = b^2 + c^2",
-    "\\sin \\theta = \\frac{cat. oposto}{hipotenusa}",
-    "\\cos \\theta = \\frac{cat. adj.}{hipotenusa}",
-    "\\tan \\theta = \\frac{cat. oposto}{cat. adj.}",
+  boardTags: [
+    "Pitagoras",
+    "Seno e cosseno",
+    "Tangente",
+    "Area e semelhanca",
   ],
   panel: {
     metrics: [
@@ -837,11 +865,11 @@ const functionsScene = buildStudyScene({
     "Na quadratica, o sinal de a define a concavidade; delta, raizes e vertice descrevem a forma da parabola.",
     "Grafico e propriedades andam juntos: crescimento, decrescimento, zeros, dominio, imagem e intervalos de sinal.",
   ],
-  formulaTags: [
-    "f(x) = ax + b",
-    "f(x) = ax^2 + bx + c",
-    "x_v = -\\frac{b}{2a}",
-    "y_v = -\\frac{\\Delta}{4a}",
+  boardTags: [
+    "Funcao afim",
+    "Funcao quadratica",
+    "Vertice da parabola",
+    "Graficos e propriedades",
   ],
   panel: {
     metrics: [
