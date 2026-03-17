@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SceneDefinition } from "../physics/scenes/types";
 
 interface SceneTabsProps {
@@ -10,6 +10,28 @@ interface SceneTabsProps {
 export function SceneTabs({ scenes, activeSceneId, onChange }: SceneTabsProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const groupedScenes = useMemo(() => {
+    const groups: Array<{ category: string; scenes: SceneDefinition[] }> = [];
+    const seen = new Map<string, { category: string; scenes: SceneDefinition[] }>();
+
+    scenes.forEach((scene) => {
+      const existing = seen.get(scene.category);
+      if (existing) {
+        existing.scenes.push(scene);
+        return;
+      }
+
+      const group = {
+        category: scene.category,
+        scenes: [scene],
+      };
+      seen.set(scene.category, group);
+      groups.push(group);
+    });
+
+    return groups;
+  }, [scenes]);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -60,20 +82,30 @@ export function SceneTabs({ scenes, activeSceneId, onChange }: SceneTabsProps) {
         </header>
 
         <div className="scene-menu__list">
-          {scenes.map((scene) => (
-            <button
-              key={scene.id}
-              type="button"
-              className={`scene-tab ${scene.id === activeSceneId ? "is-active" : ""}`}
-              onClick={() => onChange(scene.id)}
-              style={{ ["--scene-accent" as string]: scene.accent }}
-              title={scene.title}
-            >
-              <span className="scene-tab__title">{scene.title}</span>
+          {groupedScenes.map((group) => (
+            <section key={group.category} className="scene-menu__group">
               {!collapsed && (
-                <span className="scene-tab__subtitle">{scene.subtitle}</span>
+                <p className="scene-menu__group-title">{group.category}</p>
               )}
-            </button>
+
+              <div className="scene-menu__group-list">
+                {group.scenes.map((scene) => (
+                  <button
+                    key={scene.id}
+                    type="button"
+                    className={`scene-tab ${scene.id === activeSceneId ? "is-active" : ""}`}
+                    onClick={() => onChange(scene.id)}
+                    style={{ ["--scene-accent" as string]: scene.accent }}
+                    title={scene.title}
+                  >
+                    <span className="scene-tab__title">{scene.title}</span>
+                    {!collapsed && (
+                      <span className="scene-tab__subtitle">{scene.subtitle}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       </aside>

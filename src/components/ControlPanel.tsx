@@ -8,6 +8,22 @@ interface ControlPanelProps {
 }
 
 export function ControlPanel({ controls, config, onChange, embedded = false }: ControlPanelProps) {
+  if (!controls.length) {
+    return (
+      <div className={embedded ? 'stack-gap-sm inspector-panel' : 'card stack-gap-sm'}>
+        <div className="panel-heading">
+          <div>
+            <p className="eyebrow">Seção teórica</p>
+            <h2>Sem controles nesta cena</h2>
+          </div>
+          <p className="panel-text">
+            Este conteúdo é de base conceitual. Use as abas de tutorial e exercícios para estudar a teoria.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={embedded ? 'stack-gap-sm inspector-panel' : 'card stack-gap-sm'}>
       <div className="panel-heading">

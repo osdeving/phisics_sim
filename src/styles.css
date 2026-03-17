@@ -179,6 +179,34 @@ input {
   gap: 6px;
 }
 
+.scene-menu__group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scene-menu__group + .scene-menu__group {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.scene-menu__group-title {
+  margin: 0;
+  padding: 0 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(208, 220, 242, 0.72);
+}
+
+.scene-menu__group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .scene-tab {
   width: 100%;
   text-align: left;
@@ -230,6 +258,11 @@ input {
 .scene-menu__panel.is-collapsed .scene-tab {
   padding: 8px;
   border-radius: 10px;
+}
+
+.scene-menu__panel.is-collapsed .scene-menu__group + .scene-menu__group {
+  margin-top: 6px;
+  padding-top: 6px;
 }
 
 .scene-menu__panel.is-collapsed .scene-tab__title {
