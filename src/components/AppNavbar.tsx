@@ -2,7 +2,29 @@ import { useMemo, useState } from "react";
 import { SceneDefinition } from "../physics/scenes/types";
 import { WorkspaceTabId } from "./WorkspaceTabs";
 
-type MenuId = "file" | "view" | "categories" | "scene" | "base" | "help";
+type MenuId =
+  | "file"
+  | "edit"
+  | "view"
+  | "window"
+  | "journey"
+  | "insert"
+  | "settings"
+  | "help";
+
+type MenuEntry =
+  | {
+      type: "item";
+      key: string;
+      label: string;
+      meta?: string;
+      active?: boolean;
+      onSelect: () => void;
+    }
+  | {
+      type: "divider";
+      key: string;
+    };
 
 interface AppNavbarProps {
   scenes: SceneDefinition[];
@@ -16,10 +38,15 @@ interface AppNavbarProps {
   onToggleRightDock: () => void;
 }
 
-const workspaceTabLabels: Record<WorkspaceTabId, string> = {
-  scene: "Cena",
-  tutorial: "Tutorial",
-  exercise: "Exercícios",
+const menuLabels: Record<MenuId, string> = {
+  file: "File",
+  edit: "Edit",
+  view: "View",
+  window: "Window",
+  journey: "Journey",
+  insert: "Insert",
+  settings: "Settings",
+  help: "Help",
 };
 
 export function AppNavbar({
@@ -54,10 +81,12 @@ export function AppNavbar({
     }));
   }, [scenes]);
 
-  const activeCategoryScenes = groupedScenes.find(
-    (group) => group.category === activeScene.category,
-  )?.scenes ?? [activeScene];
-
+  const activeSceneIndex = scenes.findIndex((scene) => scene.id === activeScene.id);
+  const previousScene = scenes[(activeSceneIndex - 1 + scenes.length) % scenes.length];
+  const nextScene = scenes[(activeSceneIndex + 1) % scenes.length];
+  const activeCategoryScenes =
+    groupedScenes.find((group) => group.category === activeScene.category)?.scenes ??
+    [activeScene];
   const foundationScenes = scenes.filter(
     (scene) => scene.category === "Matematica base",
   );
@@ -67,270 +96,241 @@ export function AppNavbar({
     setOpenMenu((current) => (current === menuId ? null : menuId));
   };
 
+  const menus = useMemo<Record<MenuId, MenuEntry[]>>(
+    () => ({
+      file: [
+        {
+          type: "item",
+          key: "first-scene",
+          label: "Open First Scene",
+          meta: "Home",
+          onSelect: () => onChangeScene(scenes[0].id),
+        },
+        {
+          type: "item",
+          key: "last-scene",
+          label: "Open Last Scene",
+          meta: "End",
+          onSelect: () => onChangeScene(scenes[scenes.length - 1].id),
+        },
+        { type: "divider", key: "file-divider" },
+        {
+          type: "item",
+          key: "active-category",
+          label: `Open ${activeScene.category}`,
+          meta: `${activeCategoryScenes.length}`,
+          onSelect: () => onChangeScene(activeCategoryScenes[0].id),
+        },
+      ],
+      edit: [
+        {
+          type: "item",
+          key: "previous-scene",
+          label: "Previous Scene",
+          meta: "[",
+          onSelect: () => onChangeScene(previousScene.id),
+        },
+        {
+          type: "item",
+          key: "next-scene",
+          label: "Next Scene",
+          meta: "]",
+          onSelect: () => onChangeScene(nextScene.id),
+        },
+        { type: "divider", key: "edit-divider" },
+        {
+          type: "item",
+          key: "scene-tab",
+          label: "Show Scene Tab",
+          meta: "1",
+          active: activeTab === "scene",
+          onSelect: () => onChangeTab("scene"),
+        },
+        {
+          type: "item",
+          key: "tutorial-tab",
+          label: "Show Tutorial Tab",
+          meta: "2",
+          active: activeTab === "tutorial",
+          onSelect: () => onChangeTab("tutorial"),
+        },
+        {
+          type: "item",
+          key: "exercise-tab",
+          label: "Show Exercises Tab",
+          meta: "3",
+          active: activeTab === "exercise",
+          onSelect: () => onChangeTab("exercise"),
+        },
+      ],
+      view: [
+        {
+          type: "item",
+          key: "toggle-library",
+          label: leftDockCollapsed ? "Show Library" : "Hide Library",
+          meta: "L",
+          onSelect: onToggleLeftDock,
+        },
+        {
+          type: "item",
+          key: "toggle-inspector",
+          label: rightDockCollapsed ? "Show Inspector" : "Hide Inspector",
+          meta: "I",
+          onSelect: onToggleRightDock,
+        },
+        { type: "divider", key: "view-divider" },
+        {
+          type: "item",
+          key: "focus-scene",
+          label: "Focus Current Scene",
+          meta: activeScene.title,
+          onSelect: () => onChangeScene(activeScene.id),
+        },
+      ],
+      window: groupedScenes.map((group) => ({
+        type: "item" as const,
+        key: group.category,
+        label: group.category,
+        meta: `${group.scenes.length}`,
+        active: group.category === activeScene.category,
+        onSelect: () => onChangeScene(group.scenes[0].id),
+      })),
+      journey: activeCategoryScenes.map((scene) => ({
+        type: "item" as const,
+        key: scene.id,
+        label: scene.title,
+        meta: scene.id === activeScene.id ? "Live" : undefined,
+        active: scene.id === activeScene.id,
+        onSelect: () => onChangeScene(scene.id),
+      })),
+      insert: foundationScenes.map((scene) => ({
+        type: "item" as const,
+        key: scene.id,
+        label: scene.title,
+        meta: scene.navGlyph,
+        active: scene.id === activeScene.id,
+        onSelect: () => onChangeScene(scene.id),
+      })),
+      settings: [
+        {
+          type: "item",
+          key: "library-state",
+          label: leftDockCollapsed ? "Library Collapsed" : "Library Expanded",
+          meta: "Dock",
+          onSelect: onToggleLeftDock,
+        },
+        {
+          type: "item",
+          key: "inspector-state",
+          label: rightDockCollapsed ? "Inspector Collapsed" : "Inspector Expanded",
+          meta: "Dock",
+          onSelect: onToggleRightDock,
+        },
+        { type: "divider", key: "settings-divider" },
+        {
+          type: "item",
+          key: "current-tab",
+          label: `Current Tab: ${activeTab}`,
+          meta: "State",
+          active: true,
+          onSelect: () => onChangeTab(activeTab),
+        },
+      ],
+      help: activeScene.keyboardHints.map((hint, index) => ({
+        type: "item" as const,
+        key: `${activeScene.id}-hint-${index}`,
+        label: hint,
+        meta: "Hint",
+        onSelect: closeMenu,
+      })),
+    }),
+    [
+      activeCategoryScenes,
+      activeScene.category,
+      activeScene.id,
+      activeScene.keyboardHints,
+      activeScene.title,
+      activeTab,
+      foundationScenes,
+      groupedScenes,
+      leftDockCollapsed,
+      nextScene.id,
+      onChangeScene,
+      onChangeTab,
+      onToggleLeftDock,
+      onToggleRightDock,
+      previousScene.id,
+      rightDockCollapsed,
+      scenes,
+    ],
+  );
+
   return (
     <header className="app-navbar card">
       <button type="button" className="app-navbar__logo" onClick={closeMenu}>
         <span>PS</span>
       </button>
 
-      <nav
-        className="app-navbar__menu"
-        aria-label="Menu principal"
-        onMouseLeave={closeMenu}
-      >
-        <div
-          className={`app-navbar__menu-item ${openMenu === "file" ? "is-open" : ""}`}
-          onMouseEnter={() => setOpenMenu("file")}
+      <div className="app-navbar__menu-rail">
+        <nav
+          className="app-navbar__menu"
+          aria-label="Application menu"
+          onMouseLeave={closeMenu}
         >
-          <button
-            type="button"
-            className="app-navbar__menu-button"
-            onClick={() => toggleMenu("file")}
-          >
-            Arquivo
-          </button>
-          <div className="app-navbar__dropdown" role="menu">
-            <button
-              type="button"
-              className="app-navbar__scene-link"
-              onClick={() => {
-                onChangeScene(scenes[0].id);
-                closeMenu();
-              }}
+          {(Object.keys(menuLabels) as MenuId[]).map((menuId) => (
+            <div
+              key={menuId}
+              className={`app-navbar__menu-item ${openMenu === menuId ? "is-open" : ""}`}
+              onMouseEnter={() => setOpenMenu(menuId)}
             >
-              <span className="app-navbar__scene-copy">
-                <span className="app-navbar__scene-title">Primeira cena</span>
-                <span className="app-navbar__scene-subtitle">
-                  Volta para o início da biblioteca.
-                </span>
-              </span>
-            </button>
-
-            <button
-              type="button"
-              className="app-navbar__scene-link"
-              onClick={() => {
-                onChangeScene(scenes[scenes.length - 1].id);
-                closeMenu();
-              }}
-            >
-              <span className="app-navbar__scene-copy">
-                <span className="app-navbar__scene-title">Última cena</span>
-                <span className="app-navbar__scene-subtitle">
-                  Salta direto para o fim da sequência.
-                </span>
-              </span>
-            </button>
-          </div>
-        </div>
-
-        <div
-          className={`app-navbar__menu-item ${openMenu === "view" ? "is-open" : ""}`}
-          onMouseEnter={() => setOpenMenu("view")}
-        >
-          <button
-            type="button"
-            className="app-navbar__menu-button"
-            onClick={() => toggleMenu("view")}
-          >
-            Exibir
-          </button>
-          <div className="app-navbar__dropdown" role="menu">
-            {(Object.keys(workspaceTabLabels) as WorkspaceTabId[]).map((tabId) => (
               <button
-                key={tabId}
                 type="button"
-                className={`app-navbar__scene-link ${activeTab === tabId ? "is-active" : ""}`}
-                onClick={() => {
-                  onChangeTab(tabId);
-                  closeMenu();
-                }}
+                className="app-navbar__menu-button"
+                aria-haspopup="menu"
+                aria-expanded={openMenu === menuId}
+                onClick={() => toggleMenu(menuId)}
               >
-                <span className="app-navbar__scene-copy">
-                  <span className="app-navbar__scene-title">
-                    {workspaceTabLabels[tabId]}
-                  </span>
-                  <span className="app-navbar__scene-subtitle">
-                    Alterna a área central para esta visualização.
-                  </span>
-                </span>
+                {menuLabels[menuId]}
               </button>
-            ))}
 
-            <button
-              type="button"
-              className="app-navbar__scene-link"
-              onClick={() => {
-                onToggleLeftDock();
-                closeMenu();
-              }}
-            >
-              <span className="app-navbar__scene-copy">
-                <span className="app-navbar__scene-title">
-                  {leftDockCollapsed ? "Mostrar biblioteca" : "Ocultar biblioteca"}
-                </span>
-                <span className="app-navbar__scene-subtitle">
-                  Controla o painel esquerdo.
-                </span>
-              </span>
-            </button>
+              <div className="app-navbar__dropdown" role="menu">
+                {menus[menuId].map((entry) => {
+                  if (entry.type === "divider") {
+                    return <div key={entry.key} className="app-navbar__dropdown-divider" />;
+                  }
 
-            <button
-              type="button"
-              className="app-navbar__scene-link"
-              onClick={() => {
-                onToggleRightDock();
-                closeMenu();
-              }}
-            >
-              <span className="app-navbar__scene-copy">
-                <span className="app-navbar__scene-title">
-                  {rightDockCollapsed ? "Mostrar inspector" : "Ocultar inspector"}
-                </span>
-                <span className="app-navbar__scene-subtitle">
-                  Controla o painel direito.
-                </span>
-              </span>
-            </button>
-          </div>
-        </div>
-
-        <div
-          className={`app-navbar__menu-item ${openMenu === "categories" ? "is-open" : ""}`}
-          onMouseEnter={() => setOpenMenu("categories")}
-        >
-          <button
-            type="button"
-            className="app-navbar__menu-button"
-            onClick={() => toggleMenu("categories")}
-          >
-            Categorias
-          </button>
-          <div className="app-navbar__dropdown" role="menu">
-            {groupedScenes.map((group) => (
-              <button
-                key={group.category}
-                type="button"
-                className={`app-navbar__scene-link ${group.category === activeScene.category ? "is-active" : ""}`}
-                onClick={() => {
-                  onChangeScene(group.scenes[0].id);
-                  closeMenu();
-                }}
-              >
-                <span className="app-navbar__scene-copy">
-                  <span className="app-navbar__scene-title">{group.category}</span>
-                  <span className="app-navbar__scene-subtitle">
-                    {group.scenes.length} cena{group.scenes.length === 1 ? "" : "s"}
-                  </span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div
-          className={`app-navbar__menu-item ${openMenu === "scene" ? "is-open" : ""}`}
-          onMouseEnter={() => setOpenMenu("scene")}
-        >
-          <button
-            type="button"
-            className="app-navbar__menu-button"
-            onClick={() => toggleMenu("scene")}
-          >
-            Cena
-          </button>
-          <div className="app-navbar__dropdown" role="menu">
-            {activeCategoryScenes.map((scene) => (
-              <button
-                key={scene.id}
-                type="button"
-                className={`app-navbar__scene-link ${scene.id === activeScene.id ? "is-active" : ""}`}
-                onClick={() => {
-                  onChangeScene(scene.id);
-                  closeMenu();
-                }}
-              >
-                <span
-                  className="app-navbar__scene-dot"
-                  style={{ ["--scene-accent" as string]: scene.accent }}
-                />
-                <span className="app-navbar__scene-copy">
-                  <span className="app-navbar__scene-title">{scene.title}</span>
-                  <span className="app-navbar__scene-subtitle">
-                    {scene.subtitle}
-                  </span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div
-          className={`app-navbar__menu-item ${openMenu === "base" ? "is-open" : ""}`}
-          onMouseEnter={() => setOpenMenu("base")}
-        >
-          <button
-            type="button"
-            className="app-navbar__menu-button"
-            onClick={() => toggleMenu("base")}
-          >
-            Base
-          </button>
-          <div className="app-navbar__dropdown" role="menu">
-            {foundationScenes.map((scene) => (
-              <button
-                key={scene.id}
-                type="button"
-                className={`app-navbar__scene-link ${scene.id === activeScene.id ? "is-active" : ""}`}
-                onClick={() => {
-                  onChangeScene(scene.id);
-                  closeMenu();
-                }}
-              >
-                <span className="app-navbar__scene-copy">
-                  <span className="app-navbar__scene-title">{scene.title}</span>
-                  <span className="app-navbar__scene-subtitle">{scene.subtitle}</span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div
-          className={`app-navbar__menu-item ${openMenu === "help" ? "is-open" : ""}`}
-          onMouseEnter={() => setOpenMenu("help")}
-        >
-          <button
-            type="button"
-            className="app-navbar__menu-button"
-            onClick={() => toggleMenu("help")}
-          >
-            Ajuda
-          </button>
-          <div className="app-navbar__dropdown" role="menu">
-            {activeScene.keyboardHints.map((hint) => (
-              <button
-                key={hint}
-                type="button"
-                className="app-navbar__scene-link"
-                onClick={closeMenu}
-              >
-                <span className="app-navbar__scene-copy">
-                  <span className="app-navbar__scene-title">{hint}</span>
-                  <span className="app-navbar__scene-subtitle">
-                    Atalho mental da cena ativa.
-                  </span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </nav>
+                  return (
+                    <button
+                      key={entry.key}
+                      type="button"
+                      role="menuitem"
+                      className={`app-navbar__dropdown-item ${entry.active ? "is-active" : ""}`}
+                      onClick={() => {
+                        entry.onSelect();
+                        closeMenu();
+                      }}
+                    >
+                      <span className="app-navbar__dropdown-label">
+                        {entry.label}
+                      </span>
+                      {entry.meta ? (
+                        <span className="app-navbar__dropdown-meta">{entry.meta}</span>
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
+      </div>
 
       <div className="app-navbar__status">
-        <span className="app-navbar__status-label">Workspace ativo</span>
-        <strong>{activeScene.title}</strong>
-        <p>{workspaceTabLabels[activeTab]}</p>
+        <span className="app-navbar__status-title">{activeScene.title}</span>
+        <span className="app-navbar__status-subtitle">
+          {scenes.length} items
+        </span>
+        <span className="app-navbar__status-dot" />
       </div>
     </header>
   );

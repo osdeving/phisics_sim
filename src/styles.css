@@ -61,7 +61,11 @@ input {
   position: relative;
   z-index: 30;
   margin-bottom: 10px;
-  padding: 10px 12px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 14px;
@@ -81,13 +85,27 @@ input {
   box-shadow: inset 0 0 0 1px rgba(125, 240, 186, 0.12);
 }
 
+.app-navbar__menu-rail {
+  min-width: 0;
+  padding: 4px 8px;
+  border-radius: 18px;
+  border: 1px solid rgba(132, 156, 211, 0.22);
+  background: linear-gradient(
+    180deg,
+    rgba(19, 30, 53, 0.96),
+    rgba(12, 21, 38, 0.96)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 24px rgba(3, 7, 16, 0.18);
+}
+
 .app-navbar__menu {
   min-width: 0;
   display: flex;
   gap: 8px;
   align-items: center;
   overflow-x: auto;
-  padding-bottom: 2px;
 }
 
 .app-navbar__menu-item {
@@ -97,60 +115,58 @@ input {
 
 .app-navbar__menu-button {
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, rgba(30, 43, 68, 0.88), rgba(20, 29, 48, 0.82));
+  background: linear-gradient(
+    180deg,
+    rgba(41, 55, 84, 0.9),
+    rgba(28, 39, 61, 0.86)
+  );
   color: var(--text-main);
   border-radius: 11px;
-  padding: 8px 12px;
+  padding: 7px 14px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
   font-size: 0.82rem;
   font-weight: 650;
   transition:
     transform 180ms ease,
     border-color 180ms ease,
-    background 180ms ease;
-}
-
-.app-navbar__menu-button small {
-  color: var(--text-soft);
+    background 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .app-navbar__menu-item:hover .app-navbar__menu-button,
-.app-navbar__menu-item.is-open .app-navbar__menu-button,
-.app-navbar__menu-item.is-active .app-navbar__menu-button {
-  border-color: var(--scene-accent);
+.app-navbar__menu-item.is-open .app-navbar__menu-button {
+  border-color: rgba(125, 190, 255, 0.46);
   background: linear-gradient(
     135deg,
-    rgba(103, 218, 255, 0.2),
-    rgba(143, 125, 255, 0.18)
+    rgba(74, 110, 205, 0.96),
+    rgba(55, 84, 171, 0.92)
   );
+  box-shadow: inset 0 0 0 1px rgba(191, 215, 255, 0.12);
   transform: translateY(-1px);
-}
-
-.app-navbar__caret {
-  font-size: 0.72rem;
-  color: var(--text-soft);
 }
 
 .app-navbar__dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 6px);
   left: 0;
-  min-width: 320px;
-  max-width: min(420px, 70vw);
-  padding: 10px;
+  min-width: 248px;
+  max-width: min(300px, 70vw);
+  max-height: min(62vh, 560px);
+  overflow: auto;
+  padding: 6px;
   border-radius: 16px;
-  border: 1px solid rgba(160, 193, 255, 0.14);
+  border: 1px solid rgba(120, 151, 208, 0.28);
   background: linear-gradient(
     180deg,
-    rgba(14, 26, 49, 0.98),
-    rgba(6, 13, 25, 0.98)
+    rgba(16, 25, 42, 0.99),
+    rgba(11, 18, 31, 0.99)
   );
   box-shadow: 0 24px 52px rgba(0, 0, 0, 0.34);
-  display: grid;
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -170,83 +186,92 @@ input {
   transform: translateY(0);
 }
 
-.app-navbar__scene-link {
+.app-navbar__dropdown-item {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.03);
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--text-main);
   cursor: pointer;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
   text-align: left;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease,
+    transform 140ms ease;
 }
 
-.app-navbar__scene-link:hover,
-.app-navbar__scene-link.is-active {
-  border-color: rgba(125, 223, 255, 0.32);
-  background: rgba(103, 218, 255, 0.12);
+.app-navbar__dropdown-item:hover,
+.app-navbar__dropdown-item.is-active {
+  border-color: rgba(125, 190, 255, 0.18);
+  background: rgba(53, 78, 132, 0.34);
+  transform: translateX(1px);
 }
 
-.app-navbar__scene-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  margin-top: 6px;
-  background: var(--scene-accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--scene-accent) 18%, transparent);
-  flex: 0 0 auto;
-}
-
-.app-navbar__scene-copy {
+.app-navbar__dropdown-label {
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+  font-size: 0.84rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.app-navbar__scene-title {
-  font-weight: 700;
-  font-size: 0.88rem;
-}
-
-.app-navbar__scene-subtitle {
-  font-size: 0.75rem;
+.app-navbar__dropdown-meta {
+  flex: 0 0 auto;
+  padding: 2px 7px;
+  border-radius: 8px;
+  border: 1px solid rgba(154, 177, 222, 0.18);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text-soft);
+  font-size: 0.68rem;
   line-height: 1.4;
+}
+
+.app-navbar__dropdown-divider {
+  height: 1px;
+  margin: 4px 6px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .app-navbar__status {
   min-width: 0;
   padding: 8px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(108, 223, 255, 0.14);
-  background: linear-gradient(180deg, rgba(15, 35, 59, 0.94), rgba(9, 20, 38, 0.92));
-  text-align: right;
+  border-radius: 16px;
+  border: 1px solid rgba(108, 223, 255, 0.16);
+  background: linear-gradient(
+    180deg,
+    rgba(15, 35, 59, 0.94),
+    rgba(9, 20, 38, 0.92)
+  );
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 10px;
+  align-items: center;
 }
 
-.app-navbar__status-label {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 0.72rem;
+.app-navbar__status-title {
+  font-size: 0.84rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--scene-accent);
+  color: var(--text-main);
 }
 
-.app-navbar__status strong {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 0.98rem;
-}
-
-.app-navbar__status p {
-  margin: 0;
+.app-navbar__status-subtitle {
+  font-size: 0.74rem;
   color: var(--text-soft);
-  line-height: 1.3;
+}
+
+.app-navbar__status-dot {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #38d77c;
+  box-shadow: 0 0 0 4px rgba(56, 215, 124, 0.12);
 }
 
 .app-toolbar {
