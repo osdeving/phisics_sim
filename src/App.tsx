@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { AppNavbar } from "./components/AppNavbar";
 import { SceneTabs } from "./components/SceneTabs";
 import { SimulationStage } from "./components/SimulationStage";
 import { WorkspaceTabs } from "./components/WorkspaceTabs";
@@ -123,6 +124,12 @@ export default function App() {
 
   return (
     <div className="app-shell app-shell--canvas">
+      <AppNavbar
+        scenes={scenes}
+        activeScene={activeScene}
+        onChangeScene={setActiveSceneId}
+      />
+
       <main className="app-layout">
         <SceneTabs
           scenes={scenes}

@@ -25,6 +25,10 @@ function buildSceneGlyph(title: string) {
   return `${words[0][0]}${words[1][0]}`.toUpperCase();
 }
 
+function getSceneGlyph(scene: SceneDefinition) {
+  return scene.navGlyph ?? buildSceneGlyph(scene.title);
+}
+
 export function SceneTabs({ scenes, activeSceneId, activeScene, onChange }: SceneTabsProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -121,7 +125,7 @@ export function SceneTabs({ scenes, activeSceneId, activeScene, onChange }: Scen
                     style={{ ["--scene-accent" as string]: scene.accent }}
                     title={scene.title}
                   >
-                    <span className="scene-tab__icon">{buildSceneGlyph(scene.title)}</span>
+                    <span className="scene-tab__icon">{getSceneGlyph(scene)}</span>
                     {!collapsed && (
                       <span className="scene-tab__copy">
                         <span className="scene-tab__title">{scene.title}</span>

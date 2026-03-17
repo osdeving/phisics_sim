@@ -209,8 +209,13 @@ function buildStudyScene(options: StudySceneOptions): SceneDefinition {
     title: options.title,
     subtitle: options.subtitle,
     accent: options.accent,
+    navGlyph: options.stageLabel.replace("Base ", "B").replace(/[()]/g, ""),
     category: "Matematica base",
     summary: options.summary,
+    displayMode: "board",
+    boardLabel: options.stageLabel,
+    boardHighlights: options.highlights,
+    boardTags: options.boardTags,
     worldWidth: 22,
     worldHeight: 8,
     keyboardHints: [

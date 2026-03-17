@@ -160,8 +160,13 @@ export interface SceneDefinition {
   title: string;
   subtitle: string;
   accent: string;
+  navGlyph?: string;
   category: string;
   summary: string;
+  displayMode?: 'canvas' | 'board';
+  boardLabel?: string;
+  boardHighlights?: string[];
+  boardTags?: string[];
   worldWidth: number;
   worldHeight: number;
   keyboardHints: string[];
