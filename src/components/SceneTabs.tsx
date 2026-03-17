@@ -4,7 +4,9 @@ import { SceneDefinition } from "../physics/scenes/types";
 interface SceneTabsProps {
   scenes: SceneDefinition[];
   activeSceneId: string;
+  collapsed: boolean;
   onChange: (sceneId: string) => void;
+  onToggleCollapse: () => void;
 }
 
 function buildSceneGlyph(title: string) {
@@ -28,8 +30,13 @@ function getSceneGlyph(scene: SceneDefinition) {
   return scene.navGlyph ?? buildSceneGlyph(scene.title);
 }
 
-export function SceneTabs({ scenes, activeSceneId, onChange }: SceneTabsProps) {
-  const [collapsed, setCollapsed] = useState(false);
+export function SceneTabs({
+  scenes,
+  activeSceneId,
+  collapsed,
+  onChange,
+  onToggleCollapse,
+}: SceneTabsProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const groupedScenes = useMemo(() => {
@@ -92,7 +99,7 @@ export function SceneTabs({ scenes, activeSceneId, onChange }: SceneTabsProps) {
               type="button"
               className="scene-menu__icon-button"
               aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
-              onClick={() => setCollapsed((value) => !value)}
+              onClick={onToggleCollapse}
             >
               {collapsed ? ">>" : "<<"}
             </button>

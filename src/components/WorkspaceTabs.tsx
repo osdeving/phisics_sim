@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import { SceneDefinition, ScenePanelData, SliderControl } from "../physics/scenes/types";
 import { ControlPanel } from "./ControlPanel";
 import { ExercisePanel } from "./ExercisePanel";
@@ -6,7 +6,7 @@ import { MathFoundationBoard } from "./MathFoundationBoard";
 import { OverviewPanel } from "./OverviewPanel";
 import { TutorialTabs } from "./TutorialTabs";
 
-type WorkspaceTabId = "scene" | "tutorial" | "exercise";
+export type WorkspaceTabId = "scene" | "tutorial" | "exercise";
 
 interface WorkspaceTabsProps {
   scene: SceneDefinition;
@@ -15,6 +15,8 @@ interface WorkspaceTabsProps {
   config: Record<string, number>;
   onChange: (key: string, value: number) => void;
   sceneContent: ReactNode;
+  activeTab: WorkspaceTabId;
+  onTabChange: (tabId: WorkspaceTabId) => void;
 }
 
 const labels: Record<WorkspaceTabId, string> = {
@@ -30,9 +32,9 @@ export function WorkspaceTabs({
   config,
   onChange,
   sceneContent,
+  activeTab,
+  onTabChange,
 }: WorkspaceTabsProps) {
-  const [activeTab, setActiveTab] = useState<WorkspaceTabId>("scene");
-
   const sceneTabContent = (
     <div className="workspace-scene-tab">
       {scene.displayMode === "board" ? (
@@ -96,7 +98,7 @@ export function WorkspaceTabs({
               key={tabId}
               type="button"
               className={`workspace-tabs__button ${tabId === activeTab ? "is-active" : ""}`}
-              onClick={() => setActiveTab(tabId)}
+              onClick={() => onTabChange(tabId)}
             >
               {labels[tabId]}
             </button>

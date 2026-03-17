@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppNavbar } from "./components/AppNavbar";
+import { AppToolbar } from "./components/AppToolbar";
+import { InspectorRail } from "./components/InspectorRail";
 import { SceneTabs } from "./components/SceneTabs";
 import { SimulationStage } from "./components/SimulationStage";
-import { WorkspaceTabs } from "./components/WorkspaceTabs";
+import { WorkspaceTabId, WorkspaceTabs } from "./components/WorkspaceTabs";
 import { scenes } from "./data/scenes";
 import { SceneDefinition, ScenePanelData } from "./physics/scenes/types";
 
@@ -42,6 +44,10 @@ function buildPanelMap() {
 
 export default function App() {
   const [activeSceneId, setActiveSceneId] = useState(scenes[0].id);
+  const [activeWorkspaceTab, setActiveWorkspaceTab] =
+    useState<WorkspaceTabId>("scene");
+  const [leftDockCollapsed, setLeftDockCollapsed] = useState(false);
+  const [rightDockCollapsed, setRightDockCollapsed] = useState(false);
   const [configMap, setConfigMap] = useState<
     Record<string, Record<string, number>>
   >(() => buildConfigMap());
@@ -58,6 +64,7 @@ export default function App() {
     [activeScene, configMap],
   );
   const activePanel = panelMap[activeScene.id];
+  const activeSceneIndex = scenes.findIndex((scene) => scene.id === activeScene.id);
 
   useEffect(() => {
     setConfigMap((current) => {
@@ -122,19 +129,53 @@ export default function App() {
     [activeScene.id],
   );
 
+  const handlePreviousScene = useCallback(() => {
+    const previousIndex = (activeSceneIndex - 1 + scenes.length) % scenes.length;
+    setActiveSceneId(scenes[previousIndex].id);
+  }, [activeSceneIndex]);
+
+  const handleNextScene = useCallback(() => {
+    const nextIndex = (activeSceneIndex + 1) % scenes.length;
+    setActiveSceneId(scenes[nextIndex].id);
+  }, [activeSceneIndex]);
+
   return (
     <div className="app-shell app-shell--canvas">
       <AppNavbar
         scenes={scenes}
         activeScene={activeScene}
+        activeTab={activeWorkspaceTab}
+        leftDockCollapsed={leftDockCollapsed}
+        rightDockCollapsed={rightDockCollapsed}
         onChangeScene={setActiveSceneId}
+        onChangeTab={setActiveWorkspaceTab}
+        onToggleLeftDock={() => setLeftDockCollapsed((value) => !value)}
+        onToggleRightDock={() => setRightDockCollapsed((value) => !value)}
       />
 
-      <main className="app-layout">
+      <AppToolbar
+        scenes={scenes}
+        activeScene={activeScene}
+        activeTab={activeWorkspaceTab}
+        leftDockCollapsed={leftDockCollapsed}
+        rightDockCollapsed={rightDockCollapsed}
+        onChangeScene={setActiveSceneId}
+        onChangeTab={setActiveWorkspaceTab}
+        onPreviousScene={handlePreviousScene}
+        onNextScene={handleNextScene}
+        onToggleLeftDock={() => setLeftDockCollapsed((value) => !value)}
+        onToggleRightDock={() => setRightDockCollapsed((value) => !value)}
+      />
+
+      <main
+        className={`app-layout ${rightDockCollapsed ? "is-right-collapsed" : ""}`}
+      >
         <SceneTabs
           scenes={scenes}
           activeSceneId={activeScene.id}
+          collapsed={leftDockCollapsed}
           onChange={setActiveSceneId}
+          onToggleCollapse={() => setLeftDockCollapsed((value) => !value)}
         />
 
         <WorkspaceTabs
@@ -143,6 +184,8 @@ export default function App() {
           controls={activeScene.controls}
           config={activeConfig}
           onChange={handleConfigChange}
+          activeTab={activeWorkspaceTab}
+          onTabChange={setActiveWorkspaceTab}
           sceneContent={
             <SimulationStage
               scene={activeScene}
@@ -152,6 +195,10 @@ export default function App() {
             />
           }
         />
+
+        {!rightDockCollapsed && (
+          <InspectorRail scene={activeScene} panel={activePanel} />
+        )}
       </main>
     </div>
   );
