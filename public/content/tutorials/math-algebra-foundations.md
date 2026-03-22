@@ -1,32 +1,63 @@
-# Algebra base
+# Algebra base para fisica
 
 ## Escopo
 Esta parte cobre:
 
-- equacoes do 1º grau
-- equacoes do 2º grau
+- principio de equivalencia
+- equacoes do 1o grau
+- equacoes do 2o grau
 - produtos notaveis
 - fatoracao
 - produto nulo
-- cuidados de sinal e equivalencia
+- cuidados com sinal
 
-O objetivo e construir a base que aparece depois em funcoes, fisica, geometria analitica e manipulacao de formulas.
+Tudo isso aparece o tempo todo em mecanica. Antes de falar em MRU, MRUV, queda livre ou leis de Newton, o aluno precisa conseguir reorganizar formulas, isolar variaveis e reconhecer padroes algebricos.
 
 ---
 
-## 1. Igualdade e principio de equivalencia
+## 1. Por que algebra e base da fisica
 
-Uma equacao e uma igualdade com pelo menos uma incognita.
+Em fisica escolar, a maior parte das formulas nao chega para ser decorada: chega para ser manipulada.
+
+Voce ve algo como:
+
+$$
+s = s_0 + vt
+$$
+
+e precisa tirar:
+
+- o tempo $$t$$
+- a velocidade $$v$$
+- a posicao inicial $$s_0$$
+
+O mesmo acontece em:
+
+$$
+F = ma
+$$
+
+$$
+P = mg
+$$
+
+$$
+v^2 = v_0^2 + 2a\Delta s
+$$
+
+Sem algebra, a formula fica parada. Com algebra, ela vira ferramenta.
+
+---
+
+## 2. Igualdade e principio de equivalencia
+
+Uma equacao e uma igualdade com incognita.
 
 Resolver uma equacao significa encontrar os valores que tornam a igualdade verdadeira.
 
-Exemplo:
+O principio central e:
 
-$$
-2x + 5 = 13
-$$
-
-Se fizermos a mesma operacao nos dois lados, a igualdade continua equivalente.
+> o que voce faz de um lado, precisa fazer do outro.
 
 ### Regras basicas de equivalencia
 
@@ -35,14 +66,38 @@ Se fizermos a mesma operacao nos dois lados, a igualdade continua equivalente.
 - multiplicar os dois lados por um mesmo numero nao nulo
 - dividir os dois lados por um mesmo numero nao nulo
 
+### Exemplo de fisica
+
+No MRU:
+
+$$
+s = s_0 + vt
+$$
+
+Se queremos isolar $$t$$:
+
+$$
+s - s_0 = vt
+$$
+
+$$
+t = \frac{s - s_0}{v}
+$$
+
+Essa conta e pura algebra, mas e ela que permite responder perguntas como:
+
+- quanto tempo o carro levou?
+- em que instante o movel chegou ao ponto pedido?
+
 ### Cuidado
 
-- nao se divide por zero
-- ao multiplicar ou dividir desigualdades por numero negativo, o sinal muda; em equacoes, isso nao ocorre porque o sinal e de igualdade
+- nunca divida por zero
+- preste atencao a parenteses e sinais
+- em desigualdades, multiplicar por numero negativo inverte o sinal; em equacoes isso nao acontece
 
 ---
 
-## 2. Equacao do 1º grau
+## 3. Equacao do 1o grau
 
 Forma geral:
 
@@ -56,65 +111,81 @@ $$
 x = -\frac{b}{a}
 $$
 
-### Exemplo
+### Exemplo com cinematica
+
+Um corpo faz MRU com:
 
 $$
-3x - 9 = 0
+s_0 = 20 \text{ m}, \quad v = 10 \text{ m/s}
 $$
 
-$$
-3x = 9
-$$
+Queremos saber quando ele chega a:
 
 $$
-x = 3
+s = 120 \text{ m}
 $$
 
-### Com parenteses
-
-Use distributiva:
+Montando a equacao:
 
 $$
-2(x+3)=10
-$$
-
-$$
-2x+6=10
+120 = 20 + 10t
 $$
 
 $$
-2x=4
+100 = 10t
 $$
 
 $$
-x=2
+t = 10 \text{ s}
 $$
 
-### Com fracoes
+### Exemplo com distributiva
 
-Pode usar MMC para eliminar denominadores:
-
-$$
-\frac{x}{2}+\frac{3}{4}=2
-$$
-
-Multiplicando tudo por 4:
+Suponha que, depois de reorganizar uma conta de forcas, voce chegue a:
 
 $$
-2x + 3 = 8
+2(x + 3) = 14
 $$
 
+Aplicando distributiva:
+
 $$
-2x = 5
+2x + 6 = 14
 $$
 
 $$
-x = \frac{5}{2}
+2x = 8
+$$
+
+$$
+x = 4
+$$
+
+### Exemplo com fracao
+
+Se em uma etapa voce obtiver:
+
+$$
+\frac{t}{2} + \frac{3}{4} = 2
+$$
+
+elimine os denominadores multiplicando tudo por 4:
+
+$$
+2t + 3 = 8
+$$
+
+$$
+2t = 5
+$$
+
+$$
+t = \frac{5}{2} \text{ s}
 $$
 
 ---
 
-## 3. Equacao do 2º grau
+## 4. Equacao do 2o grau
 
 Forma geral:
 
@@ -122,13 +193,75 @@ $$
 ax^2 + bx + c = 0, \quad a \neq 0
 $$
 
-### Discriminante
+Ela aparece muito quando a posicao depende de $$t^2$$, como no MRUV e na queda livre.
+
+### Exemplo classico de mecanica
+
+Considere:
+
+$$
+h(t) = 20 + 15t - 5t^2
+$$
+
+Essa pode ser uma altura em funcao do tempo.
+
+Para descobrir quando o corpo toca o solo, impomos:
+
+$$
+h = 0
+$$
+
+Logo:
+
+$$
+20 + 15t - 5t^2 = 0
+$$
+
+Multiplicando por $$-1$$ e dividindo por 5:
+
+$$
+t^2 - 3t - 4 = 0
+$$
+
+### Resolvendo por fatoracao
+
+Queremos dois numeros cujo produto seja $$-4$$ e cuja soma seja $$-3$$:
+
+$$
+-4 \text{ e } 1
+$$
+
+Entao:
+
+$$
+t^2 - 3t - 4 = (t-4)(t+1)
+$$
+
+Pelo produto nulo:
+
+$$
+t-4 = 0 \quad \text{ou} \quad t+1 = 0
+$$
+
+$$
+t = 4 \quad \text{ou} \quad t = -1
+$$
+
+Em fisica, geralmente descartamos o tempo negativo quando o contexto comeca em $$t=0$$.
+
+Resposta fisica:
+
+$$
+t = 4 \text{ s}
+$$
+
+### Bhaskara
+
+Quando a fatoracao nao sai rapido, usamos:
 
 $$
 \Delta = b^2 - 4ac
 $$
-
-### Formula de Bhaskara
 
 $$
 x = \frac{-b \pm \sqrt{\Delta}}{2a}
@@ -140,69 +273,71 @@ $$
 - se $$\Delta = 0$$, uma raiz real dupla
 - se $$\Delta < 0$$, nao ha raiz real
 
-### Exemplo
+Na leitura fisica, isso pode significar:
 
-$$
-x^2 - 5x + 6 = 0
-$$
-
-Temos:
-
-- $$a=1$$
-- $$b=-5$$
-- $$c=6$$
-
-Logo:
-
-$$
-\Delta = (-5)^2 - 4 \cdot 1 \cdot 6 = 25 - 24 = 1
-$$
-
-$$
-x = \frac{5 \pm 1}{2}
-$$
-
-Raizes:
-
-$$
-x_1 = 3,\quad x_2 = 2
-$$
+- dois instantes possiveis
+- um instante unico
+- nenhum instante real compativel com a situacao
 
 ---
 
-## 4. Produtos notaveis
+## 5. Produtos notaveis
 
-Produtos notaveis sao identidades algébricas que aparecem com muita frequencia.
+Produtos notaveis aparecem porque muitas expressoes da fisica tem quadrados e diferencas de quadrados.
 
-### 4.1 Quadrado da soma
+### 5.1 Quadrado da soma
 
 $$
 (a+b)^2 = a^2 + 2ab + b^2
 $$
 
-### 4.2 Quadrado da diferenca
+### 5.2 Quadrado da diferenca
 
 $$
 (a-b)^2 = a^2 - 2ab + b^2
 $$
 
-### 4.3 Soma pela diferenca
+### 5.3 Soma pela diferenca
 
 $$
 (a+b)(a-b) = a^2 - b^2
 $$
 
-### 4.4 Cubo da soma
+### 5.4 Cubo da soma
 
 $$
 (a+b)^3 = a^3 + 3a^2b + 3ab^2 + b^3
 $$
 
-### 4.5 Cubo da diferenca
+### 5.5 Cubo da diferenca
 
 $$
 (a-b)^3 = a^3 - 3a^2b + 3ab^2 - b^3
 $$
+
+### Onde isso aparece em mecanica
+
+Se:
+
+$$
+v = v_0 - gt
+$$
+
+entao:
+
+$$
+v^2 = (v_0 - gt)^2 = v_0^2 - 2v_0gt + g^2t^2
+$$
+
+Esse tipo de expansao aparece em deducoes e simplificacoes.
+
+Outra identidade muito importante:
+
+$$
+v^2 - v_0^2 = (v-v_0)(v+v_0)
+$$
+
+Ela ajuda a reconhecer padroes ligados a formulas como a de Torricelli.
 
 ### Erros classicos
 
@@ -212,127 +347,65 @@ $$
 
 ---
 
-## 5. Fatoracao
+## 6. Fatoracao
 
 Fatorar e escrever uma expressao como produto.
 
 Isso ajuda a:
 
-- simplificar expressoes
-- resolver equacoes
-- cortar fatores em fracoes algebricas
-- reconhecer padroes
+- simplificar contas
+- enxergar fatores comuns
+- usar produto nulo
+- cancelar fatores em fracoes algebricas
 
-### 5.1 Fator comum em evidencia
-
-$$
-ax + ay = a(x+y)
-$$
-
-Exemplo:
+### 6.1 Fator comum
 
 $$
-6x + 9 = 3(2x+3)
+ma + mg = m(a+g)
 $$
 
-### 5.2 Agrupamento
+Isso e muito comum em mecanica: a mesma massa aparece multiplicando varios termos.
+
+### 6.2 Agrupamento
 
 $$
 ax + ay + bx + by = a(x+y) + b(x+y) = (a+b)(x+y)
 $$
 
-Exemplo:
-
-$$
-x^2 + 3x + 2x + 6 = x(x+3) + 2(x+3) = (x+2)(x+3)
-$$
-
-### 5.3 Diferenca de quadrados
+### 6.3 Diferenca de quadrados
 
 $$
 a^2 - b^2 = (a-b)(a+b)
 $$
 
-Exemplo:
+Exemplo fisico:
 
 $$
-x^2 - 16 = (x-4)(x+4)
+v^2 - v_0^2 = (v-v_0)(v+v_0)
 $$
 
-### 5.4 Trinomio quadrado perfeito
-
-Se a expressao tiver o formato:
+### 6.4 Trinomio quadratico
 
 $$
-a^2 + 2ab + b^2
+x^2 + bx + c
 $$
 
-entao:
-
-$$
-a^2 + 2ab + b^2 = (a+b)^2
-$$
-
-E se tiver:
-
-$$
-a^2 - 2ab + b^2
-$$
-
-entao:
-
-$$
-a^2 - 2ab + b^2 = (a-b)^2
-$$
-
-Exemplos:
-
-$$
-x^2 + 6x + 9 = (x+3)^2
-$$
-
-$$
-x^2 - 10x + 25 = (x-5)^2
-$$
-
-### 5.5 Trinomio do 2º grau
-
-Para fatorar:
-
-$$
-x^2 + Sx + P
-$$
-
-procure dois numeros cuja:
-
-- soma seja $$S$$
-- produto seja $$P$$
+Quando possivel, procure dois numeros cujo produto seja $$c$$ e cuja soma seja $$b$$.
 
 Exemplo:
 
 $$
-x^2 - 7x + 12
-$$
-
-Queremos dois numeros com soma $$-7$$ e produto $$12$$:
-
-- $$-3$$
-- $$-4$$
-
-Logo:
-
-$$
-x^2 - 7x + 12 = (x-3)(x-4)
+t^2 - 3t - 4 = (t-4)(t+1)
 $$
 
 ---
 
-## 6. Produto nulo
+## 7. Produto nulo
 
 Se:
 
 $$
-A \cdot B = 0
+AB = 0
 $$
 
 entao:
@@ -341,89 +414,40 @@ $$
 A = 0 \quad \text{ou} \quad B = 0
 $$
 
-Isso e muito usado depois da fatoracao.
+Essa regra vale quando a expressao ja esta em forma de produto.
 
-### Exemplo
+Exemplo:
 
 $$
-(x-2)(x+5)=0
+(t-4)(t+1)=0
 $$
 
 Logo:
 
 $$
-x-2=0 \Rightarrow x=2
+t=4 \quad \text{ou} \quad t=-1
 $$
 
-ou
-
-$$
-x+5=0 \Rightarrow x=-5
-$$
+Na fisica, depois disso ainda vem a leitura do contexto: nem toda raiz matematica faz sentido fisico.
 
 ---
 
-## 7. Estrategia de resolucao
+## 8. Checklist de algebra para fisica
 
-Quando voce ve uma equacao algébrica:
+Quando aparecer uma formula de mecanica, pense nesta ordem:
 
-1. remova parenteses
-2. reduza termos semelhantes
-3. organize os termos
-4. observe se da para fatorar
-5. veja se e 1º grau, 2º grau ou produto nulo
-6. resolva
-7. confira a resposta
+1. qual variavel eu preciso isolar?
+2. a equacao e linear ou quadratica?
+3. existe fator comum ou produto notavel escondido?
+4. alguma raiz encontrada precisa ser descartada pelo contexto?
+5. os sinais e as unidades continuam coerentes?
 
 ---
 
-## 8. Erros mais comuns
+## 9. Frases para guardar
 
-- perder sinal ao mover termo
-- errar distributiva
-- esquecer o $$2ab$$ nos quadrados notaveis
-- cancelar termo somado como se fosse fator
-- usar Bhaskara sem antes organizar a equacao na forma $$ax^2+bx+c=0$$
-- esquecer de testar resultado quando a conta ficou longa
-
----
-
-## 9. Formulas para memorizar
-
-$$
-ax+b=0 \Rightarrow x=-\frac{b}{a}
-$$
-
-$$
-\Delta=b^2-4ac
-$$
-
-$$
-x=\frac{-b\pm\sqrt{\Delta}}{2a}
-$$
-
-$$
-(a+b)^2=a^2+2ab+b^2
-$$
-
-$$
-(a-b)^2=a^2-2ab+b^2
-$$
-
-$$
-(a+b)(a-b)=a^2-b^2
-$$
-
-$$
-a^2+2ab+b^2=(a+b)^2
-$$
-
-$$
-a^2-2ab+b^2=(a-b)^2
-$$
-
----
-
-## 10. Frase mental
-
-> Primeiro simplifique. Depois reconheca o padrao. So entao resolva.
+- algebra em fisica e linguagem operacional
+- isolar variavel e tao importante quanto substituir numeros
+- quadrado de soma nao e soma de quadrados
+- fatorar antes costuma simplificar muito
+- raiz matematica nem sempre vira resposta fisica

@@ -1,4 +1,4 @@
-# Fracoes e manipulacoes algebricas
+# Fracoes e manipulacoes algebricas para fisica
 
 ## Escopo
 Esta parte cobre:
@@ -12,6 +12,8 @@ Esta parte cobre:
 - fracoes algebricas
 - restricoes de denominador
 - racionalizacao
+
+Em mecanica, fracoes nao sao detalhe. Elas aparecem em velocidade media, aceleracao media, densidade, pressao, inclinacao, rendimento, conversao de unidades e isolamento de formulas.
 
 ---
 
@@ -29,14 +31,27 @@ $$
 b \neq 0
 $$
 
-### Termos da fracao
+### Leitura fisica
 
-- numerador: parte de cima
-- denominador: parte de baixo
+Quase toda taxa da fisica tem forma de fracao:
+
+$$
+v_{med} = \frac{\Delta s}{\Delta t}
+$$
+
+$$
+a_{med} = \frac{\Delta v}{\Delta t}
+$$
+
+$$
+\rho = \frac{m}{V}
+$$
+
+Ou seja: entender fracao e entender como a fisica compara grandezas.
 
 ---
 
-## 2. Fracoes equivalentes
+## 2. Fracoes equivalentes e simplificacao
 
 Fracoes equivalentes representam o mesmo numero.
 
@@ -47,6 +62,26 @@ $$
 $$
 
 Isso acontece quando multiplicamos ou dividimos numerador e denominador pelo mesmo numero nao nulo.
+
+### Exemplo fisico
+
+Se um movel anda:
+
+$$
+\frac{20}{4} \text{ m/s}
+$$
+
+entao:
+
+$$
+\frac{20}{4} = \frac{10}{2} = 5
+$$
+
+Logo a velocidade e:
+
+$$
+5 \text{ m/s}
+$$
 
 ### Simplificacao
 
@@ -74,7 +109,21 @@ $$
 \frac{a}{m} - \frac{b}{m} = \frac{a-b}{m}
 $$
 
-Exemplo:
+### Exemplo com deslocamento fracionado
+
+Um carrinho percorre:
+
+$$
+\frac{3}{7} \text{ da pista}
+$$
+
+e depois mais:
+
+$$
+\frac{2}{7} \text{ da pista}
+$$
+
+Total:
 
 $$
 \frac{3}{7} + \frac{2}{7} = \frac{5}{7}
@@ -92,11 +141,33 @@ $$
 \frac{a}{b} - \frac{c}{d} = \frac{ad-bc}{bd}
 $$
 
-Exemplo:
+### Exemplo com trecho de percurso
+
+Se um corpo percorre:
+
+$$
+\frac{1}{2} \text{ do trajeto}
+$$
+
+e depois mais:
+
+$$
+\frac{1}{3} \text{ do trajeto}
+$$
+
+entao:
 
 $$
 \frac{1}{2} + \frac{1}{3} = \frac{3}{6} + \frac{2}{6} = \frac{5}{6}
 $$
+
+Ele ja percorreu:
+
+$$
+\frac{5}{6}
+$$
+
+do total.
 
 ### MMC
 
@@ -132,10 +203,18 @@ $$
 \frac{a}{b} \cdot \frac{c}{d} = \frac{ac}{bd}
 $$
 
-Exemplo:
+### Exemplo de escala fisica
+
+Se uma velocidade vale:
 
 $$
-\frac{2}{3}\cdot\frac{5}{7} = \frac{10}{21}
+\frac{3}{4} \text{ de } 20 \text{ m/s}
+$$
+
+entao:
+
+$$
+\frac{3}{4}\cdot 20 = 15 \text{ m/s}
 $$
 
 ### Simplificacao cruzada
@@ -171,11 +250,27 @@ $$
 c \neq 0,\quad d \neq 0
 $$
 
-Exemplo:
+### Exemplo com velocidade media
+
+Se um corpo percorre:
 
 $$
-\frac{3}{5}\div\frac{2}{7} = \frac{3}{5}\cdot\frac{7}{2} = \frac{21}{10}
+30 \text{ m}
 $$
+
+em:
+
+$$
+\frac{3}{2} \text{ s}
+$$
+
+entao:
+
+$$
+v_{med} = \frac{30}{3/2} = 30 \cdot \frac{2}{3} = 20 \text{ m/s}
+$$
+
+Esse tipo de conta aparece muito quando o tempo vem em forma fracionaria.
 
 ---
 
@@ -193,219 +288,144 @@ $$
 \frac{-a}{-b} = \frac{a}{b}
 $$
 
+### Leitura fisica
+
+Em mecanica, o sinal pode indicar:
+
+- sentido do movimento
+- direcao da aceleracao
+- trabalho positivo ou negativo
+
+Entao sinal em fracao nao e detalhe grafico. Ele altera a interpretacao fisica.
+
 ---
 
 ## 7. Fracoes algebricas
 
 Sao fracoes com letras no numerador, no denominador ou em ambos.
 
-Exemplo:
+Exemplo muito util em fisica:
 
 $$
-\frac{x+2}{x-3}
+\frac{v^2 - v_0^2}{v-v_0}
+$$
+
+Essa expressao aparece quando voce usa diferenca de quadrados:
+
+$$
+v^2 - v_0^2 = (v-v_0)(v+v_0)
+$$
+
+Logo:
+
+$$
+\frac{v^2 - v_0^2}{v-v_0} = \frac{(v-v_0)(v+v_0)}{v-v_0} = v+v_0
+$$
+
+desde que:
+
+$$
+v-v_0 \neq 0
+$$
+
+ou seja:
+
+$$
+v \neq v_0
 $$
 
 ### Restricao fundamental
 
 O denominador nao pode ser zero.
 
-No exemplo:
-
-$$
-x-3 \neq 0 \Rightarrow x \neq 3
-$$
-
-Essa restricao deve ser mantida durante toda a resolucao.
-
----
-
-## 8. Simplificacao em fracoes algebricas
+Essa restricao deve ser mantida durante toda a resolucao, mesmo depois de simplificar.
 
 ### Regra de ouro
 
-Voce so pode cancelar **fatores**, nao parcelas somadas.
+Cancelamento so vale entre fatores.
 
-Exemplo correto:
-
-$$
-\frac{(x-2)(x+5)}{x-2} = x+5, \quad x \neq 2
-$$
-
-Exemplo incorreto:
-
-$$
-\frac{x+2}{x}
-$$
-
-Nao pode "cortar o x" porque o numerador e uma soma.
-
----
-
-## 9. Como simplificar fracao algebrica
-
-1. fatorar numerador
-2. fatorar denominador
-3. registrar restricoes
-4. cancelar fatores iguais
-5. escrever a forma simplificada
-
-### Exemplo
+Por isso:
 
 $$
 \frac{x^2-9}{x^2-3x}
 $$
 
-Fatorando:
+precisa ser fatorada antes:
 
 $$
-x^2-9 = (x-3)(x+3)
+\frac{(x-3)(x+3)}{x(x-3)}
 $$
 
-$$
-x^2-3x = x(x-3)
-$$
-
-Logo:
-
-$$
-\frac{(x-3)(x+3)}{x(x-3)} = \frac{x+3}{x}
-$$
-
-Restricoes:
-
-$$
-x \neq 0,\quad x \neq 3
-$$
+e so depois pode simplificar.
 
 ---
 
-## 10. Racionalizacao
+## 8. Operacoes com expressoes fracionarias
 
-Racionalizar e eliminar radical do denominador.
+Quando varias fracoes aparecem numa mesma formula fisica, siga esta ordem:
+
+1. registre restricoes do denominador
+2. fatorize o que puder
+3. ache o MMC se for soma ou subtracao
+4. simplifique apenas fatores
+5. substitua valores so no final, se possivel
+
+Isso evita erro de arredondamento e deixa a estrutura da conta visivel.
+
+---
+
+## 9. Racionalizacao
+
+Racionalizar e tirar radical do denominador.
 
 ### Caso simples
 
 $$
-\frac{1}{\sqrt{2}}
+\frac{1}{\sqrt{2}} = \frac{1}{\sqrt{2}}\cdot\frac{\sqrt{2}}{\sqrt{2}} = \frac{\sqrt{2}}{2}
 $$
 
-Multiplique por $$\sqrt{2}/\sqrt{2}$$:
+### Onde isso aparece em fisica
+
+Em decomposicao de vetores a 45 graus:
 
 $$
-\frac{1}{\sqrt{2}}\cdot\frac{\sqrt{2}}{\sqrt{2}} = \frac{\sqrt{2}}{2}
+\cos 45^\circ = \frac{\sqrt{2}}{2}
 $$
 
-### Com conjugado
-
-Se o denominador tiver soma ou diferenca com radical:
+e tambem:
 
 $$
-\frac{1}{a+\sqrt{b}}
+\cos 45^\circ = \frac{1}{\sqrt{2}}
 $$
 
-use o conjugado:
+As duas formas sao equivalentes, mas a forma racionalizada costuma ser preferida:
 
 $$
-a-\sqrt{b}
+\frac{\sqrt{2}}{2}
 $$
 
-porque:
+Se uma forca $$F$$ faz 45 graus com o eixo, entao:
 
 $$
-(a+\sqrt{b})(a-\sqrt{b}) = a^2-b
-$$
-
----
-
-## 11. Manipulacoes algebricas frequentes
-
-### Distributiva
-
-$$
-a(b+c)=ab+ac
-$$
-
-### Fator comum
-
-$$
-ab+ac=a(b+c)
-$$
-
-### Reducao de termos semelhantes
-
-$$
-3x+5x=8x
-$$
-
-Mas:
-
-$$
-3x+5y
-$$
-
-nao reduz, porque as variaveis sao diferentes.
-
-### Eliminar denominadores em equacoes
-
-Se houver denominadores, o MMC pode limpar a expressao.
-
-Exemplo:
-
-$$
-\frac{x}{3}+\frac{1}{2}=2
-$$
-
-MMC de 3 e 2: 6
-
-$$
-2x + 3 = 12
-$$
-
-$$
-2x=9
-$$
-
-$$
-x=\frac{9}{2}
+F_x = F\cos 45^\circ = \frac{F\sqrt{2}}{2}
 $$
 
 ---
 
-## 12. Erros mais comuns
+## 10. Checklist de fracoes para fisica
 
-- somar numerador com numerador e denominador com denominador
-- esquecer o MMC
-- dividir por uma fracao sem inverter a segunda
-- cancelar termo em soma
-- esquecer restricao de denominador
-- racionalizar de forma incompleta
-
----
-
-## 13. Formulas para memorizar
-
-$$
-\frac{a}{b} + \frac{c}{d} = \frac{ad+bc}{bd}
-$$
-
-$$
-\frac{a}{b} - \frac{c}{d} = \frac{ad-bc}{bd}
-$$
-
-$$
-\frac{a}{b}\cdot\frac{c}{d} = \frac{ac}{bd}
-$$
-
-$$
-\frac{a}{b}\div\frac{c}{d} = \frac{a}{b}\cdot\frac{d}{c}
-$$
-
-$$
-b\neq 0,\quad d\neq 0
-$$
+- fracao e divisao com unidade
+- denominador nunca zera
+- soma e subtracao pedem denominador comum
+- divisao por fracao vira multiplicacao pelo inverso
+- em expressao algebrica, so se cancela fator
+- racionalizacao aparece em trigonometria e vetores
 
 ---
 
-## 14. Frase mental
+## 11. Frases para guardar
 
-> Em fracao algebrica, primeiro fatora. Depois simplifica. Nunca o contrario.
+- velocidade, aceleracao e densidade sao fracoes com significado fisico
+- quem nao domina fracao costuma travar no meio da formula, nao no conceito
+- soma nao cancela
+- fatora primeiro, corta depois

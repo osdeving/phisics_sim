@@ -249,12 +249,12 @@ const algebraFoundationScene = buildStudyScene({
   subtitle: "Equacoes, produtos notaveis e fatoracao",
   accent: "#ffd36f",
   summary:
-    "Resumo teorico da base algébrica: equacoes de 1º e 2º grau, identidades notaveis e tecnicas de fatoracao.",
+    "Base algebrica para mecanica: isolar variaveis em MRU e MRUV, resolver tempos, reconhecer quadrados e fatorar expressoes de fisica.",
   stageLabel: "Base (i)",
   highlights: [
-    "Equacao e uma igualdade com incognita; resolver e encontrar os valores que tornam a igualdade verdadeira.",
-    "Produtos notaveis servem para expandir rapido e reconhecer padroes importantes de quadrados e diferenca de quadrados.",
-    "Fatorar e escrever uma expressao como produto, o caminho natural para simplificar e resolver varias equacoes.",
+    "Equacao e uma igualdade com incognita; em fisica, isso vira o ato de isolar tempo, velocidade, massa ou aceleracao.",
+    "Produtos notaveis ajudam a expandir formas como (v0-gt)^2 e a reconhecer padroes de diferenca de quadrados.",
+    "Fatorar e escrever uma expressao como produto, o caminho natural para simplificar e resolver varias equacoes de movimento.",
     "Sempre respeite as equivalencias: o que faz de um lado, precisa fazer do outro.",
   ],
   boardTags: [
@@ -291,7 +291,7 @@ const algebraFoundationScene = buildStudyScene({
         title: "Equacao do 1º grau",
         formula: "$$ax + b = 0 \\Rightarrow x = -\\frac{b}{a}$$",
         explanation:
-          "Toda equacao linear pode ser resolvida isolando a incognita com operacoes equivalentes.",
+          "Toda equacao linear pode ser resolvida isolando a incognita com operacoes equivalentes, como ao reorganizar s = s0 + vt.",
       },
       {
         title: "Bhaskara",
@@ -304,7 +304,7 @@ const algebraFoundationScene = buildStudyScene({
         title: "Diferenca de quadrados",
         formula: "$$a^2 - b^2 = (a-b)(a+b)$$",
         explanation:
-          "Esse e um dos padroes de fatoracao mais usados em simplificacao e resolucao de equacoes.",
+          "Esse padrao aparece em simplificacoes ligadas a v^2 - v0^2 e a varias reescritas de formulas fisicas.",
       },
     ],
     concept: [
@@ -335,13 +335,13 @@ const algebraFoundationScene = buildStudyScene({
     ],
     exercises: [
       {
-        title: "Fatoracao + produto nulo",
-        prompt: "Resolva x^2 - 5x + 6 = 0.",
-        answer: "Fatorando: (x-2)(x-3)=0, logo x=2 ou x=3.",
+        title: "Tempo de queda",
+        prompt: "Resolva 20 + 15t - 5t^2 = 0 e indique qual raiz faz sentido fisico.",
+        answer: "As raizes sao t = 4 s e t = -1 s; no contexto fisico, vale t = 4 s.",
         steps: [
-          "Procure dois numeros cujo produto seja 6 e cuja soma seja -5.",
-          "Escreva x^2 - 5x + 6 = (x-2)(x-3).",
-          "Use o principio do produto nulo.",
+          "Reorganize a equacao para t^2 - 3t - 4 = 0.",
+          "Fatore: (t-4)(t+1)=0.",
+          "Use o produto nulo e descarte a raiz negativa no contexto do problema.",
         ],
       },
     ],
@@ -354,7 +354,7 @@ const algebraFoundationScene = buildStudyScene({
     engineering: [
       {
         title: "Por que isso volta em fisica",
-        body: "Quase toda modelagem basica em cinemática, ótica e circuitos exige isolamento de variavel, resolucao de equacoes e simplificacao algébrica.",
+        body: "Quase toda modelagem basica em cinematica e mecanica exige isolamento de variavel, resolucao de equacoes e simplificacao algebrica.",
       },
     ],
     pitfalls: [
@@ -372,12 +372,12 @@ const fractionsScene = buildStudyScene({
   subtitle: "Operacoes, MMC e simplificacao algebrica",
   accent: "#74e1ff",
   summary:
-    "Base de fracoes numericas e algebricas: simplificacao, MMC, soma, multiplicacao, divisao, fracoes algebricas e racionalizacao.",
+    "Base fracionaria para fisica: velocidades, aceleracoes, densidade, unidades compostas, MMC e simplificacao de fracoes algebricas.",
   stageLabel: "Base (ii)",
   highlights: [
-    "Fracao representa divisao; o denominador nunca pode ser zero.",
+    "Fracao representa divisao; em fisica, ela aparece como taxa e o denominador nunca pode ser zero.",
     "Somar e subtrair fracoes pede denominador comum; multiplicar e dividir seguem regras proprias.",
-    "Fracoes algebricas exigem fatoracao para simplificar com seguranca.",
+    "Fracoes algebricas exigem fatoracao para simplificar com seguranca, como em expressoes ligadas a v^2 - v0^2.",
     "Antes de cortar termos, transforme soma em produto. Cancelamento so vale entre fatores.",
   ],
   boardTags: [
@@ -415,7 +415,7 @@ const fractionsScene = buildStudyScene({
         formula:
           "$$\\frac{a}{b}+\\frac{c}{d}=\\frac{ad+bc}{bd}$$",
         explanation:
-          "Com denominadores diferentes, leve tudo para um denominador comum antes de somar.",
+          "Com denominadores diferentes, leve tudo para um denominador comum antes de somar, como em etapas de percurso ou intervalos de tempo.",
       },
       {
         title: "Divisao de fracoes",
@@ -429,7 +429,7 @@ const fractionsScene = buildStudyScene({
         formula:
           "$$\\frac{x^2-9}{x^2-3x}=\\frac{(x-3)(x+3)}{x(x-3)}$$",
         explanation:
-          "Fatore antes de simplificar; depois preserve as restricoes do denominador.",
+          "Fatore antes de simplificar; depois preserve as restricoes do denominador, como se faz em varias reescritas de formulas fisicas.",
       },
     ],
     concept: [
@@ -460,13 +460,13 @@ const fractionsScene = buildStudyScene({
     ],
     exercises: [
       {
-        title: "Fracao algebrica",
-        prompt: "Simplifique (x^2 - 9) / (x^2 - 3x).",
-        answer: "A forma simplificada e (x+3)/x, com x diferente de 0 e 3.",
+        title: "Velocidade e fatoracao",
+        prompt: "Simplifique (v^2 - v0^2) / (v - v0).",
+        answer: "A forma simplificada e v + v0, com v diferente de v0.",
         steps: [
-          "Fatore o numerador: x^2 - 9 = (x-3)(x+3).",
-          "Fatore o denominador: x^2 - 3x = x(x-3).",
-          "Cancele o fator comum (x-3), mantendo as restricoes originais.",
+          "Reconheca diferenca de quadrados no numerador.",
+          "Escreva v^2 - v0^2 = (v-v0)(v+v0).",
+          "Cancele o fator comum, mantendo a restricao v diferente de v0.",
         ],
       },
     ],
@@ -479,7 +479,7 @@ const fractionsScene = buildStudyScene({
     engineering: [
       {
         title: "Por que isso volta em fisica",
-        body: "Expressões com densidade, vazao, velocidade media, resistência equivalente e unidades compostas exigem dominio total de fracoes.",
+        body: "Expressoes com velocidade media, aceleracao, densidade, pressao e unidades compostas exigem dominio total de fracoes.",
       },
     ],
     pitfalls: [
@@ -497,12 +497,12 @@ const proportionalityScene = buildStudyScene({
   subtitle: "Razoes, proporcoes, regra de tres e porcentagem",
   accent: "#7df0ba",
   summary:
-    "Relacoes proporcionais diretas e inversas, escalas, taxas, porcentagem e leitura de razoes.",
+    "Relacoes proporcionais para mecanica: leitura de razoes, regra de tres, porcentagem e leis como s = vt, P = mg e t = s/v.",
   stageLabel: "Base (iii)",
   highlights: [
-    "Razao compara grandezas; proporcao e igualdade entre duas razoes.",
+    "Razao compara grandezas; em fisica, isso gera taxas como velocidade media, aceleracao e densidade.",
     "Diretamente proporcional: se uma dobra, a outra dobra. Inversamente proporcional: se uma dobra, a outra cai pela metade.",
-    "Regra de tres funciona porque preserva a proporcionalidade do problema.",
+    "Regra de tres funciona porque preserva a proporcionalidade do problema fisico.",
     "Porcentagem e apenas uma razao sobre 100, e deve ser tratada como numero.",
   ],
   boardTags: [
@@ -545,13 +545,13 @@ const proportionalityScene = buildStudyScene({
         title: "Direta",
         formula: "$$y = kx$$",
         explanation:
-          "A razao y/x permanece constante quando as grandezas sao diretamente proporcionais.",
+          "A razao y/x permanece constante quando as grandezas sao diretamente proporcionais, como em P = mg ou s = vt.",
       },
       {
         title: "Inversa",
         formula: "$$y = \\frac{k}{x}$$",
         explanation:
-          "O produto xy permanece constante quando as grandezas sao inversamente proporcionais.",
+          "O produto xy permanece constante quando as grandezas sao inversamente proporcionais, como em t = s/v com s fixo.",
       },
     ],
     concept: [
@@ -582,13 +582,13 @@ const proportionalityScene = buildStudyScene({
     ],
     exercises: [
       {
-        title: "Regra de tres simples",
-        prompt: "Se 4 cadernos custam 36 reais, quanto custam 7 cadernos?",
-        answer: "63 reais.",
+        title: "MRU e proporcionalidade",
+        prompt: "Se um movel percorre 45 m em 3 s no MRU, quanto percorre em 11 s?",
+        answer: "165 m.",
         steps: [
-          "A relacao e diretamente proporcional.",
-          "Monte 4/36 = 7/x ou 36/4 = x/7.",
-          "Resolva: x = 63.",
+          "A relacao entre distancia e tempo e direta quando a velocidade e constante.",
+          "Monte 45/3 = x/11.",
+          "Resolva a proporcao para obter x = 165.",
         ],
       },
     ],
@@ -601,7 +601,7 @@ const proportionalityScene = buildStudyScene({
     engineering: [
       {
         title: "Por que isso volta em fisica",
-        body: "Escalas de mapa, densidade, velocidade media, leis experimentais e conversoes percentuais dependem de raciocinio proporcional.",
+        body: "Velocidade media, peso, pressao, densidade, escalas experimentais e varias leis elementares dependem de raciocinio proporcional.",
       },
     ],
     pitfalls: [
@@ -619,13 +619,13 @@ const powersRootsScene = buildStudyScene({
   subtitle: "Leis de expoentes, raizes e expoente fracionario",
   accent: "#c8a7ff",
   summary:
-    "Conjunto completo das leis de potenciacao e radiciacao: expoente zero, negativo, fracionario, propriedades de raizes e racionalizacao.",
+    "Leis de potenciacao e radiciacao usadas em fisica: energia cinetica, notacao cientifica, resultantes, raizes de formulas e racionalizacao.",
   stageLabel: "Base (iv)",
   highlights: [
-    "Potenciação compacta multiplicacoes repetidas; radiciacao e o processo inverso em varios contextos.",
+    "Potenciacao compacta multiplicacoes repetidas; em fisica isso aparece em v^2, areas, volumes e ordens de grandeza.",
     "Regras de expoentes dependem da estrutura: mesma base, potencia de potencia, potencia de produto e quociente.",
-    "Expoente negativo indica inverso; expoente fracionario conecta potencia e raiz.",
-    "Em radicais, simplifique fatorando, extraia quadrados perfeitos e racionalize quando necessario.",
+    "Expoente negativo indica inverso; expoente fracionario conecta potencia e raiz em formulas como v = sqrt(2gh).",
+    "Em radicais, simplifique fatorando, extraia quadrados perfeitos e racionalize quando necessario, especialmente em trigonometria.",
   ],
   boardTags: [
     "Mesma base, soma expoentes",
@@ -673,7 +673,7 @@ const powersRootsScene = buildStudyScene({
         title: "Raiz como potencia",
         formula: "$$\\sqrt[n]{a^m}=a^{m/n}$$",
         explanation:
-          "Essa equivalencia costuma simplificar muito operacoes mistas entre potencia e radical.",
+          "Essa equivalencia simplifica operacoes mistas entre potencia e radical e aparece em varias reescritas de formulas mecanicas.",
       },
     ],
     concept: [
@@ -704,12 +704,13 @@ const powersRootsScene = buildStudyScene({
     ],
     exercises: [
       {
-        title: "Leis de expoentes",
-        prompt: "Simplifique a^3 · a^-5 · a^2.",
-        answer: "a^0 = 1, desde que a seja diferente de zero.",
+        title: "Energia e raiz",
+        prompt: "De v^2 = 2gh, isole v.",
+        answer: "v = sqrt(2gh).",
         steps: [
-          "Some os expoentes porque a base e a mesma: 3 + (-5) + 2 = 0.",
-          "Use a^0 = 1 para a ≠ 0.",
+          "A expressao ja esta com v ao quadrado.",
+          "Aplique raiz quadrada nos dois lados.",
+          "Escreva o resultado como v = sqrt(2gh).",
         ],
       },
     ],
@@ -722,7 +723,7 @@ const powersRootsScene = buildStudyScene({
     engineering: [
       {
         title: "Por que isso volta em fisica",
-        body: "Notacao cientifica, conversoes de unidades, ondas, escalas logaritmicas e formulas com raiz aparecem o tempo todo.",
+        body: "Notacao cientifica, energia cinetica, Pitagoras, modulos vetoriais e formulas com raiz aparecem o tempo todo em mecanica.",
       },
     ],
     pitfalls: [
@@ -740,12 +741,12 @@ const geometryTrigScene = buildStudyScene({
   subtitle: "Figuras planas, areas, angulos e razoes trigonometricas",
   accent: "#ff9ec2",
   summary:
-    "Base de geometria plana e trigonometria: angulos, triangulos, areas, circunferencia, Pitagoras e seno, cosseno e tangente.",
+    "Geometria e trigonometria aplicadas a mecanica: vetores, planos inclinados, areas, circunferencia, Pitagoras e decomposicao de forcas.",
   stageLabel: "Base (v)",
   highlights: [
-    "Geometria plana organiza medidas de comprimento, angulo, area e propriedades de figuras no plano.",
+    "Geometria plana organiza medidas de comprimento, angulo, area e propriedades de figuras no plano que voltam em vetores e mecanismos.",
     "Triangulos concentram grande parte da base: soma dos angulos internos, classificacao, congruencia e semelhanca.",
-    "Teorema de Pitagoras e a ponte entre geometria e trigonometria no triangulo retangulo.",
+    "Teorema de Pitagoras e a ponte entre geometria e trigonometria no triangulo retangulo e calcula modulos e resultantes.",
     "Seno, cosseno e tangente relacionam lados e angulos e aparecem em decomposicao vetorial e analise de inclinacao.",
   ],
   boardTags: [
@@ -788,7 +789,7 @@ const geometryTrigScene = buildStudyScene({
         title: "Area do triangulo",
         formula: "$$A = \\frac{b \\cdot h}{2}$$",
         explanation:
-          "Uma das formulas mais recorrentes em geometria plana.",
+          "Uma das formulas mais recorrentes em geometria plana e tambem importante em pressao e contato entre superficies.",
       },
       {
         title: "Tangente",
@@ -826,12 +827,13 @@ const geometryTrigScene = buildStudyScene({
     ],
     exercises: [
       {
-        title: "Pitagoras",
-        prompt: "Num triangulo retangulo com catetos 6 e 8, quanto mede a hipotenusa?",
-        answer: "10.",
+        title: "Deslocamento resultante",
+        prompt: "Um corpo anda 6 m para leste e 8 m para norte. Qual o modulo do deslocamento?",
+        answer: "10 m.",
         steps: [
-          "Aplique h^2 = 6^2 + 8^2 = 36 + 64 = 100.",
-          "Extraia a raiz: h = 10.",
+          "Modele a situacao como um triangulo retangulo.",
+          "Aplique R^2 = 6^2 + 8^2 = 100.",
+          "Extraia a raiz e conclua que R = 10 m.",
         ],
       },
     ],
@@ -844,7 +846,7 @@ const geometryTrigScene = buildStudyScene({
     engineering: [
       {
         title: "Por que isso volta em fisica",
-        body: "Vetores, planos inclinados, lancamento obliquo, torque e estatica usam trigonometria e geometria o tempo todo.",
+        body: "Vetores, planos inclinados, lancamento obliquo, torque, movimento circular e estatica usam trigonometria e geometria o tempo todo.",
       },
     ],
     pitfalls: [
@@ -862,12 +864,12 @@ const functionsScene = buildStudyScene({
   subtitle: "Afim, quadratica, graficos e propriedades",
   accent: "#9fb6ff",
   summary:
-    "Teoria de funcao, dominio, imagem, funcao afim e quadratica, leitura de graficos, raiz, vertice, crescimento e concavidade.",
+    "Funcoes basicas para mecanica: graficos de posicao, velocidade e aceleracao, leitura de retas e parabolas, raiz e vertice.",
   stageLabel: "Base (vi)",
   highlights: [
-    "Funcao associa cada valor de entrada a um unico valor de saida.",
-    "Na funcao afim, o coeficiente angular controla a inclinacao da reta e o coeficiente linear marca o corte no eixo y.",
-    "Na quadratica, o sinal de a define a concavidade; delta, raizes e vertice descrevem a forma da parabola.",
+    "Funcao associa cada valor de entrada a um unico valor de saida; em fisica, o tempo costuma ser a entrada principal.",
+    "Na funcao afim, o coeficiente angular controla a inclinacao da reta e o coeficiente linear marca o valor inicial.",
+    "Na quadratica, o sinal de a define a concavidade; delta, raizes e vertice descrevem a forma da parabola do MRUV.",
     "Grafico e propriedades andam juntos: crescimento, decrescimento, zeros, dominio, imagem e intervalos de sinal.",
   ],
   boardTags: [
@@ -904,13 +906,13 @@ const functionsScene = buildStudyScene({
         title: "Funcao afim",
         formula: "$$f(x)=ax+b$$",
         explanation:
-          "O grafico e uma reta. O coeficiente a mede a inclinacao e b e o intercepto em y.",
+          "O grafico e uma reta. Em mecanica, isso modela s(t) = s0 + vt e v(t) = v0 + at.",
       },
       {
         title: "Funcao quadratica",
         formula: "$$f(x)=ax^2+bx+c$$",
         explanation:
-          "O grafico e uma parabola; o sinal de a define se a concavidade aponta para cima ou para baixo.",
+          "O grafico e uma parabola; o sinal de a define se a concavidade aponta para cima ou para baixo, como em posicoes com aceleracao constante.",
       },
       {
         title: "Vertice da parabola",
@@ -948,13 +950,13 @@ const functionsScene = buildStudyScene({
     ],
     exercises: [
       {
-        title: "Leitura de funcao afim",
-        prompt: "Na funcao f(x)=3x-6, qual a raiz e o que o coeficiente 3 representa?",
-        answer: "A raiz e x=2, e o 3 representa a inclinacao da reta.",
+        title: "MRU como funcao",
+        prompt: "Em s(t)=12+4t, qual a posicao inicial e qual a velocidade?",
+        answer: "Posicao inicial 12 m e velocidade 4 m/s.",
         steps: [
-          "Para a raiz, imponha f(x)=0: 3x-6=0.",
-          "Resolva x=2.",
-          "O coeficiente angular positivo indica reta crescente.",
+          "Compare s(t)=12+4t com a forma s(t)=s0+vt.",
+          "Leia s0 = 12 m.",
+          "Leia v = 4 m/s.",
         ],
       },
     ],
@@ -967,7 +969,7 @@ const functionsScene = buildStudyScene({
     engineering: [
       {
         title: "Por que isso volta em fisica",
-        body: "Relacoes lineares e quadraticas aparecem em movimento, energia, eletricidade, optica e ajuste de dados experimentais.",
+        body: "Relacoes lineares e quadraticas aparecem de imediato em movimento, principalmente nos graficos de MRU e MRUV.",
       },
     ],
     pitfalls: [

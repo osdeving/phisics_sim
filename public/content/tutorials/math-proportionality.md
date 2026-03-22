@@ -1,4 +1,4 @@
-# Proporcionalidade
+# Proporcionalidade para fisica
 
 ## Escopo
 Esta parte cobre:
@@ -13,29 +13,58 @@ Esta parte cobre:
 - escala
 - taxa
 
+Em fisica, proporcionalidade nao e capitulo separado. Ela aparece por tras de quase toda lei simples:
+
+- $$s = vt$$
+- $$P = mg$$
+- $$F = ma$$
+- $$t = \frac{s}{v}$$
+
+Se o aluno enxerga proporcionalidade, ele entende por que a formula muda quando uma grandeza dobra ou cai pela metade.
+
 ---
 
 ## 1. Razao
 
 Razao e a comparacao entre duas grandezas.
 
-Exemplo:
+Na fisica, uma razao quase sempre vira uma taxa.
 
-Se ha 8 meninas e 4 meninos:
+### Exemplo com velocidade media
+
+Se um corpo percorre:
 
 $$
-\text{razao} = \frac{8}{4}=2
+80 \text{ m}
 $$
 
-Isso significa que ha 2 meninas para cada 1 menino.
+em:
+
+$$
+4 \text{ s}
+$$
+
+entao:
+
+$$
+\text{razao} = \frac{80}{4} = 20
+$$
+
+Logo:
+
+$$
+v_{med} = 20 \text{ m/s}
+$$
 
 ### Cuidado
 
 Razao depende da ordem:
 
 $$
-\frac{8}{4}\neq\frac{4}{8}
+\frac{\Delta s}{\Delta t} \neq \frac{\Delta t}{\Delta s}
 $$
+
+Uma e velocidade; a outra e o inverso da velocidade.
 
 ---
 
@@ -44,7 +73,7 @@ $$
 Proporcao e igualdade entre duas razoes:
 
 $$
-\frac{a}{b}=\frac{c}{d}
+\frac{a}{b} = \frac{c}{d}
 $$
 
 com:
@@ -58,16 +87,54 @@ $$
 Se:
 
 $$
-\frac{a}{b}=\frac{c}{d}
+\frac{a}{b} = \frac{c}{d}
 $$
 
 entao:
 
 $$
-ad=bc
+ad = bc
 $$
 
-Essa propriedade e muito usada para achar incognitas.
+### Exemplo fisico
+
+Dois movimentos com a mesma velocidade constante satisfazem:
+
+$$
+\frac{\Delta s_1}{\Delta t_1} = \frac{\Delta s_2}{\Delta t_2}
+$$
+
+Se um carro percorre:
+
+$$
+60 \text{ m}
+$$
+
+em:
+
+$$
+3 \text{ s}
+$$
+
+e queremos saber quanto percorre em:
+
+$$
+8 \text{ s}
+$$
+
+mantendo a mesma velocidade:
+
+$$
+\frac{60}{3} = \frac{x}{8}
+$$
+
+$$
+3x = 480
+$$
+
+$$
+x = 160 \text{ m}
+$$
 
 ---
 
@@ -82,14 +149,44 @@ Se uma triplica, a outra triplica.
 ### Modelo
 
 $$
-y=kx
+y = kx
 $$
 
 em que $$k$$ e a constante de proporcionalidade.
 
-### Exemplo
+### Exemplos em mecanica
 
-Preco total e quantidade comprada, quando o preco unitario e fixo.
+#### Peso e massa
+
+Perto da superficie da Terra:
+
+$$
+P = mg
+$$
+
+Se $$g$$ e constante, entao peso e diretamente proporcional a massa.
+
+Se a massa dobra, o peso dobra.
+
+#### Forca resultante e aceleracao
+
+Para massa constante:
+
+$$
+F = ma
+$$
+
+Se a massa nao muda, forca e aceleracao sao diretamente proporcionais.
+
+#### Distancia e tempo no MRU
+
+Se a velocidade e constante:
+
+$$
+s = vt
+$$
+
+Entao distancia e tempo sao diretamente proporcionais.
 
 ---
 
@@ -102,18 +199,36 @@ Se uma dobra, a outra cai pela metade.
 ### Modelo
 
 $$
-y=\frac{k}{x}
+y = \frac{k}{x}
 $$
 
 ou
 
 $$
-xy=k
+xy = k
 $$
 
-### Exemplo
+### Exemplos em fisica
 
-Numero de operarios e tempo para terminar um mesmo trabalho, em condicoes ideais.
+#### Tempo e velocidade para distancia fixa
+
+Se a distancia e fixa:
+
+$$
+t = \frac{s}{v}
+$$
+
+Logo tempo e velocidade sao inversamente proporcionais.
+
+Se a velocidade dobra, o tempo cai pela metade.
+
+#### Pressao e area para forca fixa
+
+$$
+p = \frac{F}{A}
+$$
+
+Para mesma forca aplicada, quanto maior a area, menor a pressao.
 
 ---
 
@@ -121,7 +236,7 @@ Numero de operarios e tempo para terminar um mesmo trabalho, em condicoes ideais
 
 Pergunte:
 
-- se uma grandeza dobra, o que voce espera da outra?
+- se uma grandeza dobra, o que acontece com a outra?
 
 ### Se a outra tambem dobra
 
@@ -130,6 +245,12 @@ Pergunte:
 ### Se a outra cai pela metade
 
 - proporcionalidade inversa
+
+### Pergunta fisica equivalente
+
+Se eu mexer nesta grandeza e mantiver o resto fixo, a formula diz que a outra acompanha ou compensa?
+
+Essa leitura evita muita regra de tres montada ao contrario.
 
 ---
 
@@ -145,50 +266,80 @@ E um metodo pratico para resolver problemas proporcionais.
 4. monte a proporcao correta
 5. resolva
 
-### Exemplo direto
+### Exemplo direto com cinematica
 
-Se 4 cadernos custam 36 reais, quanto custam 7 cadernos?
-
-Como mais cadernos significam mais preco, a relacao e direta.
+No MRU, um corpo percorre:
 
 $$
-\frac{4}{36}=\frac{7}{x}
+45 \text{ m}
 $$
 
-ou
+em:
 
 $$
-\frac{36}{4}=\frac{x}{7}
+3 \text{ s}
 $$
 
-Logo:
+Quantos metros percorre em:
 
 $$
-4x=252
+11 \text{ s}
 $$
 
-$$
-x=63
-$$
+na mesma velocidade?
 
-### Exemplo inverso
-
-Se 6 operarios fazem um servico em 10 dias, quantos dias levarao 15 operarios?
-
-Mais operarios significam menos tempo.
-
-O produto fica constante:
+Mais tempo significa mais distancia, entao a relacao e direta:
 
 $$
-6\cdot 10 = 15\cdot x
+\frac{45}{3} = \frac{x}{11}
 $$
 
 $$
-60=15x
+3x = 495
 $$
 
 $$
-x=4
+x = 165 \text{ m}
+$$
+
+### Exemplo inverso com movimento
+
+Para percorrer:
+
+$$
+120 \text{ m}
+$$
+
+um carrinho leva:
+
+$$
+12 \text{ s}
+$$
+
+quando sua velocidade e:
+
+$$
+10 \text{ m/s}
+$$
+
+Quanto tempo levara se a velocidade passar para:
+
+$$
+15 \text{ m/s}
+$$
+
+Mais velocidade significa menos tempo. A relacao e inversa:
+
+$$
+10 \cdot 12 = 15 \cdot t
+$$
+
+$$
+120 = 15t
+$$
+
+$$
+t = 8 \text{ s}
 $$
 
 ---
@@ -198,7 +349,7 @@ $$
 Porcentagem e uma razao com denominador 100.
 
 $$
-25\%=\frac{25}{100}=0{,}25
+25\% = \frac{25}{100} = 0{,}25
 $$
 
 ### Como calcular
@@ -209,114 +360,81 @@ $$
 \frac{p}{100}\cdot V
 $$
 
-### Exemplo
+### Exemplo fisico
 
-20% de 150:
-
-$$
-\frac{20}{100}\cdot150=30
-$$
-
-### Aumento percentual
-
-Se um valor $$V$$ aumenta $$p\%$$:
+Se a velocidade de um carrinho aumenta 20% a partir de:
 
 $$
-V_{novo}=V\left(1+\frac{p}{100}\right)
+15 \text{ m/s}
 $$
 
-### Desconto percentual
-
-Se um valor $$V$$ diminui $$p\%$$:
+entao o aumento e:
 
 $$
-V_{novo}=V\left(1-\frac{p}{100}\right)
+0{,}20 \cdot 15 = 3 \text{ m/s}
 $$
 
----
-
-## 8. Escala
-
-Escala relaciona medida no desenho com medida real.
-
-Exemplo:
-
-Escala $$1:100$$ significa:
-
-- 1 unidade no desenho
-- 100 unidades na realidade
-
-Se um segmento mede 5 cm no desenho:
+Nova velocidade:
 
 $$
-5\cdot 100 = 500 \text{ cm}
+18 \text{ m/s}
+$$
+
+### Erro percentual
+
+Em laboratorio, porcentagem aparece muito em erro relativo:
+
+$$
+\text{erro percentual} = \frac{|\text{medido} - \text{teorico}|}{\text{teorico}} \cdot 100\%
 $$
 
 ---
 
-## 9. Taxa
+## 8. Escala e taxa
 
-Taxa e uma razao entre grandezas de naturezas diferentes.
+### Escala
+
+Escala compara desenho e realidade.
+
+Se num esquema 1 cm representa 20 cm reais, a leitura e proporcional.
+
+Isso e util em:
+
+- diagramas
+- mapas
+- desenhos de vetores
+- montagens experimentais
+
+### Taxa
+
+Taxa e uma razao entre grandezas de natureza diferente.
 
 Exemplos:
 
-- km/h
-- R$/kg
-- habitantes/km²
+- $$m/s$$
+- $$m/s^2$$
+- $$kg/m^3$$
 
-Em muitos problemas, taxa funciona como coeficiente de proporcionalidade.
-
-Exemplo:
-
-Se um carro anda a 80 km/h por 3 h:
-
-$$
-d=vt=80\cdot3=240
-$$
+Em fisica, ler a unidade ja ajuda a reconhecer a estrutura proporcional.
 
 ---
 
-## 10. Cuidados importantes
+## 9. Checklist de proporcionalidade para fisica
 
-- nao montar regra de tres antes de decidir se a relacao e direta ou inversa
-- nao esquecer unidade
-- porcentagem nao e "enfeite"; ela precisa virar numero
-- em problemas reais, proporcionalidade pode ser aproximada, nao perfeita
+Quando aparecer uma formula ou situacao de mecanica, pergunte:
 
----
-
-## 11. Resumo das formulas
-
-$$
-\frac{a}{b}=\frac{c}{d}\Rightarrow ad=bc
-$$
-
-$$
-y=kx
-$$
-
-$$
-y=\frac{k}{x}
-$$
-
-$$
-xy=k
-$$
-
-$$
-p\%=\frac{p}{100}
-$$
-
-$$
-V_{novo}=V\left(1+\frac{p}{100}\right)
-$$
-
-$$
-V_{novo}=V\left(1-\frac{p}{100}\right)
-$$
+1. que grandezas estao sendo comparadas?
+2. elas crescem juntas ou uma compensa a outra?
+3. ha alguma constante fixa escondida?
+4. a unidade confirma a leitura da razao?
+5. o problema pede relacao direta, inversa ou apenas uma taxa?
 
 ---
 
-## 12. Frase mental
+## 10. Frases para guardar
 
-> Antes de cruzar, descubra se a relacao cresce junto ou se cresce para um lado e cai para o outro.
+- razao em fisica quase sempre significa taxa
+- proporcionalidade direta faz acompanhar
+- proporcionalidade inversa faz compensar
+- regra de tres funciona porque preserva a relacao fisica do problema
+- antes da conta, vem a leitura do comportamento das grandezas

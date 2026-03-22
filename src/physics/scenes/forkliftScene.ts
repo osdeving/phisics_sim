@@ -3,8 +3,8 @@ import { clamp } from "../math/scalar";
 import { Vector2 } from "../math/Vector2";
 import {
   drawGrid,
-  drawGround,
   drawLineWorld,
+  drawScenicBackdrop,
   drawSpriteAtWorld,
   drawWorldLabel,
 } from "../render/canvasPrimitives";
@@ -15,17 +15,44 @@ import {
   circleWithScene,
   createBox,
   createChamferedFork,
+  createPolygon,
   createRigidBody,
   drawBodyCenter,
   drawBodyCollider,
   rayWithScene,
   readForkliftCommands,
 } from "../../ventania3d";
+import {
+  FORKLIFT_BREAKABLE_CRATES,
+  FORKLIFT_CAMERA_HEIGHT,
+  FORKLIFT_CAMERA_WIDTH,
+  FORKLIFT_GROUND_Y,
+  FORKLIFT_PAYLOAD_SPAWN_Y,
+  FORKLIFT_START_X,
+  FORKLIFT_START_Y,
+  FORKLIFT_SURFACE_PROFILES,
+  FORKLIFT_TERRAIN_SEGMENTS,
+  FORKLIFT_WORLD_HEIGHT,
+  FORKLIFT_WORLD_WIDTH,
+  getForkliftSurfaceProfile,
+  getSurfaceProfileForPoint,
+  getTerrainLabelPoint,
+  getTerrainPolygonPoints,
+  getTerrainTopLine,
+  type ForkliftBreakableCrateSpec,
+  type ForkliftSurfaceProfile,
+} from "./forkliftMap";
 import { SceneDefinition, ScenePanelData, SceneState } from "./types";
 
-const GROUND_ID = "forklift-ground";
 const FORKLIFT_ID = "forklift-showcase";
+const TERRAIN_BODY_PREFIX = "forklift-terrain-";
+const WALL_BODY_PREFIX = "forklift-wall";
+const BREAKABLE_BODY_PREFIX = "forklift-breakable-";
+const DEBRIS_BODY_PREFIX = "forklift-debris-";
 const PAYLOAD_IDS = ["payload-alpha", "payload-beta", "payload-gamma"];
+const BREAKABLE_CRATE_IDS = FORKLIFT_BREAKABLE_CRATES.map(
+  (entry) => `${BREAKABLE_BODY_PREFIX}${entry.id}`,
+);
 const WHEEL_RADIUS = 0.4;
 const FORK_BLADE_LENGTH = 2.15;
 const DISPLAY_TONS_TO_SIM_MASS = 10;
@@ -76,6 +103,11 @@ interface ForkliftState extends SceneState {
   activePayloadMass: number;
   staticReserveMoment: number;
   estimatedCapacity: number;
+  activeSurfaceId: keyof typeof FORKLIFT_SURFACE_PROFILES;
+  activeSurfaceLabel: string;
+  activeSurfaceGripMultiplier: number;
+  furthestTravelX: number;
+  brokenCrates: number;
   initialPayloadPositions: Record<string, number>;
 }
 
@@ -88,11 +120,48 @@ function bodyKind(bodyId: string) {
     return "forklift";
   }
 
-  if (bodyId === GROUND_ID || bodyId.startsWith("forklift-wall")) {
+  if (isTerrainBodyId(bodyId) || bodyId.startsWith(WALL_BODY_PREFIX)) {
     return "static";
   }
 
+  if (isBreakableBodyId(bodyId)) {
+    return "breakable";
+  }
+
+  if (isDebrisBodyId(bodyId)) {
+    return "debris";
+  }
+
   return "payload";
+}
+
+function isTerrainBodyId(bodyId: string) {
+  return bodyId.startsWith(TERRAIN_BODY_PREFIX);
+}
+
+function isStaticSupportBodyId(bodyId: string) {
+  return isTerrainBodyId(bodyId) || bodyId.startsWith(WALL_BODY_PREFIX);
+}
+
+function isBreakableBodyId(bodyId: string) {
+  return bodyId.startsWith(BREAKABLE_BODY_PREFIX);
+}
+
+function isDebrisBodyId(bodyId: string) {
+  return bodyId.startsWith(DEBRIS_BODY_PREFIX);
+}
+
+function getBreakableBodyId(specId: string) {
+  return `${BREAKABLE_BODY_PREFIX}${specId}`;
+}
+
+function getBreakableCrateSpec(bodyId: string) {
+  const specId = bodyId.replace(BREAKABLE_BODY_PREFIX, "");
+  return FORKLIFT_BREAKABLE_CRATES.find((entry) => entry.id === specId);
+}
+
+function getShortestAngleDelta(target: number, current: number) {
+  return Math.atan2(Math.sin(target - current), Math.cos(target - current));
 }
 
 function configValue(config: Record<string, number>, key: string, fallback: number) {
@@ -301,6 +370,412 @@ function createPayloadBody(
   });
 }
 
+function createTerrainBody(
+  segment: (typeof FORKLIFT_TERRAIN_SEGMENTS)[number],
+  config: Record<string, number>,
+) {
+  const surface = getForkliftSurfaceProfile(segment.surfaceId);
+  const points = getTerrainPolygonPoints(segment);
+
+  return createRigidBody({
+    id: `${TERRAIN_BODY_PREFIX}${segment.id}`,
+    type: "static",
+    position: Vector3.zero(),
+    colliders: [
+      {
+        id: `${segment.id}-shape`,
+        shape: createPolygon(points),
+        material: {
+          density: 0,
+          friction: config.surfaceFriction * surface.frictionMultiplier,
+          restitution: 0.01,
+        },
+      },
+    ],
+    userData: {
+      kind: "terrain",
+      surfaceId: segment.surfaceId,
+    },
+  });
+}
+
+function createBreakableCrateBody(spec: ForkliftBreakableCrateSpec) {
+  return createRigidBody({
+    id: getBreakableBodyId(spec.id),
+    position: spec.position,
+    mass: spec.mass,
+    inertia: spec.mass * 0.26,
+    linearDamping: 0.08,
+    angularDamping: 0.11,
+    colliders: [
+      {
+        id: `${spec.id}-body`,
+        shape: createBox(spec.width, spec.height),
+        material: {
+          density: 1,
+          friction: 0.7,
+          restitution: 0.05,
+        },
+      },
+    ],
+    userData: {
+      kind: "breakable",
+      breakThreshold: spec.breakThreshold,
+    },
+  });
+}
+
+function resolveSurfaceResponse(points: Vector3[]) {
+  const profiles = points.map((point) => getSurfaceProfileForPoint(point));
+  const gripMultiplier =
+    profiles.reduce((sum, profile) => sum + profile.frictionMultiplier, 0) /
+    Math.max(profiles.length, 1);
+  const rollingResistanceMultiplier =
+    profiles.reduce(
+      (sum, profile) => sum + profile.rollingResistanceMultiplier,
+      0,
+    ) / Math.max(profiles.length, 1);
+  const dragMultiplier =
+    profiles.reduce((sum, profile) => sum + profile.dragMultiplier, 0) /
+    Math.max(profiles.length, 1);
+  const primaryProfile = profiles.reduce<ForkliftSurfaceProfile>(
+    (best, profile) =>
+      profile.frictionMultiplier < best.frictionMultiplier ? profile : best,
+    profiles[0] ?? getForkliftSurfaceProfile("concrete"),
+  );
+
+  return {
+    primaryProfile,
+    gripMultiplier,
+    rollingResistanceMultiplier,
+    dragMultiplier,
+  };
+}
+
+function getStabilityAssistTargetRotation(
+  scene: ForkliftState,
+  rearWheelCenter: Vector3,
+  frontWheelCenter: Vector3,
+) {
+  const ignoreBodyIds = [
+    FORKLIFT_ID,
+    ...PAYLOAD_IDS,
+    ...BREAKABLE_CRATE_IDS,
+    ...scene.world.bodies
+      .filter((body) => isDebrisBodyId(body.id))
+      .map((body) => body.id),
+  ];
+  const rayOptions = { ignoreBodyIds };
+  const rayDistance = 1.8;
+  const rearHit = rayWithScene(
+    scene.world,
+    rearWheelCenter,
+    Vector3.down(),
+    rayDistance,
+    rayOptions,
+  );
+  const frontHit = rayWithScene(
+    scene.world,
+    frontWheelCenter,
+    Vector3.down(),
+    rayDistance,
+    rayOptions,
+  );
+
+  if (
+    rearHit &&
+    frontHit &&
+    isStaticSupportBodyId(rearHit.bodyId) &&
+    isStaticSupportBodyId(frontHit.bodyId)
+  ) {
+    return clamp(
+      Math.atan2(
+        frontHit.point.y - rearHit.point.y,
+        frontHit.point.x - rearHit.point.x,
+      ),
+      -0.42,
+      0.42,
+    );
+  }
+
+  return 0;
+}
+
+function updateSurfaceTelemetry(scene: ForkliftState, points: Vector3[]) {
+  const surface = resolveSurfaceResponse(points);
+  scene.activeSurfaceId = surface.primaryProfile.id;
+  scene.activeSurfaceLabel = surface.primaryProfile.label;
+  scene.activeSurfaceGripMultiplier = surface.gripMultiplier;
+}
+
+function renderTerrainTexture(
+  ctx: CanvasRenderingContext2D,
+  viewport: Parameters<typeof drawBodyCollider>[1],
+  segment: (typeof FORKLIFT_TERRAIN_SEGMENTS)[number],
+  surface: ForkliftSurfaceProfile,
+) {
+  const [topStart, topEnd] = getTerrainTopLine(segment);
+  const topDirection = topEnd.subtract(topStart);
+  const topLength = topDirection.length;
+  const tangent = topDirection.normalized();
+  const normal = tangent.perpendicular().normalized();
+  const startOffset = 0.8;
+  const endOffset = 0.8;
+
+  if (surface.id === "concrete") {
+    for (let distance = startOffset; distance < topLength - endOffset; distance += 2.25) {
+      const markStart = topStart
+        .add(tangent.scale(distance))
+        .add(normal.scale(0.2));
+      const markEnd = markStart.add(tangent.scale(Math.min(1.05, topLength - distance - 0.4)));
+      drawLineWorld(
+        ctx,
+        viewport,
+        toVector2(markStart),
+        toVector2(markEnd),
+        "rgba(244, 249, 255, 0.24)",
+        2,
+      );
+    }
+    return;
+  }
+
+  if (surface.id === "gravel") {
+    for (let distance = startOffset; distance < topLength - 0.2; distance += 0.95) {
+      const anchor = topStart
+        .add(tangent.scale(distance))
+        .add(normal.scale(0.18));
+      drawLineWorld(
+        ctx,
+        viewport,
+        toVector2(anchor.add(tangent.scale(-0.14))),
+        toVector2(anchor.add(normal.scale(0.12))),
+        "rgba(255, 233, 194, 0.22)",
+        1.4,
+      );
+    }
+    return;
+  }
+
+  if (surface.id === "steel") {
+    for (let distance = 0.5; distance < topLength - 0.2; distance += 1.1) {
+      const stripeBase = topStart.add(tangent.scale(distance));
+      drawLineWorld(
+        ctx,
+        viewport,
+        toVector2(stripeBase.add(normal.scale(0.06))),
+        toVector2(
+          stripeBase.add(tangent.scale(0.42)).add(normal.scale(0.34)),
+        ),
+        "rgba(255, 200, 120, 0.34)",
+        2,
+      );
+    }
+    return;
+  }
+
+  for (let distance = 0.35; distance < topLength - 0.1; distance += 0.92) {
+    const plank = topStart.add(tangent.scale(distance));
+    drawLineWorld(
+      ctx,
+      viewport,
+      toVector2(plank.add(normal.scale(-0.02))),
+      toVector2(plank.add(normal.scale(0.28))),
+      "rgba(242, 218, 182, 0.2)",
+      1.6,
+    );
+  }
+}
+
+function renderForkliftMap(
+  ctx: CanvasRenderingContext2D,
+  viewport: Parameters<typeof drawBodyCollider>[1],
+) {
+  FORKLIFT_TERRAIN_SEGMENTS.forEach((segment) => {
+    const surface = getForkliftSurfaceProfile(segment.surfaceId);
+    drawWorldPolygon(
+      ctx,
+      viewport,
+      getTerrainPolygonPoints(segment),
+      surface.sideColor,
+      "rgba(255, 255, 255, 0.08)",
+      1.2,
+    );
+    const [topStart, topEnd] = getTerrainTopLine(segment);
+    drawLineWorld(
+      ctx,
+      viewport,
+      toVector2(topStart),
+      toVector2(topEnd),
+      surface.topColor,
+      6,
+    );
+    drawLineWorld(
+      ctx,
+      viewport,
+      toVector2(topStart),
+      toVector2(topEnd),
+      surface.accentColor,
+      1.5,
+    );
+    renderTerrainTexture(ctx, viewport, segment, surface);
+    drawWorldLabel(
+      ctx,
+      viewport,
+      new Vector2(getTerrainLabelPoint(segment).x, getTerrainLabelPoint(segment).y),
+      segment.label,
+    );
+  });
+}
+
+function renderBreakableCrateSkin(
+  ctx: CanvasRenderingContext2D,
+  viewport: Parameters<typeof drawBodyCollider>[1],
+  body: NonNullable<ReturnType<PhysicsWorld["getBody"]>>,
+  spec: ForkliftBreakableCrateSpec,
+) {
+  const boxPoints = getLocalBoxPoints(body, Vector3.zero(), spec.width, spec.height);
+  drawWorldPolygon(
+    ctx,
+    viewport,
+    boxPoints,
+    "rgba(164, 112, 58, 0.96)",
+    "rgba(245, 220, 180, 0.22)",
+  );
+  drawLineWorld(
+    ctx,
+    viewport,
+    toVector2(boxPoints[0]),
+    toVector2(boxPoints[2]),
+    "rgba(244, 221, 186, 0.2)",
+    2,
+  );
+  drawLineWorld(
+    ctx,
+    viewport,
+    toVector2(boxPoints[1]),
+    toVector2(boxPoints[3]),
+    "rgba(244, 221, 186, 0.2)",
+    2,
+  );
+}
+
+function renderDebrisSkin(
+  ctx: CanvasRenderingContext2D,
+  viewport: Parameters<typeof drawBodyCollider>[1],
+  body: NonNullable<ReturnType<PhysicsWorld["getBody"]>>,
+) {
+  drawWorldPolygon(
+    ctx,
+    viewport,
+    getLocalBoxPoints(body, Vector3.zero(), 0.34, 0.18),
+    "rgba(126, 84, 45, 0.9)",
+    "rgba(238, 209, 168, 0.14)",
+    1,
+  );
+}
+
+function computeBreakableImpactSeverity(
+  world: PhysicsWorld,
+  contact: PhysicsWorld["contactEvents"]["begin"][number],
+) {
+  const bodyA = world.getBody(contact.bodyAId);
+  const bodyB = world.getBody(contact.bodyBId);
+  if (!bodyA || !bodyB) {
+    return 0;
+  }
+
+  const contactSeverity = contact.points.reduce((best, point) => {
+    const relativeVelocity = bodyB
+      .getPointVelocity(point.position)
+      .subtract(bodyA.getPointVelocity(point.position));
+    const normalSpeed = Math.abs(relativeVelocity.dot(contact.normal));
+    const tangentSpeed = Math.abs(
+      relativeVelocity.dot(contact.normal.perpendicular().normalized()),
+    );
+    const impulse = Math.abs(point.normalImpulse) + Math.abs(point.tangentImpulse) * 0.4;
+    return Math.max(best, normalSpeed + tangentSpeed * 0.24 + impulse * 0.012);
+  }, 0);
+
+  return contactSeverity;
+}
+
+function spawnBreakableDebris(
+  scene: ForkliftState,
+  spec: ForkliftBreakableCrateSpec,
+  breakPoint: Vector3,
+) {
+  const offsets = [
+    new Vector3(-0.24, -0.2, 0),
+    new Vector3(0.22, -0.14, 0),
+    new Vector3(-0.18, 0.18, 0),
+    new Vector3(0.2, 0.16, 0),
+  ];
+
+  offsets.forEach((offset, index) => {
+    const body = scene.world.addBody(
+      createRigidBody({
+        id: `${DEBRIS_BODY_PREFIX}${spec.id}-${index}-${scene.brokenCrates}`,
+        position: spec.position.add(offset),
+        rotation: (index - 1.5) * 0.22,
+        velocity: offset.scale(2.8),
+        mass: spec.mass * 0.12,
+        inertia: spec.mass * 0.03,
+        linearDamping: 0.32,
+        angularDamping: 0.34,
+        colliders: [
+          {
+            id: `${spec.id}-debris-${index}`,
+            shape: createBox(0.34, 0.18),
+            material: {
+              density: 1,
+              friction: 0.74,
+              restitution: 0.08,
+            },
+          },
+        ],
+        userData: {
+          kind: "debris",
+        },
+      }),
+    );
+    body.applyImpulse(
+      offset.normalized().add(new Vector3(0, -0.4, 0)).scale(0.45),
+      body.position,
+    );
+  });
+}
+
+function processBreakableCrates(scene: ForkliftState) {
+  const brokenIds = new Set<string>();
+
+  scene.world.contactEvents.begin.forEach((contact) => {
+    const breakableBodyId = [contact.bodyAId, contact.bodyBId].find((bodyId) =>
+      isBreakableBodyId(bodyId),
+    );
+    if (!breakableBodyId || brokenIds.has(breakableBodyId)) {
+      return;
+    }
+
+    const spec = getBreakableCrateSpec(breakableBodyId);
+    const breakableBody = scene.world.getBody(breakableBodyId);
+    if (!spec || !breakableBody) {
+      return;
+    }
+
+    const impactSeverity = computeBreakableImpactSeverity(scene.world, contact);
+    if (impactSeverity < spec.breakThreshold) {
+      return;
+    }
+
+    brokenIds.add(breakableBodyId);
+    const breakPoint = contact.points[0]?.position ?? breakableBody.position;
+    scene.world.removeBody(breakableBodyId);
+    spawnBreakableDebris(scene, spec, breakPoint);
+    scene.brokenCrates += 1;
+  });
+}
+
 function computeStabilityState(
   scene: ForkliftState,
   engagedPayloadId: string | null = scene.engagedPayloadId,
@@ -337,7 +812,7 @@ function computeStabilityState(
 }
 
 function createForkliftWorld(config: Record<string, number>) {
-  const groundY = 7.55;
+  const groundY = FORKLIFT_GROUND_Y;
   const forkSurfaceFriction = configValue(config, "forkSurfaceFriction", 0.24);
   const world = new PhysicsWorld({
     gravity: new Vector3(0, config.gravity, 0),
@@ -345,36 +820,18 @@ function createForkliftWorld(config: Record<string, number>) {
     positionIterations: 5,
   });
 
-  world.addBody(
-    createRigidBody({
-      id: GROUND_ID,
-      type: "static",
-      position: new Vector3(11, groundY + 1, 0),
-      colliders: [
-        {
-          id: "ground-body",
-          shape: createBox(30, 2),
-          material: {
-            density: 0,
-            friction: config.surfaceFriction,
-            restitution: 0.02,
-          },
-        },
-      ],
-      userData: {
-        kind: "static",
-      },
-    }),
-  );
+  FORKLIFT_TERRAIN_SEGMENTS.forEach((segment) => {
+    world.addBody(createTerrainBody(segment, config));
+  });
 
   world.addBody(
     createRigidBody({
-      id: "forklift-wall-left",
+      id: `${WALL_BODY_PREFIX}-left`,
       type: "static",
-      position: new Vector3(-1.5, 5.5, 0),
+      position: new Vector3(-1.5, FORKLIFT_WORLD_HEIGHT * 0.5, 0),
       colliders: [
         {
-          shape: createBox(2, 10),
+          shape: createBox(2, FORKLIFT_WORLD_HEIGHT + 2),
           material: {
             density: 0,
             friction: 0.9,
@@ -390,12 +847,12 @@ function createForkliftWorld(config: Record<string, number>) {
 
   world.addBody(
     createRigidBody({
-      id: "forklift-wall-right",
+      id: `${WALL_BODY_PREFIX}-right`,
       type: "static",
-      position: new Vector3(23.2, 5.5, 0),
+      position: new Vector3(FORKLIFT_WORLD_WIDTH + 1.5, FORKLIFT_WORLD_HEIGHT * 0.5, 0),
       colliders: [
         {
-          shape: createBox(2, 10),
+          shape: createBox(2, FORKLIFT_WORLD_HEIGHT + 2),
           material: {
             density: 0,
             friction: 0.9,
@@ -412,11 +869,11 @@ function createForkliftWorld(config: Record<string, number>) {
   world.addBody(
     createRigidBody({
       id: FORKLIFT_ID,
-      position: new Vector3(5.2, 6.39, 0),
+      position: new Vector3(FORKLIFT_START_X, FORKLIFT_START_Y, 0),
       mass: displayTonsToSimMass(config.forkliftMass),
-      inertia: displayTonsToSimMass(config.forkliftMass) * 8.5,
+      inertia: displayTonsToSimMass(config.forkliftMass) * 11.5,
       linearDamping: 0.12,
-      angularDamping: 0.22,
+      angularDamping: 0.34,
       colliders: [
         {
           id: "forklift-chassis",
@@ -539,11 +996,15 @@ function createForkliftWorld(config: Record<string, number>) {
     world.addBody(
       createPayloadBody(
         payload.id,
-        new Vector3(payload.spawnX, 6.915, 0),
+        new Vector3(payload.spawnX, FORKLIFT_PAYLOAD_SPAWN_Y, 0),
         getPayloadMass(config, payload.id),
         config.payloadFriction,
       ),
     );
+  });
+
+  FORKLIFT_BREAKABLE_CRATES.forEach((spec) => {
+    world.addBody(createBreakableCrateBody(spec));
   });
 
   return { world, groundY };
@@ -608,8 +1069,8 @@ function inspectForkliftState(scene: ForkliftState) {
   const tipHits = circleWithScene(scene.world, tip, 0.14).filter(
     (contact) =>
       contact.bodyBId !== FORKLIFT_ID &&
-      contact.bodyBId !== GROUND_ID &&
-      !contact.bodyBId.startsWith("forklift-wall"),
+      !isTerrainBodyId(contact.bodyBId) &&
+      !contact.bodyBId.startsWith(WALL_BODY_PREFIX),
   );
 
   const payloadBodies = PAYLOAD_IDS.map((id) => scene.world.getBody(id)).filter(
@@ -644,6 +1105,7 @@ function inspectForkliftState(scene: ForkliftState) {
   scene.activePayloadMass = stability.activePayloadMass;
   scene.staticReserveMoment = stability.reserveMoment;
   scene.estimatedCapacity = stability.estimatedCapacity;
+  scene.furthestTravelX = Math.max(scene.furthestTravelX, forklift?.position.x ?? 0);
 }
 
 function buildPanel(
@@ -660,6 +1122,21 @@ function buildPanel(
 
   return {
     metrics: [
+      {
+        label: "Superficie atual",
+        value: scene.activeSurfaceLabel,
+        helper: `Grip relativo ${formatNumber(scene.activeSurfaceGripMultiplier, 2)}x sobre o atrito base. O cascalho da rampa entrega bem menos tracao que o patio.`,
+      },
+      {
+        label: "Avanco no mapa",
+        value: formatQuantity(Math.max(scene.furthestTravelX - FORKLIFT_START_X, 0), "m"),
+        helper: "A fase agora passa da largura da tela; a camera segue a empilhadeira e registra o quanto voce ja explorou.",
+      },
+      {
+        label: "Caixas quebradas",
+        value: `${scene.brokenCrates}/${FORKLIFT_BREAKABLE_CRATES.length}`,
+        helper: "Caixas leves se despedacam quando o impacto inicial passa do limite configurado para aquele obstaculo.",
+      },
       {
         label: "Velocidade do chassi",
         value: formatQuantity(speed, "m/s"),
@@ -811,30 +1288,30 @@ function buildPanel(
     ],
     concept: [
       {
-        title: "Showcase da engine, nao truque da cena",
-        body: "Nesta cena o chassi, rodas, mastro, carriage e pa pertencem ao mesmo rigidbody composto. O mundo fisico desacoplado cuida de colisao, torque, atrito, rolamento e empurrao entre cargas.",
+        title: "Agora existe um mapa de verdade",
+        body: "A fase saiu do corredor curto e passou a ser um percurso maior que a tela, com patio, faixa de cascalho, rampa e deck elevado. A camera so mostra uma janela do mundo e acompanha a empilhadeira pelo mapa.",
+      },
+      {
+        title: "Superficie muda a dirigibilidade",
+        body: "Cada trecho do mapa aplica um multiplicador proprio de atrito, arrasto e resistencia ao rolamento. O efeito mais visivel esta no cascalho: ele deixa a rampa dependente de embalo em vez de torque bruto parado.",
       },
       {
         title: "Atuadores internos, resposta externa real",
-        body: "Lift e tilt sao atuadores internos com curso, velocidade e amortecimento. Como os colliders moveis ainda passam pelo solver, tocar o solo com a pa devolve reacao real no corpo principal.",
-      },
-      {
-        title: "Escala coerente de massa",
-        body: "Os controles agora trabalham em toneladas equivalentes. Isso permite comparar intuitivamente o peso da empilhadeira com o das cargas sem perder a estabilidade numerica da simulacao.",
+        body: "Lift e tilt continuam sendo atuadores internos com curso, velocidade e amortecimento. Como os colliders moveis ainda passam pelo solver, tocar o solo, entrar na rampa ou bater numa caixa quebravel devolve reacao fisica no corpo principal.",
       },
     ],
     studyNotes: [
       {
-        title: "Primeiro teste util",
-        body: "Entre por baixo do primeiro pallet com a pa baixa. Quando o encaixe estiver limpo, suba aos poucos e depois empurre a fila para sentir a transferencia de impulso.",
+        title: "Pegue embalo no cascalho",
+        body: "Saia do patio de concreto com velocidade e entre na faixa de cascalho sem aliviar. A rampa foi calibrada para premiar entrada rapida; parado nela, a empilhadeira tende a patinar ou morrer.",
       },
       {
-        title: "Derrube com intencao",
-        body: "Incline demais a pa ou bata lateralmente na carga. O momento aplicado longe do centro de massa faz a caixa girar e tombar.",
+        title: "Leve uma carga ate o deck",
+        body: "Entre por baixo de um pallet ainda na area inicial, estabilize a pa e tente carregar a caixa ate o piso metalico. A subida mostra a disputa entre peso, tracao e inercia.",
       },
       {
-        title: "Experimento de sobrecarga",
-        body: "Aumente muito a massa do caixote A e mantenha a empilhadeira leve. Observe a margem estatica e veja quando a carga deixa de ser coerente com o veiculo.",
+        title: "Quebre a barreira",
+        body: "As caixas leves espalhadas pelo percurso quebram quando recebem uma pancada forte o bastante. Use o Shift para ganhar embalo e compare bater vazio com bater carregando um pallet.",
       },
     ],
     loopSteps: [
@@ -956,6 +1433,14 @@ function getFillColor(bodyId: string, colliderId: string) {
     return colliderId.includes("foot")
       ? "rgba(120, 78, 31, 0.14)"
       : "rgba(156, 104, 62, 0.1)";
+  }
+
+  if (bodyKind(bodyId) === "breakable") {
+    return "rgba(176, 126, 70, 0.12)";
+  }
+
+  if (bodyKind(bodyId) === "debris") {
+    return "rgba(110, 76, 42, 0.12)";
   }
 
   return "rgba(59, 86, 122, 0.7)";
@@ -1193,18 +1678,18 @@ function renderForkliftSkin(
 export const forkliftScene: SceneDefinition = {
   id: "forklift-showcase",
   title: "Empilhadeira showcase",
-  subtitle: "Rigid body, contatos, atrito e carga",
+  subtitle: "Mapa maior, pisos variados, rampa e caixas quebraveis",
   accent: "#ffb85a",
   category: "Engine",
   summary:
-    "Cena-cobaia do ventania3d: rigidbody composto, eixo com rolamento, pistoes internos, caixas dinamicas, solver de contato e transferencia de forca entre cargas.",
-  worldWidth: 18,
-  worldHeight: 8.4,
+    "Cena-cobaia maior do ventania3d: mapa side-view mais largo que a tela, camera seguindo a empilhadeira, pisos com atrito diferente, rampa de embalo, deck elevado e caixas quebraveis.",
+  worldWidth: FORKLIFT_WORLD_WIDTH,
+  worldHeight: FORKLIFT_WORLD_HEIGHT,
   keyboardHints: [
     "← / → dirigem",
     "W / S sobem e descem a pa",
     "Z / X inclinam a pa",
-    "Shift ativa o modo pancada",
+    "Shift ajuda a pegar embalo na rampa",
   ],
   autoLoopDefault: false,
   defaults: {
@@ -1306,7 +1791,7 @@ export const forkliftScene: SceneDefinition = {
       max: 1.2,
       step: 0.02,
       unit: "",
-      description: "Limite de atrito tangencial nos contatos da empilhadeira com o chao.",
+      description: "Multiplicador base do atrito. Cada piso do mapa ainda aplica seu proprio fator por cima desse valor.",
     },
     {
       key: "payloadFriction",
@@ -1359,10 +1844,19 @@ export const forkliftScene: SceneDefinition = {
       activePayloadMass: 0,
       staticReserveMoment: 0,
       estimatedCapacity: 0,
+      activeSurfaceId: "concrete",
+      activeSurfaceLabel: getForkliftSurfaceProfile("concrete").label,
+      activeSurfaceGripMultiplier: 1,
+      furthestTravelX: FORKLIFT_START_X,
+      brokenCrates: 0,
       initialPayloadPositions,
     };
 
     updateForkAssembly(scene.world, scene.forkLift, scene.forkTilt);
+    updateSurfaceTelemetry(scene, [
+      new Vector3(FORKLIFT_START_X, FORKLIFT_GROUND_Y, 0),
+      new Vector3(FORKLIFT_START_X + 0.8, FORKLIFT_GROUND_Y, 0),
+    ]);
     inspectForkliftState(scene);
     return scene;
   },
@@ -1439,6 +1933,9 @@ export const forkliftScene: SceneDefinition = {
       const frontWheelCenter = forklift.worldPoint(FRONT_WHEEL_LOCAL);
       const rearContactPoint = rearWheelCenter.add(downAxis.scale(WHEEL_RADIUS));
       const frontContactPoint = frontWheelCenter.add(downAxis.scale(WHEEL_RADIUS));
+      const surfaceSamplePoints = [rearContactPoint, frontContactPoint];
+      const surfaceResponse = resolveSurfaceResponse(surfaceSamplePoints);
+      updateSurfaceTelemetry(scene, surfaceSamplePoints);
       const rearSupported = hasWheelSupport(
         scene.world,
         rearContactPoint.add(downAxis.scale(0.04)),
@@ -1473,7 +1970,11 @@ export const forkliftScene: SceneDefinition = {
         10,
       );
       const gravityLoad = forklift.mass * config.gravity * supportRatio;
-      const tractionLimit = config.surfaceFriction * gravityLoad * turboTractionMultiplier;
+      const tractionLimit =
+        config.surfaceFriction *
+        surfaceResponse.gripMultiplier *
+        gravityLoad *
+        turboTractionMultiplier;
       const rawSlip = scene.wheelAngularVelocity * WHEEL_RADIUS - contactSpeed;
       const tractionForce =
         wheelSupport.count === 0
@@ -1483,6 +1984,7 @@ export const forkliftScene: SceneDefinition = {
         wheelSupport.count === 0
           ? 0
           : rollingResistanceTorque *
+            surfaceResponse.rollingResistanceMultiplier *
             Math.sign(
               Math.abs(scene.wheelAngularVelocity) > 0.02
                 ? scene.wheelAngularVelocity
@@ -1528,8 +2030,52 @@ export const forkliftScene: SceneDefinition = {
 
       if (Math.abs(forklift.velocity.x) > 0.02) {
         forklift.applyForce(
-          new Vector3(-forklift.velocity.x * config.chassisDrag * WORLD_SUBSTEPS, 0, 0),
+          new Vector3(
+            -forklift.velocity.x *
+              config.chassisDrag *
+              surfaceResponse.dragMultiplier *
+              WORLD_SUBSTEPS,
+            0,
+            0,
+          ),
         );
+      }
+
+      if (wheelSupport.count > 0) {
+        const targetRotation = getStabilityAssistTargetRotation(
+          scene,
+          rearWheelCenter,
+          frontWheelCenter,
+        );
+        const rotationError = getShortestAngleDelta(
+          targetRotation,
+          forklift.rotation,
+        );
+        const assistGain = wheelSupport.count === 2 ? 17.5 : 11.5;
+        const assistDamping = wheelSupport.count === 2 ? 5.8 : 4.1;
+        const liftPenalty = clamp(
+          1 - (scene.forkLift / Math.max(config.maxLift, 0.1)) * 0.22,
+          0.74,
+          1,
+        );
+        const stabilization =
+          clamp(
+            rotationError * assistGain -
+              forklift.angularVelocity * assistDamping,
+            -14,
+            14,
+          ) *
+          supportRatio *
+          liftPenalty;
+
+        forklift.angularVelocity += stabilization * dt;
+
+        if (
+          Math.abs(rotationError) > 0.42 &&
+          Math.abs(forklift.angularVelocity) > 0.9
+        ) {
+          forklift.angularVelocity *= 0.9;
+        }
       }
     }
 
@@ -1563,6 +2109,7 @@ export const forkliftScene: SceneDefinition = {
     });
 
     scene.world.step(dt, WORLD_SUBSTEPS);
+    processBreakableCrates(scene);
     if (
       forklift &&
       commands.drive === 0 &&
@@ -1589,8 +2136,14 @@ export const forkliftScene: SceneDefinition = {
     const forklift = scene.world.getBody(FORKLIFT_ID);
     const bladePoints = getForkBladePoints(scene.world, scene);
 
+    drawScenicBackdrop(ctx, viewport, {
+      groundY: scene.groundY,
+      hillHeight: 1.55,
+      treeBaseY: scene.groundY,
+      treeSpacing: 4.4,
+    });
     drawGrid(ctx, viewport, 1);
-    drawGround(ctx, viewport, scene.groundY, "Piso de teste");
+    renderForkliftMap(ctx, viewport);
 
     drawLineWorld(
       ctx,
@@ -1608,7 +2161,7 @@ export const forkliftScene: SceneDefinition = {
     );
 
     scene.world.bodies
-      .filter((body) => body.id !== GROUND_ID && !body.id.startsWith("forklift-wall"))
+      .filter((body) => !isTerrainBodyId(body.id) && !body.id.startsWith(WALL_BODY_PREFIX))
       .forEach((body) => {
         body.getSnapshots().forEach((snapshot) => {
           drawBodyCollider(
@@ -1637,6 +2190,21 @@ export const forkliftScene: SceneDefinition = {
       renderPayloadSkin(ctx, viewport, payload, sprites.crate);
     });
 
+    FORKLIFT_BREAKABLE_CRATES.forEach((spec) => {
+      const body = scene.world.getBody(getBreakableBodyId(spec.id));
+      if (!body) {
+        return;
+      }
+
+      renderBreakableCrateSkin(ctx, viewport, body, spec);
+    });
+
+    scene.world.bodies
+      .filter((body) => isDebrisBodyId(body.id))
+      .forEach((body) => {
+        renderDebrisSkin(ctx, viewport, body);
+      });
+
     if (forklift) {
       drawWorldLabel(
         ctx,
@@ -1657,6 +2225,20 @@ export const forkliftScene: SceneDefinition = {
         viewport,
         new Vector2(payload.position.x - 0.52, payload.position.y - 0.92),
         `${payloadSpec.label} ${formatSimMass(payload.mass)}`,
+      );
+    });
+
+    FORKLIFT_BREAKABLE_CRATES.forEach((spec) => {
+      const body = scene.world.getBody(getBreakableBodyId(spec.id));
+      if (!body) {
+        return;
+      }
+
+      drawWorldLabel(
+        ctx,
+        viewport,
+        new Vector2(body.position.x - 0.64, body.position.y - 0.8),
+        spec.label,
       );
     });
 
@@ -1715,12 +2297,24 @@ export const forkliftScene: SceneDefinition = {
   getCameraWindow: (state) => {
     const scene = getState(state);
     const forklift = scene.world.getBody(FORKLIFT_ID);
-    const centerX = clamp(forklift?.position.x ?? 9, 8.5, 14.5);
+    const cameraWidth = FORKLIFT_CAMERA_WIDTH;
+    const cameraHeight = FORKLIFT_CAMERA_HEIGHT;
+    const lookAhead = clamp((forklift?.velocity.x ?? 0) * 0.55, -2.1, 2.1);
+    const centerX = clamp(
+      (forklift?.position.x ?? FORKLIFT_START_X) + lookAhead,
+      cameraWidth * 0.5,
+      FORKLIFT_WORLD_WIDTH - cameraWidth * 0.5,
+    );
+    const centerY = clamp(
+      (forklift?.position.y ?? FORKLIFT_START_Y) - 1.7,
+      cameraHeight * 0.5,
+      FORKLIFT_WORLD_HEIGHT - cameraHeight * 0.5,
+    );
 
     return {
-      center: new Vector2(centerX, 4.35),
-      width: 17,
-      height: 8.4,
+      center: new Vector2(centerX, centerY),
+      width: cameraWidth,
+      height: cameraHeight,
     };
   },
 };

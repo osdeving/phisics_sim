@@ -1,7 +1,7 @@
 # Empilhadeira showcase
 
 ## Ideia central
-Esta cena funciona como vitrine da engine `ventania3d`. Aqui aparecem, ao mesmo tempo, **corpo rígido**, **contato**, **atrito**, **torque**, **rolamento**, **transferência de carga** e **cinemática controlada da pá**. Em vez de um problema isolado, a empilhadeira reúne vários capítulos da mecânica num só experimento.
+Esta cena funciona como vitrine da engine `ventania3d`. Aqui aparecem, ao mesmo tempo, **corpo rígido**, **contato**, **atrito**, **torque**, **rolamento**, **transferência de carga**, **cinemática controlada da pá** e agora também **um mapa maior que a tela com pisos diferentes**. Em vez de um problema isolado, a empilhadeira reúne vários capítulos da mecânica num só experimento.
 
 O objetivo não é apenas mover um veículo, mas observar como forças aplicadas em pontos diferentes geram respostas lineares e angulares no conjunto.
 
@@ -26,9 +26,10 @@ $$
 
 ## O que observar na cena
 1. A pá precisa entrar no vão útil do pallet para erguer a carga.
-2. Quando a pá sobe, a massa engatada altera a distribuição de esforços.
-3. Inclinar a pá muda o ponto de aplicação da força e pode fazer o chassi reagir.
-4. O modo de aceleração mais forte mostra como a transferência de carga se torna mais intensa.
+2. O trecho de cascalho reduz a tração, então a rampa fica dependente de embalo.
+3. Quando a pá sobe, a massa engatada altera a distribuição de esforços.
+4. Inclinar a pá muda o ponto de aplicação da força e pode fazer o chassi reagir.
+5. As caixas quebráveis mostram impacto e transferência de energia de um jeito mais visível.
 
 ## Leitura didática da roda
 Numa leitura mais realista, o giro da roda e o avanço da empilhadeira estão conectados:
@@ -47,8 +48,17 @@ Um sistema desse tipo não depende apenas da força máxima do motor. A estabili
 - distância da carga ao eixo de apoio;
 - força de contato com o solo.
 
+## Leitura didática do mapa
+O cenário agora foi dividido em trechos com comportamentos diferentes:
+- **concreto**, onde a resposta é mais previsível;
+- **cascalho**, onde a roda patina com mais facilidade;
+- **deck metálico**, onde a empilhadeira chega depois da rampa;
+- **doca de madeira**, que fecha a parte alta do percurso.
+
+Isso aproxima a cena de um jogo/sandbox: o mundo não cabe inteiro na tela e a câmera precisa acompanhar o veículo.
+
 ## Por que esta cena é especial
 Ela é menos “equação fechada” e mais **simulação física integrada**. Em vez de resolver uma única fórmula, o motor atualiza contatos, atrito e torque a cada passo de tempo. Isso aproxima o comportamento do que se espera de uma engine física.
 
 ## Erro comum
-> Pensar que levantar a carga depende só da potência. Na prática, estabilidade, centro de massa, alavanca e contato com o solo são tão importantes quanto a força disponível.
+> Pensar que subir a rampa depende só da potência. Na prática, atrito disponível, embalo, centro de massa, alavanca e contato com o solo são tão importantes quanto a força do motor.

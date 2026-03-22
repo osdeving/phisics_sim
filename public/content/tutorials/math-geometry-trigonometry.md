@@ -1,4 +1,4 @@
-# Geometria plana e trigonometria
+# Geometria plana e trigonometria para fisica
 
 ## Escopo
 Esta parte cobre:
@@ -12,6 +12,8 @@ Esta parte cobre:
 - teorema de Pitagoras
 - seno, cosseno e tangente
 
+Em mecanica, esse bloco aparece em vetores, planos inclinados, lancamento obliquo, trajetorias, componentes de forca, torque, movimento circular e leitura de areas.
+
 ---
 
 ## 1. Angulos
@@ -20,18 +22,25 @@ Esta parte cobre:
 
 O angulo mede abertura entre duas semirretas.
 
+Na fisica, angulo costuma indicar:
+
+- direcao do vetor
+- inclinacao de uma rampa
+- orientacao de uma forca
+- posicao angular no movimento circular
+
 ### Tipos
 
-- agudo: menor que 90°
-- reto: igual a 90°
-- obtuso: entre 90° e 180°
-- raso: 180°
-- completo: 360°
+- agudo: menor que 90 graus
+- reto: igual a 90 graus
+- obtuso: entre 90 graus e 180 graus
+- raso: 180 graus
+- completo: 360 graus
 
 ### Relacoes importantes
 
-- complementares: somam 90°
-- suplementares: somam 180°
+- complementares: somam 90 graus
+- suplementares: somam 180 graus
 - opostos pelo vertice: possuem mesma medida
 
 ---
@@ -58,6 +67,14 @@ $$
 A+B+C=180^\circ
 $$
 
+### Onde isso aparece em mecanica
+
+Quase toda decomposicao vetorial desenha um triangulo:
+
+- vetor resultante
+- componentes horizontal e vertical
+- peso e normal em plano inclinado
+
 ---
 
 ## 3. Congruencia e semelhanca
@@ -75,7 +92,13 @@ Figuras semelhantes tem mesma forma, mas tamanhos proporcionais.
 - angulos correspondentes iguais
 - lados correspondentes proporcionais
 
-Isso e essencial em geometria e em varios problemas com triangulos.
+### Leitura fisica
+
+Semelhanca aparece quando:
+
+- um desenho representa um sistema real em escala
+- dois triangulos surgem na decomposicao de vetores
+- usamos uma representacao ampliada de uma configuracao mecanica
 
 ---
 
@@ -141,6 +164,13 @@ $$
 A=\frac{(B+b)\cdot h}{2}
 $$
 
+### Onde area entra na fisica
+
+- pressao: $$p = \frac{F}{A}$$
+- secao transversal
+- contato entre superficies
+- interpretacao de algumas grandezas geometricas em mecanismos
+
 ---
 
 ## 5. Poligonos
@@ -158,6 +188,10 @@ $$
 $$
 d=\frac{n(n-3)}{2}
 $$
+
+### Leitura fisica
+
+Essa parte aparece menos diretamente na mecanica basica, mas fortalece a leitura espacial, a modelagem de perfis e a interpretacao de figuras tecnicas.
 
 ---
 
@@ -181,6 +215,18 @@ $$
 d=2r
 $$
 
+### Onde isso entra em mecanica
+
+- rodas e polias
+- movimento circular
+- distancia percorrida por uma volta completa
+
+Se uma roda de raio $$r$$ completa uma volta, um ponto da borda percorre:
+
+$$
+2\pi r
+$$
+
 ---
 
 ## 7. Teorema de Pitagoras
@@ -196,17 +242,24 @@ onde:
 - $$h$$ e a hipotenusa
 - $$c_1$$ e $$c_2$$ sao os catetos
 
-### Exemplo
+### Exemplo com deslocamento
 
-Se os catetos medem 5 e 12:
+Um corpo anda:
+
+- 6 m para leste
+- 8 m para norte
+
+O modulo do deslocamento resultante e:
 
 $$
-h^2=5^2+12^2=25+144=169
+R^2 = 6^2 + 8^2 = 36 + 64 = 100
 $$
 
 $$
-h=13
+R = 10 \text{ m}
 $$
+
+Esse e um dos usos mais diretos de Pitagoras em mecanica.
 
 ---
 
@@ -232,121 +285,79 @@ $$
 \tan\theta=\frac{\text{cateto oposto}}{\text{cateto adjacente}}
 $$
 
-### Mnemônico classico
+### Exemplo central em mecanica
 
-- seno: oposto sobre hipotenusa
-- cosseno: adjacente sobre hipotenusa
-- tangente: oposto sobre adjacente
+Num plano inclinado de angulo $$\theta$$, o peso $$P$$ pode ser decomposto em:
+
+$$
+P_x = P\sin\theta
+$$
+
+$$
+P_y = P\cos\theta
+$$
+
+Ou, dependendo da convencao do desenho, os papeis de seno e cosseno trocam. O ponto central e:
+
+- defina o angulo com cuidado
+- veja qual lado e oposto
+- veja qual lado e adjacente
+
+### Outro exemplo com vetor
+
+Se uma forca $$F$$ faz angulo $$\theta$$ com o eixo horizontal:
+
+$$
+F_x = F\cos\theta
+$$
+
+$$
+F_y = F\sin\theta
+$$
 
 ---
 
 ## 9. Angulos notaveis
 
-### 30°
+Vale a pena conhecer:
 
 $$
-\sin30^\circ=\frac{1}{2}
-$$
-
-$$
-\cos30^\circ=\frac{\sqrt{3}}{2}
+\sin 30^\circ = \frac{1}{2}
 $$
 
 $$
-\tan30^\circ=\frac{\sqrt{3}}{3}
-$$
-
-### 45°
-
-$$
-\sin45^\circ=\frac{\sqrt{2}}{2}
+\cos 30^\circ = \frac{\sqrt{3}}{2}
 $$
 
 $$
-\cos45^\circ=\frac{\sqrt{2}}{2}
+\sin 45^\circ = \cos 45^\circ = \frac{\sqrt{2}}{2}
 $$
 
 $$
-\tan45^\circ=1
-$$
-
-### 60°
-
-$$
-\sin60^\circ=\frac{\sqrt{3}}{2}
+\sin 60^\circ = \frac{\sqrt{3}}{2}
 $$
 
 $$
-\cos60^\circ=\frac{1}{2}
+\cos 60^\circ = \frac{1}{2}
 $$
 
-$$
-\tan60^\circ=\sqrt{3}
-$$
+Esses valores aparecem direto em exercicios de vetores e plano inclinado.
 
 ---
 
-## 10. Aplicacoes mais comuns
+## 10. Checklist de geometria e trigonometria para fisica
 
-- calcular alturas e distancias
-- decompor vetores
-- resolver plano inclinado
-- achar diagonais
-- determinar area de figuras
-- analisar inclinacao de reta ou rampa
-
----
-
-## 11. Erros mais comuns
-
-- usar Pitagoras em triangulo que nao e retangulo
-- confundir cateto oposto e adjacente
-- trocar area com perimetro
-- esquecer unidade de area, que e unidade ao quadrado
-- usar tangente quando o problema relaciona hipotenusa
+1. desenhe a figura
+2. marque angulos, lados e direcoes
+3. veja se ha triangulo retangulo escondido
+4. escolha entre area, Pitagoras ou trigonometria
+5. confira se esta usando seno, cosseno ou tangente em relacao ao angulo certo
 
 ---
 
-## 12. Formulas para memorizar
+## 11. Frases para guardar
 
-$$
-A+B+C=180^\circ
-$$
-
-$$
-A_{\triangle}=\frac{b\cdot h}{2}
-$$
-
-$$
-A_{ret}=b\cdot h
-$$
-
-$$
-C=2\pi r
-$$
-
-$$
-A_{circulo}=\pi r^2
-$$
-
-$$
-h^2=c_1^2+c_2^2
-$$
-
-$$
-\sin\theta=\frac{oposto}{hipotenusa}
-$$
-
-$$
-\cos\theta=\frac{adjacente}{hipotenusa}
-$$
-
-$$
-\tan\theta=\frac{oposto}{adjacente}
-$$
-
----
-
-## 13. Frase mental
-
-> Se aparecer inclinacao, altura ou diagonal, provavelmente ha um triangulo escondido.
+- em mecanica, quase todo vetor pede desenho
+- Pitagoras da o modulo; trigonometria da as componentes
+- area nao e so geometria, ela entra em grandezas fisicas como pressao
+- uma roda sempre traz circunferencia para o problema

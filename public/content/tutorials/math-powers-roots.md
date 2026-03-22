@@ -1,4 +1,4 @@
-# Potenciacao e radiciacao
+# Potenciacao e radiciacao para fisica
 
 ## Escopo
 Esta parte cobre:
@@ -13,6 +13,9 @@ Esta parte cobre:
 - simplificacao de raizes
 - produto e quociente de radicais
 - racionalizacao
+- notacao cientifica
+
+Em mecanica, potencias e raizes aparecem em energia cinetica, area, volume, Pitagoras, decomposicao vetorial, velocidade de queda e leitura de unidades.
 
 ---
 
@@ -29,11 +32,19 @@ $$
 - base: $$a$$
 - expoente: $$n$$
 
-Exemplo:
+### Exemplo fisico simples
+
+Na energia cinetica:
 
 $$
-2^4=2\cdot2\cdot2\cdot2=16
+E_c = \frac{mv^2}{2}
 $$
+
+O termo $$v^2$$ mostra que a velocidade entra ao quadrado.
+
+Se a velocidade dobra, a energia cinetica nao dobra: ela quadruplica.
+
+Esse e um dos exemplos mais importantes de potencia na fisica.
 
 ---
 
@@ -42,55 +53,73 @@ $$
 ### 2.1 Produto de potencias de mesma base
 
 $$
-a^m\cdot a^n=a^{m+n}
+a^m\cdot a^n = a^{m+n}
 $$
 
 Exemplo:
 
 $$
-2^3\cdot2^5=2^8
+10^3 \cdot 10^2 = 10^5
 $$
+
+Isso aparece em notacao cientifica e em conversao de ordens de grandeza.
 
 ### 2.2 Quociente de potencias de mesma base
 
 $$
-\frac{a^m}{a^n}=a^{m-n}, \quad a\neq0
+\frac{a^m}{a^n} = a^{m-n}, \quad a\neq0
 $$
 
 Exemplo:
 
 $$
-\frac{3^7}{3^2}=3^5
+\frac{10^7}{10^3} = 10^4
 $$
 
 ### 2.3 Potencia de potencia
 
 $$
-(a^m)^n=a^{mn}
+(a^m)^n = a^{mn}
 $$
 
 Exemplo:
 
 $$
-(2^3)^4=2^{12}
+(t^2)^3 = t^6
 $$
 
 ### 2.4 Potencia de um produto
 
 $$
-(ab)^n=a^n b^n
+(ab)^n = a^n b^n
 $$
 
 Exemplo:
 
 $$
-(2x)^3=2^3x^3=8x^3
+(2v)^2 = 4v^2
 $$
 
 ### 2.5 Potencia de um quociente
 
 $$
-\left(\frac{a}{b}\right)^n=\frac{a^n}{b^n}, \quad b\neq0
+\left(\frac{a}{b}\right)^n = \frac{a^n}{b^n}, \quad b\neq0
+$$
+
+Exemplo:
+
+$$
+\left(\frac{\Delta s}{\Delta t}\right)^2 = \frac{(\Delta s)^2}{(\Delta t)^2}
+$$
+
+### Cuidado
+
+As regras acima valem para multiplicacao, divisao e parenteses.
+
+Elas nao valem para soma:
+
+$$
+a^m + a^n \neq a^{m+n}
 $$
 
 ---
@@ -100,7 +129,7 @@ $$
 Para $$a\neq0$$:
 
 $$
-a^0=1
+a^0 = 1
 $$
 
 ### Por que?
@@ -108,19 +137,19 @@ $$
 Pela regra:
 
 $$
-\frac{a^m}{a^m}=a^{m-m}=a^0
+\frac{a^m}{a^m} = a^{m-m} = a^0
 $$
 
 Mas tambem:
 
 $$
-\frac{a^m}{a^m}=1
+\frac{a^m}{a^m} = 1
 $$
 
 Logo:
 
 $$
-a^0=1
+a^0 = 1
 $$
 
 ### Cuidado
@@ -138,20 +167,29 @@ nao entra nessa regra escolar simples.
 Para $$a\neq0$$:
 
 $$
-a^{-n}=\frac{1}{a^n}
+a^{-n} = \frac{1}{a^n}
 $$
 
 Exemplo:
 
 $$
-2^{-3}=\frac{1}{2^3}=\frac{1}{8}
+2^{-3} = \frac{1}{2^3} = \frac{1}{8}
 $$
+
+### Leitura em fisica
+
+Expoente negativo aparece muito em unidades:
+
+- $$s^{-1}$$ significa $$1/s$$
+- $$m^{-2}$$ significa $$1/m^2$$
+
+Em gravitacao, eletricidade e campos, potencias negativas surgem com frequencia.
 
 ### Cuidado
 
 Expoente negativo nao significa que o resultado final sera negativo.
 
-Ele significa inverso.
+Ele indica inverso.
 
 ---
 
@@ -160,24 +198,40 @@ Ele significa inverso.
 Temos:
 
 $$
-a^{1/n}=\sqrt[n]{a}
+a^{1/n} = \sqrt[n]{a}
 $$
 
 e, mais geralmente:
 
 $$
-a^{m/n}=\sqrt[n]{a^m}
+a^{m/n} = \sqrt[n]{a^m}
 $$
 
 Exemplos:
 
 $$
-16^{1/2}=\sqrt{16}=4
+16^{1/2} = \sqrt{16} = 4
 $$
 
 $$
-27^{2/3}=\sqrt[3]{27^2}=\sqrt[3]{729}=9
+27^{2/3} = \sqrt[3]{27^2} = 9
 $$
+
+### Leitura fisica
+
+Se:
+
+$$
+v^2 = 2gh
+$$
+
+entao:
+
+$$
+v = (2gh)^{1/2} = \sqrt{2gh}
+$$
+
+Ou seja: a raiz quadrada e o mesmo que potencia com expoente $$1/2$$.
 
 ---
 
@@ -210,6 +264,14 @@ $$
 \sqrt[3]{-8}=-2
 $$
 
+### Leitura fisica
+
+Em mecanica, raizes aparecem em:
+
+- modulo de vetores
+- velocidade obtida por energia
+- resultado do teorema de Pitagoras
+
 ---
 
 ## 7. Propriedades dos radicais
@@ -217,170 +279,134 @@ $$
 ### 7.1 Produto
 
 $$
-\sqrt[n]{a}\cdot\sqrt[n]{b}=\sqrt[n]{ab}
+\sqrt[n]{a}\cdot\sqrt[n]{b} = \sqrt[n]{ab}
+$$
+
+Exemplo:
+
+$$
+\sqrt{2}\cdot\sqrt{8} = \sqrt{16} = 4
 $$
 
 ### 7.2 Quociente
 
 $$
-\frac{\sqrt[n]{a}}{\sqrt[n]{b}}=\sqrt[n]{\frac{a}{b}}
+\frac{\sqrt[n]{a}}{\sqrt[n]{b}} = \sqrt[n]{\frac{a}{b}}
 $$
 
-com $$b>0$$ nos casos usuais de raiz par.
-
-### 7.3 Raiz de raiz
-
-$$
-\sqrt[m]{\sqrt[n]{a}}=\sqrt[mn]{a}
-$$
-
-### 7.4 Potencia do radical
-
-$$
-(\sqrt[n]{a})^m = a^{m/n}
-$$
-
----
-
-## 8. Simplificacao de radicais
-
-Procure fatores perfeitos.
+com $$b>0$$ no caso da raiz quadrada real.
 
 Exemplo:
 
 $$
-\sqrt{72}=\sqrt{36\cdot2}=6\sqrt{2}
+\frac{\sqrt{50}}{\sqrt{2}} = \sqrt{25} = 5
 $$
+
+### 7.3 Extracao de fatores perfeitos
+
+$$
+\sqrt{50} = \sqrt{25\cdot2} = 5\sqrt{2}
+$$
+
+Isso e muito util quando o resultado fisico vem de Pitagoras.
 
 Exemplo:
 
-$$
-\sqrt{50}=\sqrt{25\cdot2}=5\sqrt{2}
-$$
-
----
-
-## 9. Soma e subtracao de radicais
-
-So pode somar ou subtrair radicais semelhantes.
-
-Exemplo:
+Se:
 
 $$
-3\sqrt{2}+5\sqrt{2}=8\sqrt{2}
-$$
-
-Mas:
-
-$$
-\sqrt{2}+\sqrt{3}
-$$
-
-nao simplifica por soma direta.
-
-### Primeiro simplifique o radical
-
-Exemplo:
-
-$$
-\sqrt{8}+\sqrt{2}
-$$
-
-Como:
-
-$$
-\sqrt{8}=2\sqrt{2}
+R = \sqrt{18^2 + 24^2} = \sqrt{900}
 $$
 
 entao:
 
 $$
-2\sqrt{2}+\sqrt{2}=3\sqrt{2}
+R = 30
 $$
+
+Mas quando nao da numero inteiro, simplificar o radical ajuda a manter a conta limpa.
 
 ---
 
-## 10. Racionalizacao
+## 8. Racionalizacao
+
+Racionalizar e tirar o radical do denominador.
 
 ### Caso simples
 
 $$
-\frac{1}{\sqrt{3}}=\frac{\sqrt{3}}{3}
+\frac{1}{\sqrt{2}} = \frac{\sqrt{2}}{2}
 $$
 
-### Caso com binomio
+### Onde isso aparece em mecanica
 
-Se houver:
-
-$$
-\frac{1}{a+\sqrt{b}}
-$$
-
-use o conjugado:
+Em 45 graus:
 
 $$
-a-\sqrt{b}
+\sin 45^\circ = \cos 45^\circ = \frac{\sqrt{2}}{2}
 $$
 
-pois:
+Se uma forca $$F$$ faz 45 graus:
 
 $$
-(a+\sqrt{b})(a-\sqrt{b})=a^2-b
+F_x = \frac{F}{\sqrt{2}} = \frac{F\sqrt{2}}{2}
 $$
+
+Essa segunda forma costuma ser preferida.
 
 ---
 
-## 11. Erros mais comuns
+## 9. Notacao cientifica
 
-- somar expoentes em soma de potencias
-- usar regra de mesma base quando as bases sao diferentes
-- achar que $$a^{-n}=-a^n$$
-- esquecer restricoes de dominio em raizes pares
-- somar radicais nao semelhantes
-- esquecer de simplificar o radical antes de operar
-
----
-
-## 12. Formulas para memorizar
+Notacao cientifica escreve numeros como:
 
 $$
-a^m\cdot a^n=a^{m+n}
+a \cdot 10^n
 $$
 
-$$
-\frac{a^m}{a^n}=a^{m-n}
-$$
+com:
 
 $$
-(a^m)^n=a^{mn}
+1 \leq a < 10
+$$
+
+### Exemplos
+
+$$
+300000 = 3\cdot10^5
 $$
 
 $$
-(ab)^n=a^n b^n
+0{,}00042 = 4{,}2\cdot10^{-4}
 $$
 
-$$
-\left(\frac{a}{b}\right)^n=\frac{a^n}{b^n}
-$$
+### Por que isso importa em fisica
 
-$$
-a^0=1,\quad a\neq0
-$$
+Medidas fisicas muitas vezes ficam muito grandes ou muito pequenas:
 
-$$
-a^{-n}=\frac{1}{a^n}
-$$
+- distancias astronomicas
+- massas microscopicas
+- constante gravitacional
+- carga eletrica
 
-$$
-a^{1/n}=\sqrt[n]{a}
-$$
-
-$$
-a^{m/n}=\sqrt[n]{a^m}
-$$
+Sem notacao cientifica, a leitura e a comparacao de ordens de grandeza ficam ruins.
 
 ---
 
-## 13. Frase mental
+## 10. Checklist de potencias e raizes para fisica
 
-> Em potencia, a base manda na regra. Em radical, simplifique antes de operar.
+1. a operacao e produto, divisao ou soma?
+2. as bases sao iguais?
+3. a raiz pode ser reescrita como expoente fracionario?
+4. ha algum radical que pode ser simplificado?
+5. a unidade final continua coerente com a grandeza fisica?
+
+---
+
+## 11. Frases para guardar
+
+- velocidade ao quadrado muda muita coisa em mecanica
+- expoente negativo indica inverso
+- radical e potencia fracionaria contam a mesma historia
+- soma de potencias nao segue a regra da multiplicacao
+- notacao cientifica e ferramenta de leitura fisica, nao so de calculadora

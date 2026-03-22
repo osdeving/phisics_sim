@@ -1,4 +1,4 @@
-# Funcoes basicas
+# Funcoes basicas para fisica
 
 ## Escopo
 Esta parte cobre:
@@ -12,6 +12,14 @@ Esta parte cobre:
 - coeficientes e interpretacao
 - graficos e propriedades
 
+Para quem esta entrando em fisica, funcao e a ponte entre formula e grafico. Em mecanica isso aparece imediatamente:
+
+- posicao em funcao do tempo
+- velocidade em funcao do tempo
+- aceleracao em funcao do tempo
+
+MRU conversa com funcao afim. MRUV conversa com funcao quadratica.
+
 ---
 
 ## 1. O que e funcao
@@ -24,10 +32,21 @@ $$
 y=f(x)
 $$
 
-onde:
+Na fisica, o caso mais importante e quando a entrada e o tempo:
 
-- $$x$$ e a variavel independente
-- $$y$$ e a variavel dependente
+$$
+s = s(t)
+$$
+
+$$
+v = v(t)
+$$
+
+$$
+a = a(t)
+$$
+
+Ou seja: a grandeza fisica depende do instante.
 
 ---
 
@@ -41,21 +60,27 @@ Conjunto de valores que podem entrar na funcao.
 
 Conjunto de valores que realmente saem da funcao.
 
-### Exemplo
+### Exemplo fisico
 
-Na funcao:
-
-$$
-f(x)=\frac{1}{x-2}
-$$
-
-o dominio nao pode conter:
+Se um experimento comeca em:
 
 $$
-x=2
+t=0
 $$
 
-porque zeraria o denominador.
+e termina em:
+
+$$
+t=8 \text{ s}
+$$
+
+entao o dominio fisico pode ser:
+
+$$
+0 \leq t \leq 8
+$$
+
+Mesmo que a formula aceite outros valores, o problema real pode restringir o dominio.
 
 ---
 
@@ -64,9 +89,15 @@ porque zeraria o denominador.
 - formula
 - tabela
 - grafico
-- diagrama de setas
+- descricao verbal
 
-Cada forma destaca um aspecto diferente.
+Na fisica, grafico nao e enfeite. Ele mostra comportamento:
+
+- reta crescente
+- reta decrescente
+- parabola
+- valor maximo
+- ponto onde a grandeza zera
 
 ---
 
@@ -83,41 +114,70 @@ $$
 - $$a$$: coeficiente angular
 - $$b$$: coeficiente linear
 
-### Coeficiente angular
+### Leitura fisica no MRU
 
-Indica inclinacao da reta.
-
-- se $$a>0$$, a reta e crescente
-- se $$a<0$$, a reta e decrescente
-- se $$a=0$$, a funcao e constante
-
-### Coeficiente linear
-
-E o valor onde a reta corta o eixo $$y$$:
+A funcao horaria do espaco no MRU e:
 
 $$
-f(0)=b
+s(t)=s_0+vt
+$$
+
+Ela e uma funcao afim.
+
+Comparando com:
+
+$$
+f(x)=ax+b
+$$
+
+temos:
+
+- $$a \leftrightarrow v$$
+- $$b \leftrightarrow s_0$$
+
+Ou seja:
+
+- a inclinacao da reta representa a velocidade
+- o valor inicial representa a posicao no instante zero
+
+### Exemplo
+
+$$
+s(t)=12+4t
+$$
+
+Isso significa:
+
+- posicao inicial: $$12 \text{ m}$$
+- velocidade: $$4 \text{ m/s}$$
+
+Se:
+
+$$
+t=5 \text{ s}
+$$
+
+entao:
+
+$$
+s(5)=12+4\cdot5=32 \text{ m}
 $$
 
 ### Raiz da funcao afim
 
-E o valor de $$x$$ para o qual:
+A raiz e o valor de entrada para o qual a saida vale zero.
+
+No exemplo:
 
 $$
-f(x)=0
+12+4t=0
 $$
 
-Na funcao afim:
-
 $$
-ax+b=0
+t=-3
 $$
 
-logo:
-
-$$
-x=-\frac{b}{a}
-$$
+Matematicamente existe. Fisicamente, nem sempre faz sentido se o estudo comeca em $$t=0$$.
 
 ---
 
@@ -127,18 +187,22 @@ O grafico e uma reta.
 
 Para desenhar, bastam dois pontos.
 
-### Exemplo
+### Exemplo de MRU
 
 $$
-f(x)=2x-4
+s(t)=2t-4
 $$
 
 Pontos:
 
-- se $$x=0$$, $$y=-4$$
-- se $$x=2$$, $$y=0$$
+- se $$t=0$$, $$s=-4$$
+- se $$t=2$$, $$s=0$$
 
 Com esses dois pontos, a reta fica determinada.
+
+### Interpretacao importante
+
+Quanto maior a inclinacao da reta em $$s \times t$$, maior o modulo da velocidade.
 
 ---
 
@@ -152,18 +216,34 @@ $$
 
 O grafico e uma parabola.
 
+### Leitura fisica no MRUV
+
+A funcao horaria do espaco no movimento uniformemente variado e:
+
+$$
+s(t)=s_0 + v_0t + \frac{at^2}{2}
+$$
+
+Ela e uma funcao quadratica do tempo.
+
 ### Concavidade
 
 - se $$a>0$$, concavidade para cima
 - se $$a<0$$, concavidade para baixo
 
-### Interseccao com eixo y
+### Exemplo com lancamento vertical
 
 $$
-f(0)=c
+h(t)=20+15t-5t^2
 $$
 
-Logo, $$c$$ e o ponto onde a parabola corta o eixo $$y$$.
+Como o coeficiente de $$t^2$$ e negativo, a parabola abre para baixo.
+
+Isso combina com a ideia de:
+
+- o corpo sobe
+- atinge altura maxima
+- depois desce
 
 ---
 
@@ -189,9 +269,17 @@ $$
 
 ### Interpretacao grafica
 
-- duas raizes reais: a parabola corta o eixo $$x$$ em dois pontos
-- uma raiz real dupla: toca o eixo $$x$$ em um ponto
-- nenhuma raiz real: nao corta o eixo $$x$$
+- duas raizes reais: a parabola corta o eixo em dois pontos
+- uma raiz real dupla: toca o eixo em um ponto
+- nenhuma raiz real: nao corta o eixo
+
+### Interpretacao fisica
+
+Em mecanica, a raiz pode significar:
+
+- instante em que a posicao fica zero
+- momento em que o corpo toca o solo
+- instante em que a altura se anula
 
 ---
 
@@ -215,132 +303,67 @@ $$
 y_v=-\frac{\Delta}{4a}
 $$
 
-### Significado
+### Significado em fisica
 
-- se $$a>0$$, o vertice e ponto de minimo
-- se $$a<0$$, o vertice e ponto de maximo
+No lancamento vertical, o vertice pode representar a altura maxima.
+
+Exemplo:
+
+$$
+h(t)=20+15t-5t^2
+$$
+
+Aqui:
+
+$$
+a=-5,\quad b=15
+$$
+
+Logo:
+
+$$
+t_v=-\frac{15}{2\cdot(-5)}=1{,}5 \text{ s}
+$$
+
+Esse e o instante da altura maxima.
 
 ---
 
-## 9. Eixo de simetria
+## 9. Graficos que o aluno de mecanica precisa reconhecer
 
-A parabola e simetrica em relacao a reta:
+### Posicao por tempo no MRU
 
-$$
-x=x_v
-$$
+- reta
+- inclinacao constante
+- sinal da inclinacao indica o sentido do movimento
 
----
+### Velocidade por tempo no MUV
 
-## 10. Crescimento e decrescimento
+- reta
+- inclinacao ligada a aceleracao
 
-### Funcao afim
+### Posicao por tempo no MRUV
 
-- cresce se $$a>0$$
-- decresce se $$a<0$$
+- parabola
+- concavidade depende do sinal da aceleracao
 
-### Funcao quadratica
-
-Se $$a>0$$:
-
-- decresce ate o vertice
-- cresce depois do vertice
-
-Se $$a<0$$:
-
-- cresce ate o vertice
-- decresce depois do vertice
+Aprender funcao sem conectar com esses graficos torna o assunto artificial.
 
 ---
 
-## 11. Sinal da funcao
+## 10. Checklist de funcoes para fisica
 
-Estudar o sinal de uma funcao e descobrir onde:
-
-- $$f(x)>0$$
-- $$f(x)<0$$
-- $$f(x)=0$$
-
-### Na afim
-
-Depende da raiz e do sentido da reta.
-
-### Na quadratica
-
-Depende:
-
-- do sinal de $$a$$
-- da posicao das raizes
+1. qual grandeza depende de qual?
+2. a relacao e linear ou quadratica?
+3. o grafico esperado e reta ou parabola?
+4. o coeficiente tem leitura fisica?
+5. a raiz e o vertice tem significado no contexto?
 
 ---
 
-## 12. Leitura grafica
+## 11. Frases para guardar
 
-Num grafico de funcao, procure:
-
-- dominio
-- imagem
-- intercepto em $$y$$
-- raizes
-- crescimento e decrescimento
-- concavidade
-- ponto de maximo ou minimo
-
----
-
-## 13. Relacao com fisica
-
-Essas duas funcoes aparecem direto em:
-
-- MRU: grafico posicao x tempo com reta
-- MRUV: grafico posicao x tempo com parabola
-- relacoes lineares em experimentos
-- estimativas e modelos simples
-
----
-
-## 14. Erros mais comuns
-
-- confundir raiz com intercepto em $$y$$
-- achar que toda parabola tem duas raizes reais
-- esquecer que o sinal de $$a$$ define a concavidade
-- calcular vertice usando formula errada
-- olhar so para a formula e ignorar o grafico
-
----
-
-## 15. Formulas para memorizar
-
-$$
-f(x)=ax+b
-$$
-
-$$
-x_{raiz}=-\frac{b}{a}
-$$
-
-$$
-f(x)=ax^2+bx+c
-$$
-
-$$
-\Delta=b^2-4ac
-$$
-
-$$
-x=\frac{-b\pm\sqrt{\Delta}}{2a}
-$$
-
-$$
-x_v=-\frac{b}{2a}
-$$
-
-$$
-y_v=-\frac{\Delta}{4a}
-$$
-
----
-
-## 16. Frase mental
-
-> Formula e grafico precisam contar a mesma historia.
+- em fisica, funcao quase sempre significa grandeza em funcao do tempo
+- MRU e reta
+- MRUV traz reta em $$v \times t$$ e parabola em $$s \times t$$
+- raiz matematica so vira resposta fisica se fizer sentido no intervalo do problema
